@@ -1,0 +1,18 @@
+.app-container {
+    padding-top: 64px;
+    /* Adjust this value based on your Header height */
+}
+
+body {
+    margin: 0px;
+    font-family: "Be Vietnam Pro,sans-serif";
+}
+
+
+.swiper-button-prev {
+    display: "none"
+}
+
+.swiper-button-next {
+    display: "none"
+}
