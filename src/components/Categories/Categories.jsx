@@ -8,11 +8,12 @@ import {
   Typography,
 } from "@mui/material";
 import CategoriesStyle from "./style";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./categories.css";
 import { PiShoppingCartLight } from "react-icons/pi";
 import CategoriesArrayItem from "./CategoriesArray";
+import Aos from "aos";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -44,29 +45,36 @@ const Categories = () => {
     setValue(newValue);
   };
 
+  useEffect(() => {
+    Aos.init({ duration: 2000 });
+  });
+
   return (
     <Box sx={CategoriesStyle.mainBox}>
       <Container maxWidth="100%">
-        <Typography sx={CategoriesStyle.CategoryTypo}>
+        <Typography sx={CategoriesStyle.CategoryTypo} data-aos="fade-down">
           Most Sold Products of Different Categories
         </Typography>
-        <Typography mt={3} sx={CategoriesStyle.CategoryTypo2}>
+        <Typography
+          mt={3}
+          sx={CategoriesStyle.CategoryTypo2}
+          data-aos="fade-up"
+        >
           Across various categories, certain products reign supreme. Funnels,
           Websites, Dashbaords, Logos
         </Typography>
 
         <Grid container>
           <Box sx={{ width: "100%", marginTop: { md: "3rem", xs: "3rem" } }}>
-            <Box>
+            <Box data-aos="fade-up">
               <Tabs
-                   scrollButtons
-                   allowScrollButtonsMobile
-                      variant="scrollable"
+                scrollButtons
+                allowScrollButtonsMobile
+                variant="scrollable"
                 // disable the tab indicator because it doesn't work well with wrapped container
                 TabIndicatorProps={{ sx: { display: "none" } }}
                 sx={{
                   "& .MuiTabs-flexContainer": {
-                   
                     justifyContent: {
                       md: "space-around",
                       xs: "auto",
@@ -76,14 +84,12 @@ const Categories = () => {
                     display: { sm: "flex", md: "flex" },
                     // flexDirection: { xs: "column" },
                     gap: 2,
-                 
                   },
-                  "@media (max-width: 1024px)":{
-                    "& .MuiTabs-flexContainer":{
-                      justifyContent:"flex-start",
-                    
-                    }
-                  }
+                  "@media (max-width: 1024px)": {
+                    "& .MuiTabs-flexContainer": {
+                      justifyContent: "flex-start",
+                    },
+                  },
                 }}
                 value={value}
                 onChange={handleChange}
@@ -171,7 +177,7 @@ const Categories = () => {
               </Grid>
             </TabPanel>
             <TabPanel value={value} index={1}>
-            <Grid
+              <Grid
                 container
                 spacing={3}
                 sx={{ marginTop: { md: "0.4rem", xs: "0.5rem" } }}
@@ -241,7 +247,7 @@ const Categories = () => {
               </Grid>
             </TabPanel>
             <TabPanel value={value} index={2}>
-            <Grid
+              <Grid
                 container
                 spacing={3}
                 sx={{ marginTop: { md: "0.4rem", xs: "0.5rem" } }}
@@ -311,7 +317,7 @@ const Categories = () => {
               </Grid>
             </TabPanel>
             <TabPanel value={value} index={3}>
-            <Grid
+              <Grid
                 container
                 spacing={3}
                 sx={{ marginTop: { md: "0.4rem", xs: "0.5rem" } }}
@@ -381,7 +387,7 @@ const Categories = () => {
               </Grid>
             </TabPanel>
             <TabPanel value={value} index={4}>
-            <Grid
+              <Grid
                 container
                 spacing={3}
                 sx={{ marginTop: { md: "0.4rem", xs: "0.5rem" } }}
@@ -451,7 +457,7 @@ const Categories = () => {
               </Grid>
             </TabPanel>
             <TabPanel value={value} index={5}>
-            <Grid
+              <Grid
                 container
                 spacing={3}
                 sx={{ marginTop: { md: "0.4rem", xs: "0.5rem" } }}
@@ -521,7 +527,7 @@ const Categories = () => {
               </Grid>
             </TabPanel>
             <TabPanel value={value} index={6}>
-            <Grid
+              <Grid
                 container
                 spacing={3}
                 sx={{ marginTop: { md: "0.4rem", xs: "0.5rem" } }}

@@ -1,22 +1,31 @@
 /* eslint-disable react/no-unescaped-entities */
 
+import { useEffect } from "react";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import AuthStyle from "./styles";
 import { PiShoppingCartLight } from "react-icons/pi";
 import AuthcartArray from "./AuthorCartArray";
+import Aos from "aos";
+
 const AuthsItem = () => {
+  useEffect(() => {
+    Aos.init({duration:2000})
+  })
   return (
     <Box sx={AuthStyle.mainBox}>
       <Container maxWidth="100%">
-        <Typography sx={AuthStyle.AuthTypo}>Best Author's items</Typography>
-        <Typography sx={AuthStyle.AuthTypo2}>
-          Discover the Pinnacle of Authorship: Our Best Selections
-        </Typography>
-        <Grid
-          container
-          spacing={3}
+        <Typography
+          sx={AuthStyle.AuthTypo}
+          data-aos="fade-down"
          
         >
+          Best Author's items
+        </Typography>
+        <Typography sx={AuthStyle.AuthTypo2} data-aos="fade-up"
+     >
+          Discover the Pinnacle of Authorship: Our Best Selections
+        </Typography>
+        <Grid container spacing={3}>
           {AuthcartArray.map((item) => {
             return (
               <>

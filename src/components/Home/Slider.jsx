@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import  { useEffect, useState } from "react";
 import styles from "./styles/";
 
 //Material UI
 import { Box, Typography, Card, CardContent } from "@mui/material";
-import { styled, alpha } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 //Icons
 import { IoFunnelOutline } from "react-icons/io5";
@@ -12,7 +12,9 @@ import { TiBusinessCard } from "react-icons/ti";
 import { AiOutlineLineChart } from "react-icons/ai";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { PiGitlabLogoSimple } from "react-icons/pi";
-import { RiSurveyLine } from "react-icons/ri";
+
+//aos animation
+import Aos from 'aos'
 
 //Swiper.js
 import { EffectCoverflow, Navigation, Autoplay } from "swiper/modules";
@@ -41,6 +43,11 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 const Slider = () => {
+
+  useEffect(() => {
+    Aos.init({duration:2000})
+  })
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleSlideChange = (swiper) => {
@@ -50,7 +57,7 @@ const Slider = () => {
   return (
     <Box sx={styles.sliderBoxDiv}>
       <StyledCard variant="outlined" raised>
-        <Typography variant="h4" sx={styles.silderHeading}>
+        <Typography variant="h4" sx={styles.silderHeading} data-aos="fade-up">
           Explore Different Categories
         </Typography>
 

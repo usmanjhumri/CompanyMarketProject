@@ -55,8 +55,9 @@ const styles = {
     marginLeft: "2px",
     fontFamily: "Be Vietnam",
     color: "#000000",
-    
-
+    "&:hover": {
+      background: Colors.primary,
+    },
   },
   linkbg: {
     background: Colors.primary,
@@ -64,10 +65,10 @@ const styles = {
     borderRadius: "4px",
     color: "#FFFFFF",
     textDecoration: "none",
-    fontSize: {md:"12px", xs:"8px", lg:"12px",xxl:"12px"},
+    fontSize: { md: "12px", xs: "8px", lg: "12px", xxl: "12px" },
   },
-  linkTypo:{
-    fontSize: {md:"12px", xs:"8px", lg:"16px",xxl:"14px",sm:"10px"},
+  linkTypo: {
+    fontSize: { md: "12px", xs: "8px", lg: "16px", xxl: "14px", sm: "10px" },
   },
   drawerlink: {
     textDecoration: "none",
@@ -77,29 +78,49 @@ const styles = {
     color: "#000000",
     fontSize: "14px",
   },
-  sidebarBtnBox:{
-    display:"flex", alignItems:"center", justifyContent:"space-around", gap:2
+  sidebarBtnBox: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+    gap: 2,
   },
-  SidebarBtnStyle:{
+  SidebarBtnStyle: {
     fontFamily: "Be Vietnam Pro,sans-serif",
     fontSize: "16px",
     textTransform: "none",
     backgroundColor: Colors.primary,
-    color:"#FFFFFF",
-    width:"90%",
-    margin:"1rem 0px",
+    color: "#FFFFFF",
+    width: "90%",
+    margin: "1rem 0px",
 
-   
-    "&:hover":{
+    "&:hover": {
       fontFamily: "Be Vietnam Pro,sans-serif",
       fontSize: "16px",
       textTransform: "none",
       backgroundColor: Colors.primary,
-      color:"#FFFFFF"
+      color: "#FFFFFF",
+    },
+  },
+  closeIconStyle: {
+    position: "absolute",
+    left: "87%",
+    top: "2%",
+    background: Colors.primary,
+    color: "#FFFFFF",
+    padding: "0.3rem",
+    borderRadius: "50%",
+    fontSize: "20px",
+    cursor:"pointer"
+  },
+  iconBtnStyle: {
+    border: "none",
+    background: "#2697FA",
+    cursor: "pointer",
+    minHeight: "45px",
+    "&:hover":{
+      background:Colors.primary
     }
   },
-  
-
 };
 
 export default styles;

@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import { Routes, Route } from "react-router-dom";
 // import Funnel from "./components/Funnel";
 import Home from "./components/Home";
+import Pagenotfound from "./components/PageNotFound";
 function App() {
   return (
     <div>
@@ -18,6 +19,7 @@ function App() {
         <Route path="/GHL-Add-on's" element={<Home />} />
         <Route path="/marketing" element={<Home />} />
         <Route path="/surveys" element={<Home />} />
+        <Route path="*" element={<Pagenotfound />} />
       </Routes>
       <Footer />
     </div>

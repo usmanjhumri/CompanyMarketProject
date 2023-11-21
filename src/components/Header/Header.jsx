@@ -2,28 +2,29 @@
 import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
+
 
 import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
+
 
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import style from "./styles";
-import {  Button, Container, Hidden, InputAdornment, OutlinedInput, SwipeableDrawer } from "@mui/material";
+import {   Container, Hidden, } from "@mui/material";
 import Signinicon from "../../assets/signin.svg";
 import Logo from "../../assets/logo.png";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { HeaderItemArray } from "./HeaderItemArray";
-import { Link, NavLink } from "react-router-dom";
+import {  NavLink } from "react-router-dom";
 import { PiShoppingCartLight } from "react-icons/pi";
-import { LuSearch } from "react-icons/lu";
+
 import styles from "./styles";
 import Colors from "../colors";
-const headerWidth = 280;
+import ResponsiveDrawer from "./Drawer/ResponsiveDrawer";
+
 const navItems = [
   { title: "Home", link: "/" },
   { title: "Product", link: "product" },
@@ -73,70 +74,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-const Header = (props) => {
-  const { window } = props;
+const Header = () => {
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
-  const handleSearchClick = () => {
-    setMobileOpen(false)
-  }
-  const handlesearchBtn = () => {
-    setMobileOpen(true)
-  }
-
-  const header = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Divider />
-      <List key={1}>
-        <Link to='/'>
-        <Box mt={2} component="img" src={Logo} />
-        </Link>
-    <Box mt={2}>
-    <OutlinedInput placeholder="E’g Responsive Landing Pages and Websites" onClick={handleSearchClick}    endAdornment={
-      <InputAdornment>
-      <button style={{
-        border:"none",
-        background:"none",
-        cursor:"pointer",
-
-      }} onClick={handlesearchBtn}>
-      <LuSearch/>
-      </button>
-      </InputAdornment>
-    } />
-    </Box>
-        {HeaderItemArray.map((item) => (
-          <>
-            <Typography
-              sx={{
-                textAlign: "justify",
-                padding: "0px 2rem",
-                margin: "2rem 0px",
-              }}
-              key={item}
-            >
-              <Link to={item.link} style={styles.drawerlink}>
-                {item.title}
-              </Link>
-            </Typography>
-          </>
-        ))}
-       <Box sx={{maxWidth:"100%"}}>
-          <Button sx={styles.SidebarBtnStyle}>SignIn</Button>
-          </Box>
-          <Box sx={{maxWidth:"100%"}}>
-          <Button sx={styles.SidebarBtnStyle}>SignUp</Button>
-          </Box>
-       
-       
-      </List>
-    </Box>
-  );
-
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
+ 
   return (
     <>
       {/* upper header code  */}
@@ -201,6 +145,9 @@ const Header = (props) => {
         </Container>
       </Box>
       {/* End upper header code  */}
+
+
+
 
       {/* Lower header code  */}
       <Box sx={{ display: "flex" }}>
@@ -268,25 +215,8 @@ const Header = (props) => {
 
         <nav>
           <Hidden lgUp>
-            <SwipeableDrawer
-              container={container}
-              variant="temporary"
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              // onOpen={handleDrawerToggle}
-              ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
-              }}
-              sx={{
-                // display: { xs: "block", sm: "none" },
-                "& .MuiDrawer-paper": {
-                  boxSizing: "border-box",
-                  width: headerWidth,
-                },
-              }}
-            >
-              {header}
-            </SwipeableDrawer>
+            <ResponsiveDrawer mobileOpen={mobileOpen} setMobileOpen={setMobileOpen}/>
+        
           </Hidden>
         </nav>
       </Box>

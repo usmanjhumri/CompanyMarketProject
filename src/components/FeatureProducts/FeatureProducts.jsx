@@ -1,6 +1,6 @@
 /* eslint-disable no-irregular-whitespace */
 /* eslint-disable react/no-unescaped-entities */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Container,
@@ -14,6 +14,7 @@ import Styles from "./styles";
 import PropTypes from "prop-types";
 import "./Feature.css";
 import DummyData from "../DummyData";
+import Aos from 'aos'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,6 +47,9 @@ function a11yProps(index) {
 
 const FeatureProducts = () => {
   
+  useEffect(() => {
+    Aos.init({duration:2000})
+  })
 
   const [val, setVal] = useState(0);
 
@@ -57,14 +61,14 @@ const FeatureProducts = () => {
     <>
       <Box sx={Styles.mainBox}>
         <Container maxWidth="100%">
-          <Typography sx={Styles.AuthTypo}>Our Featured Products</Typography>
-          <Typography sx={Styles.AuthTypo2}>
+          <Typography sx={Styles.AuthTypo} data-aos='fade-up'>Our Featured Products</Typography>
+          <Typography sx={Styles.AuthTypo2} data-aos='fade-down'>
             Designed to meet the diverse needs of entrepreneurs, creatives, and
             professionals alike, our Featured Products are more than just tools 
             they're catalysts for success.
           </Typography>
 
-          <Box
+          <Box data-aos='fade-up'
             sx={{
             
               marginBottom: { md: "3rem", xs: "3rem" },
