@@ -1,5 +1,5 @@
 import Colors from "../colors";
-const AuthStyle = {
+const cardStyle = {
   mainBox: {
     marginTop: { md: "5rem", xs: "5rem" },
     padding: { md: "0px 3rem", xs: "auto" },
@@ -90,4 +90,4 @@ const AuthStyle = {
     fontSize: { md: "12px", xs: "8px", lg: "16px", xxl: "14px", sm: "10px" },
   },
 };
-export default AuthStyle;
+export default cardStyle;

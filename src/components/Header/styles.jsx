@@ -59,7 +59,7 @@ const styles = {
       background: Colors.primary,
     },
   },
-  linkbg: {
+  linkbg:  {
     background: Colors.primary,
     padding: "0.5rem 0.8rem",
     borderRadius: "4px",
@@ -69,6 +69,13 @@ const styles = {
   },
   linkTypo: {
     fontSize: { md: "12px", xs: "8px", lg: "16px", xxl: "14px", sm: "10px" },
+    "&:hover":{
+      background: Colors.primary,
+      padding: "0.5rem 0.8rem",
+      borderRadius: "4px",
+      color: "#FFFFFF",
+      textDecoration: "none",
+    }
   },
   drawerlink: {
     textDecoration: "none",
@@ -105,8 +112,8 @@ const styles = {
     position: "absolute",
     left: "87%",
     top: "2%",
-    background: Colors.primary,
-    color: "#FFFFFF",
+    // background: Colors.primary,
+    // color: "#FFFFFF",
     padding: "0.3rem",
     borderRadius: "50%",
     fontSize: "20px",

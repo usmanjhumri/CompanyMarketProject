@@ -8,11 +8,12 @@ import {
   Typography,
 } from "@mui/material";
 import CategoriesStyle from "./style";
-import { useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import "./categories.css";
 import { PiShoppingCartLight } from "react-icons/pi";
 import CategoriesArrayItem from "./CategoriesArray";
+import { useSelector } from "react-redux";
 import Aos from "aos";
 
 function TabPanel(props) {
@@ -33,22 +34,28 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
   return {
-    id: `simple-tab-${index}`,
+    id: `${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
 const Categories = () => {
   const [value, setValue] = useState(0);
+  const [filterProduct,setFilterProduct] = useState([])
+  const catMostProduct = useSelector((state) => state?.home?.mostSellProduct);
+  console.log(catMostProduct, ' mostProduct');
 
   const handleChange = (event, newValue) => {
+    console.log(event.target.id, ' get the id')
     setValue(newValue);
+    const prod = catMostProduct.filter(item=>item.category_id == event.target.id)
+    // setFilterProduct(prod)
+    console.log(prod, ' products');
   };
 
-  useEffect(() => {
-    Aos.init({ duration: 2000 });
-  });
 
+  const catMostCat = useSelector((state) => state?.home?.mostSellCat);
+  console.log(filterProduct,"working")
   return (
     <Box sx={CategoriesStyle.mainBox}>
       <Container maxWidth="100%">
@@ -85,7 +92,7 @@ const Categories = () => {
                     // flexDirection: { xs: "column" },
                     gap: 2,
                   },
-                  "@media (max-width: 1024px)": {
+                  "@media (max-width: 1380px)": {
                     "& .MuiTabs-flexContainer": {
                       justifyContent: "flex-start",
                     },
@@ -95,14 +102,16 @@ const Categories = () => {
                 onChange={handleChange}
                 aria-label="basic tabs example"
               >
-                <Tab label="Funnels" {...a11yProps(0)} />
+                {catMostCat?.map((item, index) => (
+                  <Tab label={item.name} {...a11yProps(item.id)} key={index}/>
+                ))}
 
-                <Tab label="Websites" {...a11yProps(1)} />
+                {/* <Tab label="Websites" {...a11yProps(1)} />
                 <Tab label="Dashboards" {...a11yProps(2)} />
                 <Tab label="GHL Add-on’s" {...a11yProps(3)} />
                 <Tab label="Surveys" {...a11yProps(4)} />
                 <Tab label="Business Cards" {...a11yProps(5)} />
-                <Tab label="Logos" {...a11yProps(6)} />
+                <Tab label="Logos" {...a11yProps(6)} /> */}
               </Tabs>
             </Box>
 
@@ -114,7 +123,7 @@ const Categories = () => {
               >
                 {CategoriesArrayItem.map((item, index) => {
                   return (
-                    <>
+                    <Fragment key={index}>
                       <Grid item xs={12} md={4} key={index}>
                         <Box sx={CategoriesStyle.BoxStyle}>
                           <Box
@@ -171,7 +180,7 @@ const Categories = () => {
                           </Box>
                         </Box>
                       </Grid>
-                    </>
+                    </Fragment>
                   );
                 })}
               </Grid>

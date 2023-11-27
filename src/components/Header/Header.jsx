@@ -2,25 +2,23 @@
 import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-
-
+import { FiUserPlus } from "react-icons/fi";
+import { FiUser } from "react-icons/fi";
 import IconButton from "@mui/material/IconButton";
-
-
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import style from "./styles";
-import {   Container, Hidden, } from "@mui/material";
-import Signinicon from "../../assets/signin.svg";
+import { Container, Hidden } from "@mui/material";
 import Logo from "../../assets/logo.png";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { HeaderItemArray } from "./HeaderItemArray";
-import {  NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { PiShoppingCartLight } from "react-icons/pi";
-
+import { useSelector } from "react-redux";
+// import './Header.css'
 import styles from "./styles";
 import Colors from "../colors";
 import ResponsiveDrawer from "./Drawer/ResponsiveDrawer";
@@ -75,12 +73,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 const Header = () => {
-
   const [mobileOpen, setMobileOpen] = useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
- 
+
+  const catergories = useSelector((state) => state?.home?.catergories);
+  console.log(catergories);
+
   return (
     <>
       {/* upper header code  */}
@@ -113,8 +113,7 @@ const Header = () => {
                 <Typography sx={style.cartTypo}>0</Typography>
               </Box>
               <Box sx={{ display: { md: "flex", xs: "none" } }}>
-                <Box component="img" src={Signinicon} />
-
+                <FiUser />
                 <Typography
                   component="p"
                   sx={{
@@ -127,8 +126,8 @@ const Header = () => {
                 </Typography>
               </Box>
               <Box sx={{ display: { md: "flex", xs: "none" } }}>
-                <Box component="img" src={Signinicon} />
-
+                {/* <Box component="img" src={Signinicon} /> */}
+                <FiUserPlus />
                 <Typography
                   component="p"
                   sx={{
@@ -146,9 +145,6 @@ const Header = () => {
       </Box>
       {/* End upper header code  */}
 
-
-
-
       {/* Lower header code  */}
       <Box sx={{ display: "flex" }}>
         <AppBar component="nav" sx={style.root} position="static">
@@ -165,20 +161,22 @@ const Header = () => {
 
               <Hidden mdDown>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-                  {HeaderItemArray.map((item) => (
+                  {catergories.map((item) => (
                     <>
-                      <Typography sx={styles.linkTypo}>
+                      <Typography>
                         <NavLink
-                          to={item.link}
+                          to={`/categories/${item.name.toLowerCase()}/${
+                            item.id
+                          }`}
                           style={({ isActive }) => ({
                             ...(isActive ? styles.linkbg : styles.link),
-                            ":hover": styles.linkbg,
                           })}
+
                           // style={({ isActive }) => {
                           //   return isActive ? styles.linkbg : styles.link;
                           // }}
                         >
-                          {item.title}
+                          {item.name}
                         </NavLink>
                       </Typography>
                     </>
@@ -215,8 +213,10 @@ const Header = () => {
 
         <nav>
           <Hidden lgUp>
-            <ResponsiveDrawer mobileOpen={mobileOpen} setMobileOpen={setMobileOpen}/>
-        
+            <ResponsiveDrawer
+              mobileOpen={mobileOpen}
+              setMobileOpen={setMobileOpen}
+            />
           </Hidden>
         </nav>
       </Box>

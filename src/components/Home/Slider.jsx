@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import  {  useState } from "react";
 import styles from "./styles/";
 
 //Material UI
@@ -14,7 +14,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { PiGitlabLogoSimple } from "react-icons/pi";
 
 //aos animation
-import Aos from 'aos'
 
 //Swiper.js
 import { EffectCoverflow, Navigation, Autoplay } from "swiper/modules";
@@ -44,9 +43,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 
 const Slider = () => {
 
-  useEffect(() => {
-    Aos.init({duration:2000})
-  })
+ 
 
   const [activeIndex, setActiveIndex] = useState(0);
 

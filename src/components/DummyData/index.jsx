@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   Box,
   Button,
@@ -99,8 +99,8 @@ export default function index() {
         md={10}
         sx={{ margin: { md: "0px", xs: "auto" } }}
       >
-        {Products.map((item) => (
-          <>
+        {Products.map((item,index) => (
+          <Fragment key={index}>
             {value === "tourism" && (
               <Grid
                 item
@@ -112,6 +112,7 @@ export default function index() {
                     paddingLeft: "0px !important",
                   },
                 }}
+                
               >
                 <Box sx={Styles.BoxStyle}>
                   <Box component="img" src={item.img} sx={Styles.ImgStyle} />
@@ -349,7 +350,7 @@ export default function index() {
                 </Box>
               </Grid>
             )}
-          </>
+          </Fragment>
         ))}
       </Grid>
     </Grid>

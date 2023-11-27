@@ -1,19 +1,10 @@
 
 import { Box, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import styles from "./styles";
 const Pagenotfound = () => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-        padding: "16px", // Add padding for better spacing
-        textAlign: "center",
-      }}
-    >
+    <Box sx={styles.mainBox}>
       <Typography variant="h2" sx={{ color: "black", mt: 2 }}>
         This page could not be found (404)
       </Typography>

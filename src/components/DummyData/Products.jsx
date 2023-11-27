@@ -25,5 +25,6 @@ const Products = [
     pricetitle2: "$18",
     salestitle: "111 Sales",
   },
+ 
 ];
 export default Products;

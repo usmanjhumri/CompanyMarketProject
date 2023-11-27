@@ -2,14 +2,10 @@ import { Box, Button, Container, Grid, Link, Typography } from "@mui/material";
 import Logo from "../../assets/logo.png";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import FooterStyle from "./styles";
-import Aos from "aos";
-import { useEffect } from "react";
 import { LiaCopyrightSolid } from "react-icons/lia";
 
 const Footer = () => {
-  useEffect(() => {
-    Aos.init({ duration: 2000 });
-  });
+ 
   return (
     <>
       <Box mt={12} sx={FooterStyle.root}>
@@ -18,7 +14,11 @@ const Footer = () => {
             <Box>
               <Box component="img" src={Logo} data-aos="fade-down" />
             </Box>
-            <Button sx={FooterStyle.button} data-aos="fade-up">
+            <Button
+              variant="contained"
+              sx={FooterStyle.button}
+              data-aos="fade-up"
+            >
               Join Now
             </Button>
           </Box>

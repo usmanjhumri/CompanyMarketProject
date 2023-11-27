@@ -6,12 +6,13 @@ import AuthsItem from "../Author'sItems";
 import Categories from "../Categories/Categories";
 import FeatureProducts from "../FeatureProducts";
 import Slider from "./Slider";
+import { useSelector } from "react-redux";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: "white",
   "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    backgroundColor: alpha(theme.palette.common.white, 0.9),
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
@@ -48,7 +49,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       width: "40ch",
     },
     [theme.breakpoints.down("sm")]: {
-      width: "25ch",
+      width: "20ch",
     },
   },
 }));
