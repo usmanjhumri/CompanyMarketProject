@@ -1,10 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-export const fetchHomeData = createAsyncThunk("fetchHomeData", async () => {
-  const res = await fetch("https://marketplace.jdfunnel.com/api/homepage");
-  const check = res.json();
-  return check;
-});
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchHomeData } from "../api/api";
 
 const homeSlice = createSlice({
   name: "home",
@@ -12,11 +7,14 @@ const homeSlice = createSlice({
     isLoading: false,
     catergories: [],
     authorProduct: [],
-    mostSellProduct:[],
-    mostSellCat:[],
+    mostSellProduct: [],
+    mostSellCat: [],
+    featureProducts: [],
     isError: false,
+    imgPath: "",
   },
   extraReducers: (builder) => {
+    // eslint-disable-next-line no-unused-vars
     builder.addCase(fetchHomeData.pending, (state, action) => {
       state.isLoading = true;
     });
@@ -24,12 +22,19 @@ const homeSlice = createSlice({
       state.isLoading = false;
       state.authorProduct = action.payload?.bestAuthorProducts;
       state.catergories = action.payload?.browsecategories;
-      state.mostSellProduct = action.payload?.mostsoldproducts?.flatMap(item=>item)
+      state.featureProducts = action.payload?.featuredProducts;
+      state.mostSellProduct = action.payload?.mostsoldproducts?.flatMap(
+        (item) => item
+      );
       state.mostSellCat = action.payload?.catwithmostsold;
+      state.imgPath = action.payload?.imgpath;
     });
+    // eslint-disable-next-line no-unused-vars
     builder.addCase(fetchHomeData.rejected, (state, action) => {
       state.authorProduct = [];
       state.catergories = [];
+      state.featureProducts = [];
+      state.isLoading = false;
     });
   },
 });

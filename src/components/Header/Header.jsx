@@ -14,7 +14,7 @@ import Logo from "../../assets/logo.png";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import { HeaderItemArray } from "./HeaderItemArray";
+// import { HeaderItemArray } from "./HeaderItemArray";
 import { NavLink } from "react-router-dom";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { useSelector } from "react-redux";
@@ -25,7 +25,7 @@ import ResponsiveDrawer from "./Drawer/ResponsiveDrawer";
 
 const navItems = [
   { title: "Home", link: "/" },
-  { title: "Product", link: "product" },
+  { title: "Products", link: "products" },
 ];
 
 const Search = styled("div")(({ theme }) => ({
@@ -79,7 +79,6 @@ const Header = () => {
   };
 
   const catergories = useSelector((state) => state?.home?.catergories);
-  console.log(catergories);
 
   return (
     <>
@@ -95,9 +94,10 @@ const Header = () => {
             }}
           >
             <Box sx={{ flexGrow: 1 }}>
-              {navItems.map((item) => (
+              {navItems?.map((item, index) => (
                 // eslint-disable-next-line react/jsx-key
                 <NavLink
+                  key={index}
                   to={item.link}
                   style={({ isActive }) => {
                     return isActive ? styles.textActive : styles.text;
@@ -122,11 +122,11 @@ const Header = () => {
                   }}
                   style={style.text}
                 >
-                  Sign in
+                   <NavLink to="/signin"  style={style.signupLoginStyle}>Sign In</NavLink>
+               
                 </Typography>
               </Box>
               <Box sx={{ display: { md: "flex", xs: "none" } }}>
-                {/* <Box component="img" src={Signinicon} /> */}
                 <FiUserPlus />
                 <Typography
                   component="p"
@@ -136,7 +136,9 @@ const Header = () => {
                   }}
                   style={style.text}
                 >
-                  Sign up
+                 
+                   <NavLink to="/signup" style={style.signupLoginStyle}>Sign Up</NavLink>
+           
                 </Typography>
               </Box>
             </Box>
@@ -156,7 +158,7 @@ const Header = () => {
               <Box sx={{ flexGrow: 1 }}>
                 <NavLink to={"/"}>
                   <Box component="img" src={Logo} />
-                </NavLink>
+                </NavLink>  
               </Box>
 
               <Hidden mdDown>
@@ -165,9 +167,10 @@ const Header = () => {
                     <>
                       <Typography>
                         <NavLink
-                          to={`/categories/${item.name.toLowerCase()}/${
-                            item.id
-                          }`}
+                          to={`/categories/${item.name
+                            .toLowerCase()
+                            .trim()
+                            .replace(/\s+/gm, "")}/${item.id}`}
                           style={({ isActive }) => ({
                             ...(isActive ? styles.linkbg : styles.link),
                           })}

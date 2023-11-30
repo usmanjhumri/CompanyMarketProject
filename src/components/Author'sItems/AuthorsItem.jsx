@@ -1,7 +1,8 @@
+/* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable react/no-unescaped-entities */
 
 import { useEffect } from "react";
-import { Box,  Container, Grid, Typography, Link } from "@mui/material";
+import { Box, Container, Grid, Typography, Button } from "@mui/material";
 import AuthStyle from "./styles";
 import { PiShoppingCartLight } from "react-icons/pi";
 // import AuthcartArray from "./AuthorCartArray";
@@ -25,23 +26,23 @@ const AuthsItem = () => {
           Discover the Pinnacle of Authorship: Our Best Selections
         </Typography>
 
-        <Grid container spacing={3}>
+        <Grid container spacing={3}  >
           {authorProduct?.map((item, ind) => {
             return (
               <Grid item xs={12} md={4} key={ind}>
                 <Box sx={AuthStyle.BoxStyle}>
                   <Box
                     component="img"
-                    src={item.image}
+                    src={`https://marketplace.jdfunnel.com/assets/images/product/${item.image}`}
                     sx={AuthStyle.ImgStyle}
                     alt="Loading"
                   />
                   <Typography mt={2} sx={AuthStyle.BoxTypo}>
-                    {item.title1}
+                    {item.name}
                   </Typography>
 
                   <Typography mt={1} sx={AuthStyle.BoxTypo2}>
-                    {item.title2}
+                    By {item.user.username}
                   </Typography>
 
                   <Box mt={2} sx={{ display: "flex", gap: 2 }}>
@@ -75,16 +76,10 @@ const AuthsItem = () => {
                           color: "#787878",
                         }}
                       />
-                      <Typography sx={AuthStyle.linkTypo}>
-                        <Link
-                          href={item.demo_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          sx={AuthStyle.BtnStyle}
-                        >
-                          Live Preview
-                        </Link>
-                      </Typography>
+
+                      <a href={item.demo_link} target="_blank">
+                        <Button sx={AuthStyle.BtnStyle}>Live Preview</Button>
+                      </a>
                     </Box>
                   </Box>
                 </Box>

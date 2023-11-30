@@ -1,16 +1,18 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-key */
 /* eslint-disable no-irregular-whitespace */
 /* eslint-disable react/no-unescaped-entities */
-import { useState } from "react";
-import { Box, Container, Typography, Tab, Tabs } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Box, Container, Typography, Tab, Tabs, Grid } from "@mui/material";
 import Styles from "./styles";
-
+import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import "./Feature.css";
-import DummyData from "../DummyData";
+import FeatureProductData from "../FeatureProductData";
+import Skeletoncard from "../Skeletoncard";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <div role="tabpanel" hidden={value !== index} {...other}>
       {value === index && (
@@ -27,20 +29,45 @@ TabPanel.propTypes = {
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
 };
-
 function a11yProps(index) {
   return {
-    id: `simple-tab-${index}`,
+    id: index,
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
-
 const FeatureProducts = () => {
+  const catergories = useSelector((state) => state?.home?.catergories);
+  const isLoading = useSelector((state) => state?.home?.isLoading);
   const [val, setVal] = useState(0);
-
+  const [filterProduct, setFilterProduct] = useState([]);
   const handleChangetab = (e, newVal) => {
     setVal(newVal);
+    setFilterProduct(
+      featureProduct?.filter((item) => item.category_id == e.target.id)
+    );
   };
+  // console.log(filterProduct, "checking on swtich");
+  const featureProduct = useSelector((state) => state?.home?.featureProducts);
+
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <div role="tabpanel" hidden={value !== index} {...other}>
+        {value === index && (
+          <Box sx={{ paddingLeft: { md: "16px", xs: "0px !important" } }}>
+            {children}
+          </Box>
+        )}
+      </div>
+    );
+  }
+
+  useEffect(() => {
+    setFilterProduct(
+      featureProduct?.filter((item) => item.category_id === catergories[0]?.id)
+    );
+  }, [featureProduct, catergories]);
   return (
     <>
       <Box sx={Styles.mainBox}>
@@ -77,12 +104,7 @@ const FeatureProducts = () => {
 
                   gap: 2,
                 },
-                // "@media (max-width: 1024px)":{
-                //   "& .MuiTabs-flexContainer":{
-                //     justifyContent:"flex-start",
 
-                //   }
-                // },
                 "@media (max-width: 1380px)": {
                   "& .MuiTabs-flexContainer": {
                     justifyContent: "flex-start",
@@ -93,39 +115,32 @@ const FeatureProducts = () => {
               onChange={handleChangetab}
               aria-label="basic tabs example"
             >
-              <Tab label="Funnels" {...a11yProps(0)} />
+              {catergories?.map((item, index) => (
+                <Tab label={item.name} {...a11yProps(item.id)} key={index} />
+              ))}
 
-              <Tab label="Websites" {...a11yProps(1)} />
+              {/* <Tab label="Websites" {...a11yProps(1)} />
               <Tab label="Dashboards" {...a11yProps(2)} />
               <Tab label="GHL Add-on’s" {...a11yProps(3)} />
               <Tab label="Surveys" {...a11yProps(4)} />
               <Tab label="Business Cards" {...a11yProps(5)} />
-              <Tab label="Logos" {...a11yProps(6)} />
+              <Tab label="Logos" {...a11yProps(6)} /> */}
             </Tabs>
           </Box>
 
-          <TabPanel value={val} index={0}>
-            <DummyData />
-          </TabPanel>
-
-          <TabPanel value={val} index={1}>
-            <DummyData />
-          </TabPanel>
-          <TabPanel value={val} index={2}>
-            <DummyData />
-          </TabPanel>
-          <TabPanel value={val} index={3}>
-            <DummyData />
-          </TabPanel>
-          <TabPanel value={val} index={4}>
-            <DummyData />
-          </TabPanel>
-          <TabPanel value={val} index={5}>
-            <DummyData />
-          </TabPanel>
-          <TabPanel value={val} index={6}>
-            <DummyData />
-          </TabPanel>
+          {catergories?.map((item, index) => (
+            <TabPanel value={val} index={index} key={index}>
+              <FeatureProductData
+                filterProduct={filterProduct}
+                isLoading={isLoading}
+              />
+            </TabPanel>
+          ))}
+          {catergories?.length === 0 && (
+            <Grid container>
+              <Skeletoncard cards={8} />
+            </Grid>
+          )}
         </Container>
       </Box>
     </>

@@ -1,4 +1,7 @@
-import React from "react";
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-unknown-property */
+import  { useState } from "react";
 import {
   Box,
   Grid,
@@ -7,29 +10,68 @@ import {
   Container,
   Typography,
   Button,
+
+  FormControl,
+ 
+  
 } from "@mui/material";
 import formStyle from "./styles";
 import "./index";
 import { useFormik } from "formik";
 import { signupSchema } from "./Regex";
 import logo from "../../assets/jdlogo.png";
+import { useNavigate } from "react-router-dom";
+import { FaEyeSlash, FaRegEyeSlash,FaRegEye } from "react-icons/fa";
+// import {  } from "react-icons/fa";
+
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+// import countriesList from "react-select-country-list";
+// Import the list of countries
+
 const initialValues = {
   firstname: "",
   lastname: "",
+  username: "",
+  country: "",
+  phoneNumber: "",
   email: "",
   password: "",
   confirmpassword: "",
 };
 
-export default function Signup() {
-  const { errors, values, handleBlur, handleChange, handleSubmit, touched } =
-    useFormik({
-      initialValues: initialValues,
-      validationSchema: signupSchema,
-      onSubmit: (values, actions) => {
-        actions.resetForm();
-      },
-    });
+export default function Signup({ setIsLoggedIn }) {
+  const handleSignIn = () => {
+    setIsLoggedIn(true);
+  };
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const {
+    errors,
+    values,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+    touched,
+  } = useFormik({
+    initialValues: initialValues,
+    validationSchema: signupSchema,
+    onSubmit: async (values, actions) => {
+      console.log(values);
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      actions.resetForm();
+      setLoading(false);
+      navigate("/signin");
+    },
+  });
 
   return (
     <>
@@ -40,6 +82,7 @@ export default function Signup() {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
+          fontFamily: "Be+Vietnam",
         }}
       >
         <Container maxWidth="sm">
@@ -81,14 +124,16 @@ export default function Signup() {
                 required
                 onChange={handleChange}
                 onBlur={handleBlur}
+                style={{ marginBottom: "20px" }}
               />
               {errors.firstname && touched.firstname ? (
-                <p style={{ color: "red" }} sx={formStyle.signupError}>
+                <p
+                  style={{ color: "red", margin: "0", marginBottom: "15px" }}
+                  sx={formStyle.signupError}
+                >
                   {errors.firstname}
                 </p>
               ) : null}
-              <br />
-              <br />
 
               <TextField
                 id="lastName"
@@ -101,14 +146,82 @@ export default function Signup() {
                 required
                 onChange={handleChange}
                 onBlur={handleBlur}
+                style={{ marginBottom: "20px" }}
               />
               {errors.lastname && touched.lastname ? (
-                <p style={{ color: "red" }} sx={formStyle.signupError}>
+                <Typography
+                  variant="span"
+                  style={{ color: "red", margin: "0", marginBottom: "15px" }}
+                  sx={formStyle.signupError}
+                >
                   {errors.lastname}
-                </p>
+                </Typography>
               ) : null}
-              <br />
-              <br />
+              <TextField
+                id="username"
+                name="username"
+                value={values.username}
+                fullWidth
+                label="Username"
+                variant="standard"
+                size="small"
+                required
+                onChange={handleChange}
+                onBlur={handleBlur}
+                style={{ marginBottom: "20px" }}
+                handleSubmit={handleSubmit}
+              />
+              {errors.username && touched.username ? (
+                <Typography
+                  variant="span"
+                  style={{ color: "red", margin: "0", marginBottom: "15px" }}
+                  sx={formStyle.signupError}
+                >
+                  {errors.username}
+                </Typography>
+              ) : null}
+
+              {/* 
+<FormControl fullWidth style={{ marginBottom: "20px" }}>
+                <InputLabel  htmlFor="country">Country</InputLabel>
+                <MuiSelect
+                  label="Country"
+                  id="country"
+                  name="country"
+                  variant="standard"
+                  size="small"
+                  value={values.country}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                >
+                  {countriesList().getData().map((country) => (
+                    <MenuItem key={country.value} value={country.value}>
+                      {country.label}
+                    </MenuItem>
+                  ))}
+                </MuiSelect>
+                {touched.country && errors.country && (
+                  <div style={{ color: "red" }}>{errors.country}</div>
+                )}
+              </FormControl> */}
+
+              <FormControl fullWidth style={{ marginTop: "10px", }}>
+                <PhoneInput
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={values.phoneNumber}
+                  onChange={(value) => handleChange("phoneNumber", value)}
+                  onBlur={handleBlur}
+                  variant="standard"
+                  size="small"
+                  required
+                />
+                {touched.phoneNumber && errors.phoneNumber && (
+                  <div style={{ color: "red" }}>{errors.phoneNumber}</div>
+                )}
+              </FormControl>
+
 
               <TextField
                 id="email"
@@ -119,14 +232,16 @@ export default function Signup() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.email}
+                style={{ marginBottom: "20px" }}
               />
               {errors.email && touched.email ? (
-                <p style={{ color: "red" }} sx={formStyle.signupError}>
+                <p
+                  style={{ color: "red", margin: "0", marginBottom: "15px" }}
+                  sx={formStyle.signupError}
+                >
                   {errors.email}
                 </p>
               ) : null}
-              <br />
-              <br />
 
               <TextField
                 id="password"
@@ -137,19 +252,25 @@ export default function Signup() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.password}
+                style={{ marginBottom: "20px" }}
+                type={showPassword ? "text" : "password"}
+                InputProps={{
+                  endAdornment: (
+                    <span onClick={togglePasswordVisibility}>
+                      {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+                    </span>
+                  ),
+                }}
               />
               {errors.password && touched.password ? (
-                <p style={{ color: "red" }} sx={formStyle.signupError}>
+                <p
+                  style={{ color: "red", margin: "0", marginBottom: "15px" }}
+                  sx={formStyle.signupError}
+                >
                   {errors.password}
                 </p>
               ) : null}
-              <br />
-              <br />
-              {errors.confirmpassword && touched.confirmpassword ? (
-                <p style={{ color: "red" }} sx={formStyle.signupError}>
-                  {errors.confirmpassword}
-                </p>
-              ) : null}
+
               <TextField
                 id="confirmpassword"
                 label="Confirm password"
@@ -159,18 +280,35 @@ export default function Signup() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.confirmpassword}
-              />
-              <br />
-              <br />
-              <br />
-              <br />
+                style={{ marginBottom: "20px" }}
+                type={showPassword ? "text" : "password"}
+                InputProps={{
+                  endAdornment: (
+                    <span onClick={togglePasswordVisibility}>
+                      {showPassword ? <FaRegEye /> : <FaEyeSlash />}
+                    </span>
+                  ),
+                }}
+              >
+                {errors.confirmpassword && touched.confirmpassword ? (
+                  <p
+                    style={{ color: "red", margin: "0", marginBottom: "15px" }}
+                    sx={formStyle.signupError}
+                  >
+                    {errors.confirmpassword}
+                  </p>
+                ) : null}
+              </TextField>
+
               <Button
+                onClick={handleSignIn}
                 type="submit"
                 variant="contained"
                 fullWidth
                 disableElevation
+                disabled={loading}
               >
-                Signup
+                {loading ? "Loading" : "Sign up"}
               </Button>
             </form>
             {/* Add more form fields as needed */}

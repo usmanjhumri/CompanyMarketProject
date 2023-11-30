@@ -58,7 +58,7 @@ const FooterStyle = {
     padding:"1.2rem"
   },
   copyRightTypo:{
-    fontSize:"14px",
+    fontSize:{md:"14px", xs:"13px"},
     fontFamily:"Be Vietnam",
     color:"#FFFFFF",
     display:"flex",

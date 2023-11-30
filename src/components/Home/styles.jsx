@@ -51,7 +51,7 @@ const styles = {
     fontWeight: 500,
     textAlign: "center",
     fontSize: 40,
-    width: { md: "630px", xs: "400px" },
+    width: { md: "630px", xs: "auto" },
 
     "@media (min-width: 600px)": {
       // Adjust styles for screens with a minimum width of 600px

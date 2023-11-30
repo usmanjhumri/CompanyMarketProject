@@ -1,8 +1,8 @@
 import Colors from "../colors";
-const AuthStyle = {
+const Styles = {
   mainBox: {
-    marginTop: { md: "5rem", xs: "5rem" },
-    padding: { md: "0px 3rem", xs: "auto" },
+    marginTop: { md: "20rem", xs: "15rem" },
+    padding: { md: "0px 3rem", xs: "0px" },
   },
   AuthTypo: {
     fontWeight: 600,
@@ -18,9 +18,10 @@ const AuthStyle = {
     fontSize: { md: "16px", xs: "12px" },
     color: "#000000",
     fontFamily: "Be Vietnam",
-    lineHeight: "35.06px",
     textAlign: "center",
-    marginBottom: "3rem",
+
+    maxWidth: "650px",
+    margin: "0.8rem auto",
   },
   BoxStyle: {
     boxShadow: " 0px 0px 15px 0px #0000001A",
@@ -33,13 +34,13 @@ const AuthStyle = {
   },
   BoxTypo: {
     fontWeight: 500,
-    fontSize: { md: "24px", xs: "12px", sm: "16px" },
+    fontSize: { md: "24px", xs: "18px" },
     color: "#000000",
     fontFamily: "Be Vietnam",
     lineHeight: "20.45px",
     textAlign: "left",
-    "@media (min-width: 900px)": {
-      fontSize: "15px",
+    "@media (min-width: 900px)":{
+      fontSize:"15px",
       fontWeight:600,
     },
   },
@@ -84,8 +85,18 @@ const AuthStyle = {
       background: Colors.primary,
     },
   },
-  linkTypo: {
-    fontSize: { md: "12px", xs: "8px", lg: "16px", xxl: "14px", sm: "10px" },
+  CategoriesText: {
+    leadingTrim: "both",
+    textEdge: "cap",
+    fontFamily: "Be Vietnam",
+    fontSize: "24px",
+    fontStyle: "normal",
+    fontWeight: 500,
+    lineHeight: "normal",
+    color: Colors.primary,
+  },
+  labelColor: {
+    color: "red",
   },
 };
-export default AuthStyle;
+export default Styles;

@@ -1,11 +1,29 @@
-import Colors from "../colors";
-const AuthStyle = {
+import colors from "../colors";
+
+const CardStyle = {
   mainBox: {
-    marginTop: { md: "5rem", xs: "5rem" },
+    marginTop: { md: "5rem", xs: "4rem" },
     padding: { md: "0px 3rem", xs: "auto" },
   },
-  AuthTypo: {
+  CardTypo: {
     fontWeight: 600,
+    fontSize: { md: "32px", xs: "20px" },
+    color: "#000000",
+    fontFamily: "Be Vietnam",
+
+    textAlign: "center",
+  },
+  CardTypo2: {
+    fontWeight: 400,
+    fontSize: { md: "16px", xs: "14px" },
+    color: "#000000",
+    fontFamily: "Be Vietnam",
+    lineHeight: "23.38px",
+    textAlign: "center",
+  },
+
+  CardTypo: {
+    fontWeight: 500,
     fontSize: { md: "32px", xs: "20px" },
     color: "#000000",
     fontFamily: "Be Vietnam",
@@ -13,14 +31,14 @@ const AuthStyle = {
     textAlign: "center",
     margin: { md: "2rem 0px", xs: "auto" },
   },
-  AuthTypo2: {
+  CardTypo2: {
     fontWeight: 400,
     fontSize: { md: "16px", xs: "12px" },
     color: "#000000",
     fontFamily: "Be Vietnam",
     lineHeight: "35.06px",
     textAlign: "center",
-    marginBottom: "3rem",
+    marginBottom: "4rem",
   },
   BoxStyle: {
     boxShadow: " 0px 0px 15px 0px #0000001A",
@@ -33,14 +51,13 @@ const AuthStyle = {
   },
   BoxTypo: {
     fontWeight: 500,
-    fontSize: { md: "24px", xs: "12px", sm: "16px" },
+    fontSize: { md: "24px", xs: "18px" },
     color: "#000000",
     fontFamily: "Be Vietnam",
     lineHeight: "20.45px",
     textAlign: "left",
     "@media (min-width: 900px)": {
-      fontSize: "15px",
-      fontWeight:600,
+      fontSize: "20px",
     },
   },
   BoxTypo2: {
@@ -62,7 +79,7 @@ const AuthStyle = {
   PriceTypo2: {
     fontWeight: 500,
     fontSize: { md: "18px", xs: "14px" },
-    color: Colors.primary,
+    color: colors.primary,
     fontFamily: "Be Vietnam",
     lineHeight: "26.3px",
     textAlign: "left",
@@ -76,16 +93,13 @@ const AuthStyle = {
     textAlign: "left",
   },
   BtnStyle: {
-    background: Colors.primary,
+    background: colors.primary,
     color: "#FFFFFF",
     padding: "0.4rem 0.6rem",
     textTransform: "capitalize",
     ":hover": {
-      background: Colors.primary,
+      background: colors.primary,
     },
   },
-  linkTypo: {
-    fontSize: { md: "12px", xs: "8px", lg: "16px", xxl: "14px", sm: "10px" },
-  },
 };
-export default AuthStyle;
+export default CardStyle;

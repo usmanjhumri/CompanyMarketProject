@@ -1,12 +1,14 @@
 import styles from "./styles";
-import { Box, Typography, InputBase, Button } from "@mui/material";
+import { Box, Typography, InputBase, Button,  } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
 import AuthsItem from "../Author'sItems";
-import Categories from "../Categories/Categories";
+
 import FeatureProducts from "../FeatureProducts";
 import Slider from "./Slider";
-import { useSelector } from "react-redux";
+import MostSoldProduct from "../MostSoldProduct/MostSoldProducts";
+
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -57,7 +59,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Home = () => {
   return (
     <>
-      <Box style={styles.backgroundImg}>
+    
+   
+       
+        <Box style={styles.backgroundImg}>
+         
         <Box style={styles.backgroundImgColor}>
           <Typography variant="h4" sx={styles.textHeading}>
             Discover Quality Digital Products And Elevate Your Business
@@ -87,9 +93,13 @@ const Home = () => {
         </Box>
         <Slider />
       </Box>
+      
+ 
+ 
+      
       <FeatureProducts />
       <AuthsItem />
-      <Categories />
+      <MostSoldProduct />
     </>
   );
 };

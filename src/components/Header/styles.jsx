@@ -5,10 +5,15 @@ const styles = {
     boxShadow: "none",
     // alignItems: "center",
     // justifyContent: "space-between",
-  },
 
+  },
+signupLoginStyle:{
+textDecoration:"none",
+color: Colors.black,
+
+},
   text: {
-    color: Colors.black,
+    // color: Colors.black,
     fontFamily: "Be Vietnam Pro,sans-serif",
     fontSize: "12px",
     fontStyle: "normal",
