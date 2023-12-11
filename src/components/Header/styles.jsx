@@ -57,7 +57,7 @@ const styles = {
     textDecoration: "none",
     lineHeight: "17.53px",
     marginLeft: "2px",
-    fontFamily: "Be Vietnam",
+    fontFamily: "Be Vietnam Pro , sans-serif",
     color: "#000000",
     "&:hover": {
       background: Colors.primary,
@@ -85,7 +85,7 @@ const styles = {
     textDecoration: "none",
     lineHeight: "17.53px",
     marginLeft: "2px",
-    fontFamily: "Be Vietnam",
+    fontFamily: "Be Vietnam Pro , sans-serif",
     color: "#000000",
     fontSize: "14px",
   },

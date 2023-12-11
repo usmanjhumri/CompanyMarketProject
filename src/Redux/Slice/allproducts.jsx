@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchAllProducts } from "../api/api";
-import { Login } from "@mui/icons-material";
 
 const allProductSlice = createSlice({
   name: "allproducts",
@@ -21,8 +20,9 @@ const allProductSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(fetchAllProducts.fulfilled, (state, action) => {
+      console.log(action.payload.allProducts);
       state.isLoading = false;
-      state.getProducts = action?.payload?.allProducts?.data;
+      state.getProducts = action?.payload?.allProducts;
       state.paginationData.currentIndex =
         action?.payload?.allProducts?.current_page;
       state.paginationData.endIndex = action?.payload?.allProducts?.last_page;

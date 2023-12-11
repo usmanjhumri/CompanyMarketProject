@@ -8,7 +8,7 @@ const FooterStyle = {
     fontWeight: 500,
     fontSize: { md: "24px", xs: "16px" },
     color: Colors.secondary,
-    fontFamily: "Be Vietnam",
+    fontFamily: "Be Vietnam Pro , sans-serif",
     lineHeight: "35.06px",
     "@media (max-width: 1024px)": {
       fontSize: "15px",
@@ -28,7 +28,7 @@ const FooterStyle = {
     textDecoration: "none",
     lineHeight: "17.53px",
     marginLeft: "2px",
-    fontFamily: "Be Vietnam",
+    fontFamily: "Be Vietnam Pro , sans-serif",
     color: "#000000",
   },
   linkTypo: {
@@ -59,7 +59,7 @@ const FooterStyle = {
   },
   copyRightTypo: {
     fontSize: "14px",
-    fontFamily: "Be Vietnam",
+    fontFamily: "Be Vietnam Pro , sans-serif",
     color: "#FFFFFF",
     display: "flex",
     alignItems: "center",

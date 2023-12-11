@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -24,10 +24,11 @@ const Categoires = () => {
   );
   const isLoading = useSelector((state) => state?.home?.isLoading);
 
-  useEffect(() => {
+  useMemo(() => {
     setProduct(categoriesProduct?.products);
     setSubCatgeory(categoriesProduct?.subcategories);
-  }, [categoriesProduct]);
+    setPriceRange([0, 1000]);
+  }, [categoriesProduct, params]);
 
   const handlePriceChange = (event, newValue) => {
     setPriceRange(newValue);
@@ -36,7 +37,6 @@ const Categoires = () => {
   const handleCheckBox = (e) => {
     const subCategoryId = e.target.value;
     const isChecked = e.target.checked;
-
     if (isChecked) {
       // Add to the selected subcategories array
       setSelectedSubcategories((prev) => [...prev, subCategoryId]);
@@ -47,7 +47,7 @@ const Categoires = () => {
       );
     }
   };
-  useEffect(() => {
+  useMemo(() => {
     // Filter products based on selected subcategories
     let subcategoryFilteredProducts = categoriesProduct?.products;
     if (selectedSubcategories.length > 0) {
@@ -72,7 +72,8 @@ const Categoires = () => {
         ? priceRangeFilteredProducts
         : subcategoryFilteredProducts
     );
-  }, [selectedSubcategories, categoriesProduct, priceRange]);
+  }, [selectedSubcategories, priceRange]);
+
   return (
     <Fragment>
       <Typography sx={Styles.CatHeading}>{params.name}</Typography>
@@ -81,8 +82,15 @@ const Categoires = () => {
         professionals alike, our Featured Products are more than just tools
         they're catalysts for success.
       </Typography>
-      <Grid container sx={{ marginTop: 5 }}>
-        <Grid item md={2} lg={2}>
+      <Grid
+        container
+        sx={{
+          maxWidth: { md: "100%", xs: "auto" },
+          margin: "auto",
+          marginTop: "4rem",
+        }}
+      >
+        <Grid item xs={12} md={2}>
           {isLoading ? (
             <Box sx={{ width: 250, paddingLeft: 5 }}>
               <Skeleton />
@@ -90,19 +98,11 @@ const Categoires = () => {
               <Skeleton animation="wave" />
             </Box>
           ) : (
-            <Box component="div" sx={Styles.mainBox}>
-              <Box>
-                <Typography sx={Styles.SubCatHeading}>
-                  Sub Catogories
-                </Typography>
-              </Box>
-              <FormGroup
-                sx={{
-                  flexDirection: { md: "column", xs: "row" },
-                  marginTop: 1,
-                  marginLeft: 3,
-                }}
-              >
+            <Box sx={Styles.categoriesStyle}>
+              <Typography sx={Styles.filterRefine}>Filter</Typography>
+              <Typography sx={Styles.SubCatHeading}>Sub Catogories</Typography>
+
+              <FormGroup sx={Styles.formCenter}>
                 {subCatgeory?.map((item) => (
                   <FormControlLabel
                     key={item.id}
@@ -113,6 +113,7 @@ const Categoires = () => {
                   />
                 ))}
               </FormGroup>
+
               <Box
                 component="div"
                 sx={{ display: "flex", flexDirection: "column" }}
@@ -126,13 +127,13 @@ const Categoires = () => {
                 valueLabelFormat={`$ ${priceRange}`}
                 min={0}
                 max={1000}
-                sx={{ width: "100%" }}
+                sx={{ width: "70%" }}
               />
             </Box>
           )}
         </Grid>
 
-        <Grid item md={10} lg={10}>
+        <Grid item md={10}>
           <Cards data={product ? product : []} isLoading={isLoading} />
         </Grid>
       </Grid>

@@ -65,10 +65,15 @@ export default function Signup({ setIsLoggedIn }) {
   };
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+  const togglePasswordVisibility2 = () => {
+    setShowPassword2(!showPassword2);
   };
 
   const {
@@ -288,11 +293,11 @@ export default function Signup({ setIsLoggedIn }) {
                 onBlur={handleBlur}
                 value={values.confirmpassword}
                 style={{ marginBottom: "20px" }}
-                type={showPassword ? "text" : "password"}
+                type={showPassword2 ? "text" : "password"}
                 InputProps={{
                   endAdornment: (
-                    <span onClick={togglePasswordVisibility}>
-                      {showPassword ? <FaRegEye /> : <FaEyeSlash />}
+                    <span onClick={togglePasswordVisibility2}>
+                      {showPassword2 ? <FaRegEye /> : <FaEyeSlash />}
                     </span>
                   ),
                 }}

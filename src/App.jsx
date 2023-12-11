@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import Header from "./components/Header";
 import "./App.css";
@@ -13,14 +14,15 @@ import Signin from "./components/Signin/Signin";
 import Products from "./components/AllProducts";
 import Categoires from "./components/Categoires";
 import ProductDetail from "./components/ProductDetail";
+import Subcategory from "./components/Subcategories";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    const getData = () => dispatch(fetchHomeData());
-    return () => getData();
-  }, []);
+   dispatch(fetchHomeData());
+ 
+  }, [dispatch]);
 
   return (
     <div>
@@ -31,8 +33,14 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/categories/:name/:id" element={<Categoires />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/:name/sub-categries/:name/:id" element={<Home />} />
-          <Route path="/product/:name/:id" element={<ProductDetail />} />
+          <Route
+            path=":category_id/sub-categories/:name/:id"
+            element={<Subcategory />}
+          />
+          <Route
+            path="/product/:category_id/:name/:id"
+            element={<ProductDetail />}
+          />
           <Route path="*" element={<Pagenotfound />} />
           <Route
             path="/signin"

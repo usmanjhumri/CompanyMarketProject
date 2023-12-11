@@ -5,15 +5,17 @@
 
 body {
   margin: 0px;
-  font-family: "Be Vietnam Pro,sans-serif";
+  font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 #root {
-  font-family: Be Vietnam Pro, sans-serif !important;
+  font-family: 'Be Vietnam Pro', sans-serif;
 }
-.css-lo5p7c-MuiTypography-root {
-  font-family: "Be Vietnam Pro", sans-serif !important;
+
+.MuiTypography-root {
+  font-family: 'Be Vietnam Pro', sans-serif !important;
 }
+
 .swiper-button-prev {
   display: "none";
 }
@@ -31,12 +33,16 @@ body {
   border-bottom: 1px solid #222222;
 
   &::placeholder {
-    color: #999; /* Adjust the color as needed */
+    color: #999;
+    /* Adjust the color as needed */
   }
 
   &:focus {
-    outline: none; /* Remove default focus outline */
-    border-bottom: 1px solid #222222; /* Change the border color on focus */
+    outline: none;
+    /* Remove default focus outline */
+    border-bottom: 1px solid #222222;
+    /* Change the border color on focus */
   }
 }
+
 /* signup phone field css */

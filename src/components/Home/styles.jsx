@@ -55,11 +55,11 @@ const styles = {
 
     "@media (min-width: 600px)": {
       // Adjust styles for screens with a minimum width of 600px
-      fontSize: "40px",
+      fontSize: "36px",
     },
     "@media (min-width: 960px)": {
       // Adjust styles for screens with a minimum width of 960px
-      fontSize: "40px",
+      fontSize: "36px",
     },
     "@media (max-width: 500px)": {
       // Adjust styles for screens with a minimum width of 960px

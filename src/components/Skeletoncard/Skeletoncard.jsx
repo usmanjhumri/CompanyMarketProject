@@ -6,7 +6,7 @@ const Skeletoncard = ({ cards }) => {
   return Array(cards)
     .fill(0)
     .map((item, index) => (
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={4} key={index}>
         <Box sx={CardStyle.BoxStyle} key={index}>
           <Skeleton style={{ marginBottom: "0.4rem" }} height={100} />
           <Skeleton count={4} style={{ marginBottom: "0.4rem" }} />

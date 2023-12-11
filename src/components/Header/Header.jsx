@@ -8,6 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import Popover from "@mui/material/Popover";
 import style from "./styles";
 import { Container, Hidden } from "@mui/material";
 import Logo from "../../assets/logo.png";
@@ -15,10 +16,9 @@ import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 // import { HeaderItemArray } from "./HeaderItemArray";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { useSelector } from "react-redux";
-import Menu from "./Menu/Menu";
 // import './Header.css'
 import styles from "./styles";
 import Colors from "../colors";
@@ -79,12 +79,11 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null); // Open and Closing menu
   const [selectedCat, setSelectedCat] = useState(null); // selecting catgoery for subcat
   const catergories = useSelector((state) => state?.home?.catergories); // getting categories from API
-
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
-  function handleClick(event, catergoryId) {
+  function handleHover(event, catergoryId) {
     event.preventDefault(); // Prevents the default behavior of the event
     event.stopPropagation(); // Stops the event from propagating up or down the DOM
     if (anchorEl !== event.currentTarget) {
@@ -96,14 +95,19 @@ const Header = () => {
     }
   }
 
-  function handleClose() {
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
     setAnchorEl(null);
-  }
+  };
+
+  const open = Boolean(anchorEl);
 
   return (
     <>
       {/* upper header code  */}
-
       <Box p={2} bgcolor="#F8F9FA">
         <Container maxWidth="100%">
           <Box
@@ -181,14 +185,16 @@ const Header = () => {
                   <Box component="img" src={Logo} />
                 </NavLink>
               </Box>
-              ``
               <Hidden mdDown>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
                   {catergories?.map((item, index) => (
                     <Fragment key={index}>
                       <Typography
-                        aria-owns={anchorEl ? "simple-popover" : undefined}
+                        aria-owns={open ? "mouse-over-popover" : undefined}
                         aria-haspopup="true"
+                        onMouseEnter={handlePopoverOpen}
+                        onClick={handlePopoverClose}
+                        sx={{ zIndex: 10000 }}
                       >
                         <NavLink
                           to={`/categories/${item.name.toLowerCase().trim()}/${
@@ -197,13 +203,45 @@ const Header = () => {
                           style={({ isActive }) => ({
                             ...(isActive ? styles.linkbg : styles.link),
                           })}
-                          onMouseEnter={(e) => handleClick(e, item.id)}
+                          onMouseEnter={(e) => handleHover(e, item.id)}
                         >
                           {item.name}
                         </NavLink>
                       </Typography>
                     </Fragment>
                   ))}
+
+                  {selectedCat?.subcategories?.length > 0 && (
+                    <Popover
+                      open={open}
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center",
+                      }}
+                      onClose={handlePopoverClose}
+                      sx={{ mt: 1 }}
+                      onMouseLeave={handlePopoverClose}
+                      onClick={handlePopoverClose}
+                    >
+                      {selectedCat?.subcategories?.map((item, index) => (
+                        <div key={index}>
+                          <NavLink
+                            style={{ textDecoration: "none", color: "black" }}
+                            to={`${selectedCat.id}/sub-categories/${item.name
+                              .toLowerCase()
+                              .trim()}/${item.id}`}
+                          >
+                            <Typography sx={{ p: 2 }}>{item.name}</Typography>
+                          </NavLink>
+                        </div>
+                      ))}
+                    </Popover>
+                  )}
                 </Box>
               </Hidden>
               <Hidden mdUp>

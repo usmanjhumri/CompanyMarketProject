@@ -3,7 +3,8 @@ const colors = {
   secondary: "#50B948",
   white: "#FFFFFF",
   black: "black",
-  cartClr:"#FDC400"
+  cartClr: "#FDC400",
+  gray: "#787878",
 };
 
 export default colors;

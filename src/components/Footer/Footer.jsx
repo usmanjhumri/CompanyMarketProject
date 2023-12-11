@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 import { Box, Button, Container, Grid, Link, Typography } from "@mui/material";
 import Logo from "../../assets/logo.png";
@@ -9,12 +10,11 @@ import { useSelector } from "react-redux";
 import { Fragment } from "react";
 
 const Footer = () => {
-// <<<<<<<<< Temporary merge branch 1
-  // const cat = useSelector((state) => state?.home?.catergories);
-  // console.log(cat, ' category');
-  
-
-  const cat = useSelector((state) => state?.home?.catergories.filter(category => category.subcategories.length > 0));
+  // const cat = useSelector((state) =>
+  //   state?.home?.catergories.filter(
+  //     (category) => category.subcategories.length > 0
+  //   )
+  // );
 
   return (
     <>

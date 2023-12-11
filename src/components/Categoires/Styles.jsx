@@ -1,9 +1,10 @@
+import Colors from "../colors";
 const CategoriesStyle = {
   CatHeading: {
     fontWeight: 600,
     fontSize: { md: "32px", xs: "20px" },
-    color: "#000000",
-    fontFamily: "Be Vietnam",
+    color: Colors.black,
+    fontFamily: "Be Vietnam Pro , sans-serif",
     lineHeight: "35.06px",
     textAlign: "center",
     margin: { md: "2rem 0px", xs: "auto" },
@@ -12,8 +13,8 @@ const CategoriesStyle = {
   CatSubHeading: {
     fontWeight: 500,
     fontSize: { md: "16px", xs: "12px" },
-    color: "#000000",
-    fontFamily: "Be Vietnam",
+    color: Colors.black,
+    fontFamily: "Be Vietnam Pro , sans-serif",
     textAlign: "center",
     maxWidth: "650px",
     margin: "0.8rem auto",
@@ -21,8 +22,7 @@ const CategoriesStyle = {
   SubCatHeading: {
     fontWeight: 500,
     fontSize: { lg: "22px", md: "18px", xs: "12px" },
-    color: "#000000",
-    fontFamily: "Be Vietnam !important",
+    color: Colors.black,
     textAlign: "center",
     maxWidth: "650px",
     margin: "0.8rem auto",
@@ -30,15 +30,32 @@ const CategoriesStyle = {
   CheckBoxLabel: {
     fontWeight: 500,
     fontSize: { md: "14px", xs: "12px" },
-    fontFamily: "Be Vietnam !important",
   },
-  mainBox: {
-    marginTop: { md: "0rem", xs: "4rem" },
-    padding: { md: "0px 3rem", xs: "auto" },
+
+  categoriesStyle: {
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
     flexDirection: "column",
+    alignItems: "center",
+    border: "1px solid rgb(223, 230, 233)",
+    marginLeft: "30px",
+    justifyContent: "center",
+  },
+  filterRefine: {
+    background: Colors.secondary,
+    color: "white",
+    height: "50px",
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontFamily: "Be Vietnam Pro , sans-serif",
+    fontSize: "24px",
+    fontWeight: 500,
+  },
+  formCenter: {
+    flexDirection: { md: "column", xs: "row" },
+    paddingLeft: { xs: "20px" },
+    alignItems: "flex-start",
   },
 };
 

@@ -48,9 +48,9 @@ const Slider = () => {
 
   return (
     <Box sx={styles.sliderBoxDiv}>
-      <StyledCard variant="outlined" raised>
+      <StyledCard variant="outlined">
         <Typography variant="h4" sx={styles.silderHeading}>
-          Explore Different Categories
+          Unleash Our Prime Creations
         </Typography>
 
         <Box sx={styles.innerCardDisplay}>

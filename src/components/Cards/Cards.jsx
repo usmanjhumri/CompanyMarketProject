@@ -14,11 +14,13 @@ const Cards = ({ data, isLoading }) => {
         <Grid container spacing={3}>
           {data?.map((item, index) => (
             <Grid item xs={12} md={4} key={index}>
-              <Link
-                to={`/product/${item.name}/${item.id}`}
-                style={{ textDecoration: "none" }}
-              >
-                <Box sx={Styles.BoxStyle}>
+              <Box sx={Styles.BoxStyle}>
+                <Link
+                  to={`/product/${item.category_id}/${item.name
+                    .toLowerCase()
+                    .replace(/[\s-]/g, "-")}/${item.id}`}
+                  style={{ textDecoration: "none" }}
+                >
                   <Box sx={Styles.imgBoxDiv}>
                     <Box
                       component="img"
@@ -44,37 +46,37 @@ const Cards = ({ data, isLoading }) => {
                       $ {Number(item.regular_price).toFixed(2)}
                     </Typography>
                   </Box>
+                </Link>
 
+                <Box
+                  mt={4}
+                  sx={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Typography sx={Styles.SalesTypo}>
+                    {item.total_sell} Sales
+                  </Typography>
                   <Box
-                    mt={4}
-                    sx={{ display: "flex", justifyContent: "space-between" }}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                    }}
                   >
-                    <Typography sx={Styles.SalesTypo}>
-                      {item.total_sell} Sales
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
+                    <PiShoppingCartLight
+                      style={{
+                        padding: "0.6rem",
+                        border: "1px solid #787878",
+                        borderRadius: "2px",
+                        color: "#787878",
                       }}
-                    >
-                      <PiShoppingCartLight
-                        style={{
-                          padding: "0.6rem",
-                          border: "1px solid #787878",
-                          borderRadius: "2px",
-                          color: "#787878",
-                        }}
-                      />
+                    />
 
-                      <a href={item.demo_link} target="_blank">
-                        <Button sx={Styles.BtnStyle}>Live Preview</Button>
-                      </a>
-                    </Box>
+                    <a href={item.demo_link} target="_blank">
+                      <Button sx={Styles.BtnStyle}>Live Preview</Button>
+                    </a>
                   </Box>
                 </Box>
-              </Link>
+              </Box>
             </Grid>
           ))}
           {isLoading && <SkeletonCard cards={20} />}

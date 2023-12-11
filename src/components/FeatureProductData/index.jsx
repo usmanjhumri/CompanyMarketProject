@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable no-undef */
 /* eslint-disable react/jsx-no-target-blank */
-import { Fragment, useState } from "react";
+import { Fragment, useState, useMemo } from "react";
 import {
   Box,
   Button,
@@ -17,7 +16,7 @@ import { styled } from "@mui/material/styles";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { useRadioGroup } from "@mui/material/RadioGroup";
 import { useSelector } from "react-redux";
-// import Skeletoncard from "../Skeletoncard";
+import { Link } from "react-router-dom";
 // eslint-disable-next-line react-refresh/only-export-components
 const StyledFormControlLabel = styled((props) => (
   <FormControlLabel {...props} />
@@ -46,10 +45,24 @@ function MyFormControlLabel(props) {
 }
 
 export default function index({ filterProduct, isLoading }) {
+  const [subCategoryUnique, setSubCategoryUnique] = useState([]);
+  const [value, setValue] = useState("");
+
   const imgPath = useSelector((state) => state?.home?.imgPath);
 
+  useMemo(() => {
+    const subCat = filterProduct.reduce(
+      (acc, cur) =>
+        acc.some(({ subcategory }) => subcategory.name === cur.subcategory.name)
+          ? acc
+          : [...acc, cur],
+      []
+    );
+    setSubCategoryUnique(subCat);
+    setValue(subCat[0]?.subcategory?.name);
+  }, [filterProduct]);
+
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [value, setValue] = useState("tourism");
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -64,7 +77,7 @@ export default function index({ filterProduct, isLoading }) {
             alignItems: "center",
           }}
         >
-          <Typography sx={Styles.CategoriesText}>Categories</Typography>
+          <Typography sx={Styles.CategoriesText}>Sub categories</Typography>
           <RadioGroup
             value={value}
             onChange={handleChange}
@@ -78,23 +91,14 @@ export default function index({ filterProduct, isLoading }) {
               },
             }}
           >
-            <MyFormControlLabel
-              value="tourism"
-              control={<Radio />}
-              label="Tourism"
-            />
-            <MyFormControlLabel value="saas" control={<Radio />} label="SAAS" />
-            <MyFormControlLabel
-              value="financial"
-              control={<Radio />}
-              label="Financial"
-            />
-
-            <MyFormControlLabel
-              value="ss"
-              control={<Radio />}
-              label="Tourism"
-            />
+            {subCategoryUnique?.map((item, index) => (
+              <MyFormControlLabel
+                key={index}
+                value={item?.subcategory?.name}
+                control={<Radio />}
+                label={item?.subcategory?.name}
+              />
+            ))}
           </RadioGroup>
         </Box>
       </Grid>
@@ -107,7 +111,7 @@ export default function index({ filterProduct, isLoading }) {
       >
         {filterProduct?.map((item, index) => (
           <Fragment key={index}>
-            {value === "tourism" && (
+            {value === item?.subcategory?.name && (
               <Grid
                 item
                 xs={12}
@@ -120,250 +124,69 @@ export default function index({ filterProduct, isLoading }) {
                 }}
               >
                 <Box sx={Styles.BoxStyle}>
-                  <Box component="div" sx={Styles.imgBoxDiv}>
-                    {" "}
-                    <Box
-                      component="img"
-                      src={imgPath + "/" + item.image}
-                      sx={Styles.ImgStyle}
-                    />
-                  </Box>
-
-                  <Typography mt={2} sx={Styles.BoxTypo}>
-                    {item.name}
-                  </Typography>
-
-                  <Typography mt={1} sx={Styles.BoxTypo2}>
-                    By {item.user.username}
-                  </Typography>
-
-                  <Box mt={2} sx={{ display: "flex", gap: 2 }}>
-                    <Typography sx={Styles.PriceTypo}>
-                      $ {Number(item.extended_price).toFixed(2)}
-                    </Typography>
-                    <Typography sx={Styles.PriceTypo2}>
-                      $ {Number(item.regular_price).toFixed(2)}
-                    </Typography>
-                  </Box>
-
-                  <Box
-                    mt={4}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
+                  <Link
+                    to={`/product/${item.category_id}/${item.name
+                      .toLowerCase()
+                      .replace(/[\s-]/g, "-")}/${item.id}`}
+                    style={{ textDecoration: "none" }}
                   >
-                    <Typography sx={Styles.SalesTypo}>
-                      {item.total_sell} Sales
+                    <Box component="div" sx={Styles.imgBoxDiv}>
+                      {" "}
+                      <Box
+                        component="img"
+                        src={imgPath + "/" + item.image}
+                        sx={Styles.ImgStyle}
+                      />
+                    </Box>
+
+                    <Typography mt={2} sx={Styles.BoxTypo}>
+                      {item.name}
                     </Typography>
+
+                    <Typography mt={1} sx={Styles.BoxTypo2}>
+                      By {item.user.username}
+                    </Typography>
+
+                    <Box mt={2} sx={{ display: "flex", gap: 2 }}>
+                      <Typography sx={Styles.PriceTypo}>
+                        $ {Number(item.extended_price).toFixed(2)}
+                      </Typography>
+                      <Typography sx={Styles.PriceTypo2}>
+                        $ {Number(item.regular_price).toFixed(2)}
+                      </Typography>
+                    </Box>
+
                     <Box
+                      mt={4}
                       sx={{
                         display: "flex",
-                        alignItems: "center",
-                        gap: 2,
+                        justifyContent: "space-between",
                       }}
                     >
-                      <PiShoppingCartLight
-                        style={{
-                          padding: "0.6rem",
-                          border: "1px solid #787878",
-                          borderRadius: "2px",
-                          color: "#787878",
+                      <Typography sx={Styles.SalesTypo}>
+                        {item.total_sell} Sales
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
                         }}
-                      />
-                      <a href={item.demo_link} target="_blank">
-                        <Button sx={Styles.BtnStyle}>Live Preview</Button>
-                      </a>
+                      >
+                        <PiShoppingCartLight
+                          style={{
+                            padding: "0.6rem",
+                            border: "1px solid #787878",
+                            borderRadius: "2px",
+                            color: "#787878",
+                          }}
+                        />
+                        <a href={item.demo_link} target="_blank">
+                          <Button sx={Styles.BtnStyle}>Live Preview</Button>
+                        </a>
+                      </Box>
                     </Box>
-                  </Box>
-                </Box>
-              </Grid>
-            )}
-            {value === "saas" && (
-              <Grid
-                item
-                xs={12}
-                md={6}
-                sx={{
-                  paddingLeft: { md: "16px", xs: "0px" },
-                  "@media screen and (max-width: 600px)": {
-                    paddingLeft: "0px !important",
-                  },
-                }}
-              >
-                <Box sx={Styles.BoxStyle}>
-                  <Box component="img" src={item.img} sx={Styles.ImgStyle} />
-                  <Typography mt={2} sx={Styles.BoxTypo}>
-                    {item.title1}
-                  </Typography>
-
-                  <Typography mt={1} sx={Styles.BoxTypo2}>
-                    {item.title2}
-                  </Typography>
-
-                  <Box mt={2} sx={{ display: "flex", gap: 2 }}>
-                    <Typography sx={Styles.PriceTypo}>
-                      {item.pricetitle}
-                    </Typography>
-                    <Typography sx={Styles.PriceTypo2}>
-                      {item.pricetitle2}
-                    </Typography>
-                  </Box>
-
-                  <Box
-                    mt={4}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography sx={Styles.SalesTypo}>
-                      {item.salestitle}
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                      }}
-                    >
-                      <PiShoppingCartLight
-                        style={{
-                          padding: "0.6rem",
-                          border: "1px solid #787878",
-                          borderRadius: "2px",
-                          color: "#787878",
-                        }}
-                      />
-                      <a href={item.demo_link} target="_blank">
-                        <Button sx={Styles.BtnStyle}>Live Preview</Button>
-                      </a>
-                    </Box>
-                  </Box>
-                </Box>
-              </Grid>
-            )}
-            {value === "financial" && (
-              <Grid
-                item
-                xs={12}
-                md={6}
-                sx={{
-                  paddingLeft: { md: "16px", xs: "0px" },
-                  "@media screen and (max-width: 600px)": {
-                    paddingLeft: "0px !important",
-                  },
-                }}
-              >
-                <Box sx={Styles.BoxStyle}>
-                  <Box component="img" src={item.img} sx={Styles.ImgStyle} />
-                  <Typography mt={2} sx={Styles.BoxTypo}>
-                    {item.title1}
-                  </Typography>
-
-                  <Typography mt={1} sx={Styles.BoxTypo2}>
-                    {item.title2}
-                  </Typography>
-
-                  <Box mt={2} sx={{ display: "flex", gap: 2 }}>
-                    <Typography sx={Styles.PriceTypo}>
-                      {item.pricetitle}
-                    </Typography>
-                    <Typography sx={Styles.PriceTypo2}>
-                      {item.pricetitle2}
-                    </Typography>
-                  </Box>
-
-                  <Box
-                    mt={4}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography sx={Styles.SalesTypo}>
-                      {item.salestitle}
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                      }}
-                    >
-                      <PiShoppingCartLight
-                        style={{
-                          padding: "0.6rem",
-                          border: "1px solid #787878",
-                          borderRadius: "2px",
-                          color: "#787878",
-                        }}
-                      />
-                      <Button sx={Styles.BtnStyle}>Live Preview</Button>
-                    </Box>
-                  </Box>
-                </Box>
-              </Grid>
-            )}
-            {value === "ss" && (
-              <Grid
-                item
-                xs={12}
-                md={6}
-                sx={{
-                  paddingLeft: { md: "16px", xs: "0px" },
-                  "@media screen and (max-width: 600px)": {
-                    paddingLeft: "0px !important",
-                  },
-                }}
-              >
-                <Box sx={Styles.BoxStyle}>
-                  <Box component="img" src={item.img} sx={Styles.ImgStyle} />
-                  <Typography mt={2} sx={Styles.BoxTypo}>
-                    {item.title1}
-                  </Typography>
-
-                  <Typography mt={1} sx={Styles.BoxTypo2}>
-                    {item.title2}
-                  </Typography>
-
-                  <Box mt={2} sx={{ display: "flex", gap: 2 }}>
-                    <Typography sx={Styles.PriceTypo}>
-                      {item.pricetitle}
-                    </Typography>
-                    <Typography sx={Styles.PriceTypo2}>
-                      {item.pricetitle2}
-                    </Typography>
-                  </Box>
-
-                  <Box
-                    mt={4}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography sx={Styles.SalesTypo}>
-                      {item.salestitle}
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                      }}
-                    >
-                      <PiShoppingCartLight
-                        style={{
-                          padding: "0.6rem",
-                          border: "1px solid #787878",
-                          borderRadius: "2px",
-                          color: "#787878",
-                        }}
-                      />
-                      <Button sx={Styles.BtnStyle}>Live Preview</Button>
-                    </Box>
-                  </Box>
+                  </Link>
                 </Box>
               </Grid>
             )}
