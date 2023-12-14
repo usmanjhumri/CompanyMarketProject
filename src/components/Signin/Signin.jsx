@@ -8,13 +8,20 @@ import {
   Container,
   Typography,
   Button,
+  OutlinedInput,
+  Link,
 } from "@mui/material";
-import logo from "../../assets/jdlogo.png";
+import logo from "../../assets/jdlogo1.svg";
 import { FaRegEye } from "react-icons/fa";
 import { useFormik } from "formik";
 import { signinSchema } from "./Regex";
 import { FaEyeSlash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link as NavLink } from "react-router-dom";
+
+import { FcGoogle } from "react-icons/fc";
+import { BsApple } from "react-icons/bs";
+import { BsFacebook } from "react-icons/bs";
+import styles from "./styles";
 
 const initialValues = {
   email: "",
@@ -51,121 +58,147 @@ export default function Signin({ setIsLoggedIn }) {
     <>
       <Box
         sx={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          fontFamily: "Be Vietnam Pro,sans-serif",
+          ...styles.mainBox,
         }}
       >
         <Container maxWidth="sm">
           <Paper
             style={{
-              borderRadius: "10px",
-              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.10)",
-              minHeight: "200px",
-              padding: "16px",
+              ...styles.paperDiv,
             }}
           >
-            <Grid container direction="column" align="center" spacing={2}>
-              <Grid
-                container
-                style={{ paddingTop: "5px" }}
-                justifyContent="center"
-              >
-                <img src={logo} width="70px" alt="jdlogo" />
-              </Grid>
-              <Typography
-                style={{ fontFamily: "Be Vietnam Pro,sans-serif" }}
-                variant="h4"
-                component="h1"
-              >
-                Sign In
-              </Typography>
-            </Grid>
-
-            <form onSubmit={handleSubmit}>
-              <TextField
-                id="email"
-                label="Email"
-                variant="standard"
-                fullWidth
-                required
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.email}
-                style={{ marginBottom: "5px" }}
-              />
-              {errors.email && touched.email ? (
-                <p style={{ color: "red", margin: "0", marginBottom: "15px" }}>
-                  {errors.email}
-                </p>
-              ) : null}
-
-              <TextField
-                id="password"
-                label="Password"
-                variant="standard"
-                type={showPassword ? "text" : "password"}
-                fullWidth
-                required
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.password}
-                style={{ marginBottom: "5px" }}
-                InputProps={{
-                  endAdornment: (
-                    <span onClick={togglePasswordVisibility}>
-                      {showPassword ? <FaRegEye /> : <FaEyeSlash />}
-                    </span>
-                  ),
-                }}
-              />
-
-              {errors.password && touched.password ? (
-                <p style={{ color: "red", margin: "0", marginBottom: "15px" }}>
-                  {errors.password}
-                </p>
-              ) : null}
-
-              <br />
-              <br />
-
-              <Button
-                onClick={handleSignIn}
-                style={{ marginTop: "10px" }}
-                type="submit"
-                variant="contained"
-                fullWidth
-                disableElevation
-                disabled={loading}
-              >
-                {loading ? "Loading..." : "Sign IN"}
-              </Button>
-            </form>
-
             <Box
-              style={{
-                marginTop: 15,
-                marginBottom: 10,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+              sx={{
+                ...styles.innerPaperFlex,
               }}
             >
-              <Link to="/signup">
-                <Typography
-                  sx={{ textDecoration: "underline", color: "black" }}
-                >
-                  Create an account.
+              <Box
+                sx={{
+                  ...styles.logoDiv,
+                }}
+              >
+                <Box
+                  component="img"
+                  src={logo}
+                  width="100%%"
+                  alt="jdlogo"
+                  sx={{ ...styles.equalMargin }}
+                ></Box>
+              </Box>
+              <Box>
+                <Typography sx={{ ...styles.equalMargin, ...styles.signFont }}>
+                  Sign in
                 </Typography>
-              </Link>
-              <Typography sx={{ textDecoration: "underline" }}>
-                Forgot password?
-              </Typography>
+              </Box>
+              <Button
+                variant="outlined"
+                startIcon={<FcGoogle size={30} />}
+                sx={{ ...styles.btnLoginWith }}
+              >
+                Continue with Google
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<BsFacebook size={30} color="#4762b4" />}
+                sx={{ ...styles.btnLoginWith }}
+              >
+                Continue with Apple
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<BsApple size={30} />}
+                sx={{ ...styles.btnLoginWith }}
+              >
+                Continue with Apple
+              </Button>
+              /*Form Start */
+              <Box sx={{ ...styles.typoLabel }}>
+                <Typography>Username or Email </Typography>{" "}
+                <Link>Remind me</Link>
+              </Box>
+              <OutlinedInput sx={{ width: "90%" }} />{" "}
+              <Box sx={{ ...styles.typoLabel }}>
+                <Typography>Password </Typography> <Link>Forgot</Link>
+              </Box>
+              <OutlinedInput sx={{ width: "90%" }} />
+              <Button variant="contained" sx={{ ...styles.signInBtn }}>
+                Sign In
+              </Button>
+              /*Form end */
+              <Box sx={{ ...styles.typoLabel1 }}>
+                <Typography>New Here? </Typography>{" "}
+                <NavLink
+                  style={{ textDecoration: "none", color: "#2697FA" }}
+                  to={"/signup"}
+                >
+                  {" "}
+                  Create an account{" "}
+                </NavLink>
+              </Box>
+              {/* <form onSubmit={handleSubmit}>
+                <TextField
+                  id="email"
+                  label="Email"
+                  variant="standard"
+                  fullWidth
+                  required
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.email}
+                  style={{ marginBottom: "5px" }}
+                />
+                {errors.email && touched.email ? (
+                  <p
+                    style={{ color: "red", margin: "0", marginBottom: "15px" }}
+                  >
+                    {errors.email}
+                  </p>
+                ) : null}
+
+                <TextField
+                  id="password"
+                  label="Password"
+                  variant="standard"
+                  type={showPassword ? "text" : "password"}
+                  fullWidth
+                  required
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password}
+                  style={{ marginBottom: "5px" }}
+                  InputProps={{
+                    endAdornment: (
+                      <span onClick={togglePasswordVisibility}>
+                        {showPassword ? <FaRegEye /> : <FaEyeSlash />}
+                      </span>
+                    ),
+                  }}
+                />
+
+                {errors.password && touched.password ? (
+                  <p
+                    style={{ color: "red", margin: "0", marginBottom: "15px" }}
+                  >
+                    {errors.password}
+                  </p>
+                ) : null}
+
+                <br />
+                <br />
+
+                <Button
+                  onClick={handleSignIn}
+                  style={{ marginTop: "10px" }}
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                  disableElevation
+                  disabled={loading}
+                >
+                  {loading ? "Loading..." : "Sign IN"}
+                </Button>
+              </form> */}
             </Box>
-            {/* Add more form fields as needed */}
           </Paper>
         </Container>
       </Box>

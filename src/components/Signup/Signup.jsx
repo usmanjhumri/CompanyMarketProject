@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-unknown-property */
-import  { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Grid,
@@ -11,19 +11,20 @@ import {
   Container,
   Typography,
   Button,
-
-  FormControl,
- 
-  
+  OutlinedInput,
+  Link,
 } from "@mui/material";
-import formStyle from "./styles";
+import styles from "./styles";
 import "./index";
 import { useFormik } from "formik";
 import { signupSchema } from "./Regex";
-import logo from "../../assets/jdlogo.png";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import logo from "../../assets/jdlogo1.svg";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaEyeSlash, FaRegEyeSlash } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import { BsApple } from "react-icons/bs";
+import { BsFacebook } from "react-icons/bs";
 import "react-phone-number-input/style.css";
 
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
@@ -101,47 +102,96 @@ export default function Signup({ setIsLoggedIn }) {
     <>
       <Box
         sx={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          fontFamily: "Be+Vietnam",
+          ...styles.mainBox,
         }}
       >
         <Container maxWidth="sm">
           <Paper
-            sx={formStyle.paperStyle}
             style={{
-              borderRadius: "10px",
-              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.10)",
-              minHeight: "200px",
-              padding: "16px",
+              ...styles.paperDiv,
             }}
           >
-            <Grid container direction="column" align="center" spacing={2}>
-              <Grid
-                container
-                style={{ paddingTop: "5px" }}
-                justifyContent="center"
+            <Box
+              sx={{
+                ...styles.innerPaperFlex,
+              }}
+            >
+              <Box
+                sx={{
+                  ...styles.logoDiv,
+                }}
               >
-                <img
+                <Box
+                  component="img"
                   src={logo}
-                  width="70px"
+                  width="100%%"
                   alt="jdlogo"
-                  style={{ marginTop: 10 }}
-                />
-              </Grid>
-              <Typography
-                sx={formStyle.signupHeading}
-                variant="h4"
-                component="h1"
+                  sx={{ ...styles.equalMargin }}
+                ></Box>
+              </Box>
+              <Box>
+                <Typography sx={{ ...styles.equalMargin, ...styles.signFont }}>
+                  Sign up
+                </Typography>
+              </Box>
+              <Button
+                variant="outlined"
+                startIcon={<FcGoogle size={30} />}
+                sx={{ ...styles.btnLoginWith }}
               >
-                Create Account
-              </Typography>
-            </Grid>
-
-            <form onSubmit={handleSubmit}>
+                Continue with Google
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<BsFacebook size={30} color="#4762b4" />}
+                sx={{ ...styles.btnLoginWith }}
+              >
+                Continue with Apple
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<BsApple size={30} />}
+                sx={{ ...styles.btnLoginWith }}
+              >
+                Continue with Apple
+              </Button>
+              /*Form Start */
+              <Box sx={{ ...styles.typoLabel }}>
+                <Box>
+                  <Typography>First Name </Typography>{" "}
+                  <OutlinedInput sx={{ width: "100%" }} />{" "}
+                </Box>
+                <Box>
+                  <Typography>Last Name </Typography>{" "}
+                  <OutlinedInput sx={{ width: "100%" }} />{" "}
+                </Box>
+              </Box>
+              <Box sx={{ ...styles.typoLabel }}>
+                <Typography>Email </Typography>{" "}
+              </Box>
+              <OutlinedInput sx={{ width: "90%" }} />{" "}
+              <Box sx={{ ...styles.typoLabel }}>
+                <Typography>Username </Typography>{" "}
+              </Box>
+              <OutlinedInput sx={{ width: "90%" }} />{" "}
+              <Box sx={{ ...styles.typoLabel }}>
+                <Typography>Password </Typography>
+              </Box>
+              <OutlinedInput sx={{ width: "90%" }} />
+              <Button variant="contained" sx={{ ...styles.signInBtn }}>
+                Sign up
+              </Button>
+              /*Form end */
+              <Box sx={{ ...styles.typoLabel1 }}>
+                <Typography>Already have an Account? </Typography>{" "}
+                <NavLink
+                  style={{ textDecoration: "none", color: "#2697FA" }}
+                  to={"/signin"}
+                >
+                  Sign in here.
+                </NavLink>
+              </Box>
+              {/* <form onSubmit={handleSubmit}>
               <TextField
                 id="firstname"
                 name="firstname"
@@ -343,8 +393,8 @@ export default function Signup({ setIsLoggedIn }) {
               <Typography sx={{ textDecoration: "underline" }}>
                 Forgot password?
               </Typography>
+            </Box> */}
             </Box>
-            {/* Add more form fields as needed */}
           </Paper>
         </Container>
       </Box>

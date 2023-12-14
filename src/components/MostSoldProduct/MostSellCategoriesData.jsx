@@ -12,7 +12,7 @@ export default function MostSellCategoriesData({ filterProduct }) {
     <>
       <Grid
         container
-        sx={{ maxWidth: { md: "85%", xs: "auto" }, gap: "12px" }}
+        sx={{ width: { md: "85%", xs: "90%" },  }}
         margin="auto"
       >
         {filterProduct?.map((item, index) => (

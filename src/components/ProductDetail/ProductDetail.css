@@ -1,0 +1,49 @@
+.image-type {
+  margin: auto;
+
+  position: relative;
+}
+
+.image-type:hover::after {
+  transform: translateY(-1);
+  opacity: 1;
+  top: 20%;
+}
+.image-type:hover .img-content {
+  opacity: 1;
+
+  margin: auto;
+}
+.img-content {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  opacity: 0;
+  z-index: 2;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  transition: all 1s ease-in-out 0.1s;
+  color: white;
+}
+.img-container::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.871);
+  z-index: 1;
+  transform: scaleY(0);
+  transform-origin: 100% 100%;
+  transition: all 0.5s ease-in-out;
+}
+.img-container:hover::after {
+  opacity: 0.9;
+  transform: scaleY(1);
+}
+.img-container:hover .img-content {
+  opacity: 1;
+  top: 40%;
+}

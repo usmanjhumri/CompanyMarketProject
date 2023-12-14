@@ -1,4 +1,6 @@
-import React from "react";
+/* eslint-disable react/jsx-no-target-blank */
+/* eslint-disable react/prop-types */
+
 import { PiShoppingCartLight } from "react-icons/pi";
 import { Box, Button, Grid, Typography, Container } from "@mui/material";
 import Styles from "./Styles";
@@ -11,7 +13,7 @@ const Cards = ({ data, isLoading }) => {
   return (
     <Box sx={Styles.mainBox}>
       <Container maxWidth="100%">
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           {data?.map((item, index) => (
             <Grid item xs={12} md={4} key={index}>
               <Box sx={Styles.BoxStyle}>

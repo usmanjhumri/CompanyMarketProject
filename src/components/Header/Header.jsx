@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import { FiUserPlus } from "react-icons/fi";
@@ -16,7 +16,7 @@ import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 // import { HeaderItemArray } from "./HeaderItemArray";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { useSelector } from "react-redux";
 // import './Header.css'
@@ -79,21 +79,34 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null); // Open and Closing menu
   const [selectedCat, setSelectedCat] = useState(null); // selecting catgoery for subcat
   const catergories = useSelector((state) => state?.home?.catergories); // getting categories from API
+  const [activeOffeset, setActiveOffeset] = useState(false)
+
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 100){
+      setActiveOffeset(true)
+    }else{
+      setActiveOffeset(false)
+    }
+  })
+
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
-  function handleHover(event, catergoryId) {
-    event.preventDefault(); // Prevents the default behavior of the event
-    event.stopPropagation(); // Stops the event from propagating up or down the DOM
-    if (anchorEl !== event.currentTarget) {
-      setAnchorEl(event.currentTarget);
-      const selectdCategory = catergories.find(
-        (category) => category.id == catergoryId
-      );
-      setSelectedCat(selectdCategory);
-    }
-  }
+  const callfunction = useCallback(
+    (event, catergoryId) => {
+      event.preventDefault(); // Prevents the default behavior of the event
+      event.stopPropagation(); // Stops the event from propagating up or down the DOM
+      if (anchorEl !== event.currentTarget) {
+        setAnchorEl(event.currentTarget);
+        const selectdCategory = catergories.find(
+          (category) => category.id == catergoryId
+        );
+        setSelectedCat(selectdCategory);
+      }
+    },
+    [catergories, anchorEl, setAnchorEl, setSelectedCat]
+  );
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -105,10 +118,12 @@ const Header = () => {
 
   const open = Boolean(anchorEl);
 
+  
+
   return (
     <>
       {/* upper header code  */}
-      <Box p={2} bgcolor="#F8F9FA">
+      <Box sx={activeOffeset? styles.upperNav: styles.upperNavone} p={2}>
         <Container maxWidth="100%">
           <Box
             sx={{
@@ -173,7 +188,7 @@ const Header = () => {
       {/* End upper header code  */}
 
       {/* Lower header code  */}
-      <Box sx={{ display: "flex" }}>
+      <Box >
         <AppBar component="nav" sx={style.root} position="static">
           <Container
             maxWidth="100%"
@@ -185,8 +200,14 @@ const Header = () => {
                   <Box component="img" src={Logo} />
                 </NavLink>
               </Box>
-              <Hidden mdDown>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+
+              <Hidden lgDown>
+                <Box sx={{
+                   display: "flex",
+                    alignItems: "center", 
+                    gap: 3,
+              
+              }}>
                   {catergories?.map((item, index) => (
                     <Fragment key={index}>
                       <Typography
@@ -203,7 +224,7 @@ const Header = () => {
                           style={({ isActive }) => ({
                             ...(isActive ? styles.linkbg : styles.link),
                           })}
-                          onMouseEnter={(e) => handleHover(e, item.id)}
+                          onMouseEnter={(e) => callfunction(e, item.id)}
                         >
                           {item.name}
                         </NavLink>
@@ -231,12 +252,24 @@ const Header = () => {
                       {selectedCat?.subcategories?.map((item, index) => (
                         <div key={index}>
                           <NavLink
-                            style={{ textDecoration: "none", color: "black" }}
+                            style={{
+                              textDecoration: "none",
+                              color: "black",
+                            }}
                             to={`${selectedCat.id}/sub-categories/${item.name
                               .toLowerCase()
                               .trim()}/${item.id}`}
                           >
-                            <Typography sx={{ p: 2 }}>{item.name}</Typography>
+                            <Typography
+                              sx={{
+                                p: 2,
+                                "&:hover": {
+                                  background: "#F8F9FA",
+                                },
+                              }}
+                            >
+                              {item.name}
+                            </Typography>
                           </NavLink>
                         </div>
                       ))}
@@ -244,7 +277,8 @@ const Header = () => {
                   )}
                 </Box>
               </Hidden>
-              <Hidden mdUp>
+
+              <Hidden lgUp>
                 <IconButton
                   color="inherit"
                   aria-label="open drawer"
@@ -264,7 +298,7 @@ const Header = () => {
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  placeholder="(E’g Responsive Landing Pages and Websites)"
+                  placeholder="Search"
                   inputProps={{ "aria-label": "search" }}
                 />
               </Search>
@@ -283,11 +317,7 @@ const Header = () => {
         </nav>
       </Box>
       {/* End Lower header code  */}
-      {/* <Menu
-        anchorEl={anchorEl}
-        handleClose={handleClose}
-        subcategories={selectedCat?.subcategories || []}
-      /> */}
+      
     </>
   );
 };

@@ -10,18 +10,18 @@ import { useDispatch } from "react-redux";
 import { fetchHomeData } from "./Redux/api/api";
 import { SkeletonTheme } from "react-loading-skeleton";
 import Signup from "./components/Signup/Signup";
-import Signin from "./components/Signin/Signin";
+import Signin from "./components/Signin";
 import Products from "./components/AllProducts";
 import Categoires from "./components/Categoires";
 import ProductDetail from "./components/ProductDetail";
 import Subcategory from "./components/Subcategories";
+import SearchProduct from "./components/SearchProduct";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-   dispatch(fetchHomeData());
- 
+    dispatch(fetchHomeData());
   }, [dispatch]);
 
   return (
@@ -50,6 +50,7 @@ function App() {
             path="/signup"
             element={<Signup setIsLoggedIn={setIsLoggedIn} />}
           />
+          <Route path="/product/search" element={<SearchProduct />} />
         </Routes>
       </SkeletonTheme>
       <Footer />

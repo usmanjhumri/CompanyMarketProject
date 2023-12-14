@@ -6,6 +6,20 @@ const styles = {
     // alignItems: "center",
     // justifyContent: "space-between",
   },
+  upperNavone:{
+  
+    background:"transparent"
+  },
+  upperNav: {
+    position: "fixed",
+    top: 0,
+    zIndex: 1000,
+    padding: "10px",
+    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+    background: "white",
+    height:"4vh",
+    width:"100%"
+  },
   signupLoginStyle: {
     textDecoration: "none",
     color: Colors.black,
@@ -89,6 +103,18 @@ const styles = {
     color: "#000000",
     fontSize: "14px",
   },
+  drawerChildlink:{
+    fontFamily: "Be Vietnam Pro , sans-serif",
+    color: "#000000",
+    fontSize: "14px",
+    textDecoration: "none",
+    lineHeight: "17.53px",
+    display:"flex",
+    flexDirection:"column",
+    textAlign: "justify",
+    transition:"all 0.2s ease",
+    margin:"1rem"
+  },
   sidebarBtnBox: {
     display: "flex",
     alignItems: "center",
@@ -99,7 +125,7 @@ const styles = {
     fontFamily: "Be Vietnam Pro,sans-serif",
     fontSize: "16px",
     textTransform: "none",
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.secondary,
     color: "#FFFFFF",
     width: "90%",
     margin: "1rem 0px",
@@ -116,12 +142,15 @@ const styles = {
     position: "absolute",
     left: "87%",
     top: "2%",
-    // background: Colors.primary,
-    // color: "#FFFFFF",
-    padding: "0.3rem",
-    borderRadius: "50%",
+   
     fontSize: "20px",
     cursor: "pointer",
+  },
+  arrowIconStyle:{
+    cursor: "pointer",
+    fontSize: "20px",
+    transition:"all 0.5s ease-in-out"
+
   },
   iconBtnStyle: {
     border: "none",

@@ -2,7 +2,7 @@ import Colors from "../colors";
 const CategoriesStyle = {
   CatHeading: {
     fontWeight: 600,
-    fontSize: { md: "32px", xs: "20px" },
+    fontSize: { md: "32px", xs: "28px" },
     color: Colors.black,
     fontFamily: "Be Vietnam Pro , sans-serif",
     lineHeight: "35.06px",
@@ -21,7 +21,7 @@ const CategoriesStyle = {
   },
   SubCatHeading: {
     fontWeight: 500,
-    fontSize: { lg: "22px", md: "18px", xs: "12px" },
+    fontSize: { lg: "24px", md: "20px", xs: "20px" },
     color: Colors.black,
     textAlign: "center",
     maxWidth: "650px",
@@ -37,7 +37,7 @@ const CategoriesStyle = {
     flexDirection: "column",
     alignItems: "center",
     border: "1px solid rgb(223, 230, 233)",
-    marginLeft: "30px",
+    marginLeft: { md: "30px", sm: "0px" },
     justifyContent: "center",
   },
   filterRefine: {

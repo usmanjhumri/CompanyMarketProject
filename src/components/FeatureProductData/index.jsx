@@ -74,7 +74,7 @@ export default function index({ filterProduct, isLoading }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
+            alignItems: "flex-start",
           }}
         >
           <Typography sx={Styles.CategoriesText}>Sub categories</Typography>
@@ -83,7 +83,6 @@ export default function index({ filterProduct, isLoading }) {
             onChange={handleChange}
             sx={{
               flexDirection: { md: "column", xs: "row" },
-              paddingLeft: { xs: "20px" },
               alignItems: "flex-start",
               marginTop: 2,
               label: {

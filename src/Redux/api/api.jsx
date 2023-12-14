@@ -17,12 +17,14 @@ export const fetchHomeData = createAsyncThunk("fetchHomeData", async () => {
 
 export const fetchAllProducts = createAsyncThunk(
   "fetchAllProducts",
-  async function ({ minPrice, maxPrice, checkCatName }) {
+  async function ({ minPrice, maxPrice, checkCatName, orderBy, searchValue }) {
     const res = await axios.get(`${apiUrl}product/filtered/data`, {
       params: {
         min: minPrice,
         max: maxPrice,
         categories: checkCatName,
+        order_by: orderBy,
+        search: searchValue,
       },
     });
     return res.data;
@@ -35,6 +37,21 @@ export const productDetail = createAsyncThunk(
     const res = await axios.get(
       `${apiUrl}product-details/${params.name}/${params.id}/fetch`
     );
+    return res.data;
+  }
+);
+
+export const fetchSearchProducts = createAsyncThunk(
+  "fetchSearchProducts",
+  async function ({ minPrice, maxPrice, checkCatName, orderBy }) {
+    const res = await axios.get(`${apiUrl}product/filtered/data`, {
+      params: {
+        min: minPrice,
+        max: maxPrice,
+        categories: checkCatName,
+        order_by: orderBy,
+      },
+    });
     return res.data;
   }
 );

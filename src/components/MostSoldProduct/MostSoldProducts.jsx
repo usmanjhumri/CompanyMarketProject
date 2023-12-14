@@ -63,7 +63,7 @@ const MostSoldProduct = () => {
 
   return (
     <Box sx={CategoriesStyle.mainBox}>
-      <Container maxWidth="100%" sx={{ maxWidth: { md: "90%", xs: "auto" } }}>
+      <Container maxWidth="100%">
         <Typography sx={CategoriesStyle.CategoryTypo}>
           Most Sold Products of Different Categories
         </Typography>
@@ -109,7 +109,7 @@ const MostSoldProduct = () => {
                   ) : (
                     <Grid
                       container
-                      spacing={3}
+                      spacing={2}
                       sx={{ marginTop: { md: "0rem", xs: "0.5rem" } }}
                     >
                       <MostSellCategoriesData

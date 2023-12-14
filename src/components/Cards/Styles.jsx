@@ -3,7 +3,7 @@ import colors from "../colors";
 const CardStyle = {
   mainBox: {
     // marginTop: { md: "5rem", xs: "4rem" },
-    padding: { md: "0px 3rem", xs: "auto" },
+    // padding: { md: "3px 3rem", xs: "auto" },
   },
   CardTypo: {
     fontWeight: 600,
@@ -24,7 +24,8 @@ const CardStyle = {
   },
 
   BoxStyle: {
-    boxShadow: " 0px 0px 15px 0px #0000001A",
+    // boxShadow: " 0px 0px 15px 0px #0000001A",
+    boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
     padding: "0.7rem",
     borderRadius: "15px",
   },

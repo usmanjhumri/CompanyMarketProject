@@ -24,7 +24,6 @@ const Subcategory = () => {
     const filterProduct = subCatgeoryProduct?.products.filter(
       (item) => item.sub_category_id == params.id
     );
-    console.log(filterProduct);
     setProducts(filterProduct);
   }, [subCatgeoryProduct, params]);
   return (

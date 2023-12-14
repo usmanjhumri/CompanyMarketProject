@@ -64,6 +64,7 @@ const FooterStyle = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    flexWrap: "wrap",
     gap: 0.4,
   },
   LinkUnderline: {

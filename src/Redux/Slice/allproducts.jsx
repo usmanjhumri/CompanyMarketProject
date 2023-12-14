@@ -18,9 +18,9 @@ const allProductSlice = createSlice({
     // eslint-disable-next-line no-unused-vars
     builder.addCase(fetchAllProducts.pending, (state, action) => {
       state.isLoading = true;
+      state.getProducts = [];
     });
     builder.addCase(fetchAllProducts.fulfilled, (state, action) => {
-      console.log(action.payload.allProducts);
       state.isLoading = false;
       state.getProducts = action?.payload?.allProducts;
       state.paginationData.currentIndex =

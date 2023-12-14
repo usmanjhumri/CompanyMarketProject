@@ -76,19 +76,20 @@ const Categoires = () => {
 
   return (
     <Fragment>
-      <Typography sx={Styles.CatHeading}>{params.name}</Typography>
-      <Typography sx={Styles.CatSubHeading}>
-        Designed to meet the diverse needs of entrepreneurs, creatives, and
-        professionals alike, our Featured Products are more than just tools
-        they're catalysts for success.
-      </Typography>
+      <Box sx={{ mt: 2 }}>
+        <Typography sx={Styles.CatHeading}>{params.name}</Typography>
+        <Typography sx={Styles.CatSubHeading}>
+          Designed to meet the diverse needs of entrepreneurs, creatives, and
+          professionals alike, our Featured Products are more than just tools
+          they're catalysts for success.
+        </Typography>
+      </Box>
       <Grid
         container
         sx={{
           maxWidth: { md: "100%", xs: "auto" },
-          margin: "auto",
-          marginTop: "4rem",
         }}
+        spacing={2}
       >
         <Grid item xs={12} md={2}>
           {isLoading ? (
@@ -114,13 +115,13 @@ const Categoires = () => {
                 ))}
               </FormGroup>
 
-              <Box
+              {/* <Box
                 component="div"
                 sx={{ display: "flex", flexDirection: "column" }}
               >
                 <Typography sx={Styles.SubCatHeading}>Price </Typography>
-              </Box>
-              <Slider
+              </Box> */}
+              {/* <Slider
                 value={priceRange}
                 onChange={handlePriceChange}
                 valueLabelDisplay="auto"
@@ -128,7 +129,7 @@ const Categoires = () => {
                 min={0}
                 max={1000}
                 sx={{ width: "70%" }}
-              />
+              /> */}
             </Box>
           )}
         </Grid>

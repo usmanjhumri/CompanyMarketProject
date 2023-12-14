@@ -13,6 +13,13 @@ const Styles = {
     textAlign: "center",
     margin: { md: "2rem 0px", xs: "auto" },
   },
+  buttonText1: {
+    margin: "4px",
+    fontFamily: "Be Vietnam Pro,sans-serif",
+    fontSize: "16px",
+    textTransform: "none",
+    backgroundColor: Colors.primary,
+  },
   AuthTypo2: {
     fontWeight: 400,
     fontSize: { md: "16px", xs: "12px" },
@@ -84,40 +91,34 @@ const Styles = {
     },
   },
   CategoriesText: {
-    leadingTrim: "both",
-    textEdge: "cap",
     fontFamily: "Be Vietnam Pro , sans-serif",
     fontSize: "24px",
-    fontStyle: "normal",
     fontWeight: 500,
     lineHeight: "normal",
     color: "black",
-    marginTop: "10px",
-    paddingRight: "25px",
+    margin: "0.5rem",
+    
   },
   filterRefine: {
     background: Colors.secondary,
     color: "white",
-    height: "50px",
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    padding:"0.5rem 0",
+    textAlign:"center",
     fontFamily: "Be Vietnam Pro , sans-serif",
     fontSize: "24px",
     fontWeight: 500,
   },
   categoriesStyle: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    margin:"auto",
     border: "1px solid rgb(223, 230, 233)",
     marginLeft: { md: "30px", sm: "0px" },
   },
   formCenter: {
     flexDirection: { md: "column", xs: "row" },
-    paddingLeft: { xs: "20px" },
-    alignItems: "flex-start",
+    alignItems: {md:"flex-start", xs:"center"},
+    // justifyContent:{md:"flex-start", xs:"center"},
+    marginLeft:{md:"2rem", xs:"1rem"}
+
   },
   priceCenter: {
     display: "flex",
@@ -142,6 +143,13 @@ const Styles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  },
+  buttonText: {
+    margin: "4px",
+    fontFamily: "Be Vietnam Pro,sans-serif",
+    fontSize: "16px",
+    textTransform: "none",
+    backgroundColor: Colors.primary,
   },
 };
 export default Styles;

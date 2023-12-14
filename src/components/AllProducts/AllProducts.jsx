@@ -344,7 +344,6 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import Skeletoncard from "../Skeletoncard";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -378,97 +377,63 @@ function getStyles(name, personName, theme) {
   };
 }
 const AllProducts = () => {
-  const [personName, setPersonName] = React.useState([]);
-
   const dispatch = useDispatch();
+
+  const data = useSelector((state) => state?.allProducts?.getProducts);
+  const filterCatgeory = useSelector((state) => state?.home?.catergories);
+  const isLoading = useSelector((state) => state?.allProducts?.isLoading);
+
+  const [orderBy, setOrderBy] = useState("");
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
-  const [subCategory, setSubCatgeory] = useState([]);
-  const [selectedSubcategories, setSelectedSubcategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [checkCatName, setCheckCatName] = useState([]);
-  const [firstTimeData, setFirstTimeData] = useState(true);
-  const [count, setCount] = useState(1);
-
-  const filterCatgeory = useSelector((state) => state?.home?.catergories);
-  const isLoading = useSelector((state) => state.allProducts.isLoading);
-  const data = useSelector((state) => state?.allProducts?.getProducts);
 
   useEffect(() => {
-    dispatch(fetchAllProducts({ minPrice, maxPrice, checkCatName }));
-  }, [checkCatName, dispatch]);
+    dispatch(fetchAllProducts({ minPrice, maxPrice, checkCatName, orderBy }));
+  }, [checkCatName, dispatch, orderBy]);
 
-  useEffect(() => {
-    const productsShow = () => {
-      if (firstTimeData) {
-        setProducts(data);
-      }
-      setSubCatgeory(filterCatgeory);
-    };
-
-    return () => productsShow();
-  }, [filterCatgeory, data]);
-
-  const filteredProducts = useMemo(() => {
-    if (selectedSubcategories.length > 0) {
-      return products.filter((item) =>
-        selectedSubcategories.includes(item.category_id.toString())
-      );
-    } else {
-      return products;
-    }
-  }, [selectedSubcategories, products]);
-
+  useMemo(() => {
+    setProducts(data);
+  }, [data]);
   const handleCheckBox = (e) => {
-    const subCategoryId = e.target.value;
     const isChecked = e.target.checked;
 
     if (isChecked) {
       setCheckCatName((prev) => [...prev, e.target.value]);
-      setSelectedSubcategories((prev) => [...prev, subCategoryId]);
     } else {
       setCheckCatName((prev) => prev.filter((name) => name !== e.target.value));
-      setSelectedSubcategories((prev) =>
-        prev.filter((id) => id !== subCategoryId)
-      );
     }
   };
   const fetchMoreData = () => {
-    if (data.length > 0) {
-      const nextPage = count + 1;
-      setFirstTimeData(false);
-      setCount(nextPage);
-
-      // Assuming each product has a unique identifier, like an 'id' field
-      const newDataIds = data.map((item) => item.id);
-
-      // Filter out duplicates based on unique identifiers
-      const uniqueProducts = products.filter(
-        (product) => !newDataIds.includes(product.id)
-      );
-
-      // Concatenate the current products with the new data
-      const updatedProducts = [...uniqueProducts, ...data];
-
-      // Ensure only the last 25 products are retained
-      const truncatedProducts = updatedProducts.slice(-25);
-
-      // Show 10 more products with each scroll, up to a total of 25
-      const productsToShow = truncatedProducts.slice(
-        0,
-        Math.min(10 * nextPage, 25)
-      );
-
-      setProducts(productsToShow);
-
-      if (productsToShow.length >= 25) {
-        // Disable further loading when the total reaches 25
-      }
-    } else {
-    }
+    console.log("Working");
+    // if (data.length > 0) {
+    //   const nextPage = count + 1;
+    //   setFirstTimeData(false);
+    //   setCount(nextPage);
+    //   // Assuming each product has a unique identifier, like an 'id' field
+    //   const newDataIds = data.map((item) => item.id);
+    //   // Filter out duplicates based on unique identifiers
+    //   const uniqueProducts = products.filter(
+    //     (product) => !newDataIds.includes(product.id)
+    //   );
+    //   // Concatenate the current products with the new data
+    //   const updatedProducts = [...uniqueProducts, ...data];
+    //   // Ensure only the last 25 products are retained
+    //   const truncatedProducts = updatedProducts.slice(-25);
+    //   // Show 10 more products with each scroll, up to a total of 25
+    //   const productsToShow = truncatedProducts.slice(
+    //     0,
+    //     Math.min(10 * nextPage, 25)
+    //   );
+    //   setProducts(productsToShow);
+    //   if (productsToShow.length >= 25) {
+    //     // Disable further loading when the total reaches 25
+    //   }
+    // }
   };
 
-  const handleInputChange = (event) => {
+  const handleMinPrice = (event) => {
     let inputValue = parseFloat(event.target.value);
 
     if (isNaN(inputValue)) {
@@ -480,7 +445,7 @@ const AllProducts = () => {
     setMinPrice(inputValue);
   };
 
-  const handleInputChange2 = (event) => {
+  const handleMaxPrice = (event) => {
     let inputValue2 = parseFloat(event.target.value);
 
     if (isNaN(inputValue2)) {
@@ -492,14 +457,8 @@ const AllProducts = () => {
     setMaxPrice(inputValue2);
   };
 
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+  const handleOrderBy = (event) => {
+    setOrderBy(event.target.value + 1);
   };
 
   const MenuProps = {
@@ -523,18 +482,17 @@ const AllProducts = () => {
         container
         sx={{
           maxWidth: { md: "100%", lg: "100%", xs: "auto" },
-          margin: "auto",
-          marginTop: "4rem",
         }}
+        spacing={2}
       >
         {/* Categories Grid */}
 
-        <Grid item xs={12} md={2}>
+        <Grid item xs={12} md={2} sx={{ order: { xs: 2, md: 1 } }}>
           <Box sx={Styles.categoriesStyle}>
             <Typography sx={Styles.filterRefine}>Filter </Typography>
             <Typography sx={Styles.CategoriesText}>Categories</Typography>
             <FormGroup sx={Styles.formCenter}>
-              {subCategory?.map((category) => (
+              {filterCatgeory?.map((category) => (
                 <FormControlLabel
                   key={category.id}
                   control={<Checkbox />}
@@ -553,7 +511,7 @@ const AllProducts = () => {
                 <TextField
                   label=" $"
                   value={isLoading ? <Skeleton width={50} /> : minPrice}
-                  onChange={handleInputChange}
+                  onChange={handleMinPrice}
                   type="number"
                 />
               </Box>
@@ -562,7 +520,7 @@ const AllProducts = () => {
                 <TextField
                   label="$"
                   value={isLoading ? <Skeleton width={50} /> : maxPrice}
-                  onChange={handleInputChange2}
+                  onChange={handleMaxPrice}
                   type="number"
                 />
               </Box>
@@ -594,14 +552,14 @@ const AllProducts = () => {
                 <Select
                   labelId="demo-multiple-checkbox-label"
                   id="demo-multiple-checkbox"
-                  value={personName}
-                  onChange={handleChange}
+                  value={orderBy}
+                  onChange={handleOrderBy}
                   input={<OutlinedInput label="Tag" />}
                   MenuProps={MenuProps}
                   variant="standard"
                 >
-                  {names.map((name) => (
-                    <MenuItem key={name} value={name}>
+                  {names.map((name, index) => (
+                    <MenuItem key={name} value={index} name={name}>
                       {isLoading ? <Skeleton width={50} /> : name}
                     </MenuItem>
                   ))}
@@ -611,22 +569,15 @@ const AllProducts = () => {
           </Box>
         </Grid>
         {/* Main Content Grid */}
-        <Grid item xs={12} md={10}>
+        <Grid item xs={12} md={10} sx={{ order: { xs: 1, md: 2 } }}>
           <InfiniteScroll
             key={products?.length}
             dataLength={products?.length}
             next={fetchMoreData}
             hasMore={true}
           >
-            <Cards data={filteredProducts} isLoading={isLoading} />
+            <Cards data={products} isLoading={isLoading} />
           </InfiniteScroll>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "2rem",
-            }}
-          ></Box>
         </Grid>
       </Grid>
     </Fragment>
