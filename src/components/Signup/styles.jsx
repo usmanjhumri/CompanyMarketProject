@@ -10,7 +10,7 @@ const styles = {
   },
 
   paperDiv: {
-    boxShadow: "0px 0px 12.8px 2px rgba(0, 0, 0, 0.25);",
+    boxShadow: "0px 0px 12.8px 2px rgba(0, 0, 0, 0.25)",
     borderRadius: "2px",
     maxWidth: 630,
   },
@@ -29,7 +29,7 @@ const styles = {
     width: "100%",
     justifyContent: "center",
     display: "flex",
-    boxShadow: "0px 0px 1.8px 1px rgba(0, 0, 0, 0.25);",
+    boxShadow: "0px 0px 1.8px 1px rgba(0, 0, 0, 0.25)",
   },
 
   equalMargin: {
@@ -85,6 +85,9 @@ const styles = {
     textTransform: "capitalize",
     marginTop: 3,
     background: Colors.secondary,
+    "&&:hover": {
+      background: Colors.secondary,
+    },
   },
 };
 export default styles;

@@ -16,33 +16,71 @@ import {
   Skeleton,
   Hidden,
   Checkbox,
-  TextField,
+  FormControl,
+  OutlinedInput,
+  MenuItem,
+  Select,
 } from "@mui/material";
-
+import { useTheme } from "@mui/material/styles";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
+import { resetSuccessCart } from "../../Redux/Slice/addtocart";
 import styles from "./styles";
-import { productDetail } from "../../Redux/api/api";
+import { productDetail, addToCart } from "../../Redux/api/api";
 import { useParams } from "react-router-dom";
 import { GoChevronLeft, GoChevronRight } from "react-icons/go";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import "./ProductDetail.css";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 200,
+    },
+  },
+};
+
+const Licenese = ["Regular License", "Extended License"];
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
 const ProductDetail = () => {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const params = useParams();
   const dispatch = useDispatch();
 
-  const [checkedItems, setCheckedItems] = useState({});
+  const [checkedItems, setCheckedItems] = useState([]);
+  const [pages, setPages] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [pages, setPages] = useState(0);
+  const [extraPages, setExtraPages] = useState(0);
+  const [LicenseType, setLicenseType] = useState(Licenese[0]);
+  const [LinceseIndex, setLinceseIndex] = useState(1);
+  const [bumpFee, setBumpfee] = useState(0);
+  const [bumps, setBumps] = useState([]);
+  const [products, setProducts] = useState([]);
 
   const product = useSelector((state) => state?.productDetail?.data?.product);
   const isLoading = useSelector((state) => state?.productDetail?.isLoading);
+  const isLoadingCart = useSelector((state) => state?.addtocart?.isLoading);
   const imgPath = useSelector((state) => state?.home?.imgPath);
+  const successCart = useSelector((state) => state?.addtocart?.success);
   const moreProduct = useSelector(
     (state) => state?.productDetail?.data?.moreProducts
+  );
+  const encrypted_id = useSelector(
+    (state) => state?.productDetail?.data.encrypted_id
   );
 
   useEffect(() => {
@@ -51,18 +89,24 @@ const ProductDetail = () => {
 
   useMemo(() => {
     if (product?.bumps?.length > 0) {
+      let newBumps = [];
       product?.bumps?.forEach((item, index) => {
         if (item.name === "Extra Pages") {
-          setPages(item.min_quantity);
+          setExtraPages(item.min_quantity);
         }
+        newBumps.push(item.price);
       });
     }
     setTotalPrice(product?.regular_price);
+    setProducts(product?.bumps);
   }, [product]);
 
   useEffect(() => {
-    console.log(checkedItems, totalPrice);
-  }, [checkedItems]);
+    if (successCart) {
+      toast.success("Item added to your cart");
+      dispatch(resetSuccessCart());
+    }
+  }, [successCart]);
 
   const responsive = {
     desktop: {
@@ -81,6 +125,25 @@ const ProductDetail = () => {
   };
 
   const handleCheckboxChange = (index, price, name) => {
+    const bump = products[index];
+    setBumps((prevBumps) => {
+      const newBumps = [...prevBumps];
+      if (!prevBumps[index]) {
+        newBumps[index] = bump.price;
+      } else {
+        newBumps.splice(index, 1);
+      }
+      return newBumps;
+    });
+    setPages((prevPages) => {
+      const newPages = [...prevPages];
+      if (!prevPages[index]) {
+        newPages[index] = bump.min_quantity;
+      } else {
+        newPages.splice(index, 1);
+      }
+      return newPages;
+    });
     setCheckedItems((prevCheckedItems) => {
       const checkingItem = {
         ...prevCheckedItems,
@@ -88,16 +151,25 @@ const ProductDetail = () => {
       };
 
       if (checkingItem[index]) {
+        setBumps((state) => [...state, price]);
+        setBumpsPages((state) => [...state, min]);
+
         if (name === "Extra Pages") {
-          setTotalPrice(Number(totalPrice) + Number(price) * pages);
+          setTotalPrice(Number(totalPrice) + Number(price) * extraPages);
+          setBumpfee(bumpFee + Number(price) * extraPages);
         } else {
           setTotalPrice(Number(totalPrice) + Number(price));
+          setBumpfee(Number(price));
         }
       } else {
+        setBumps((state) => state.filter((item) => item !== price));
+        setBumpsPages((state) => state.filter((item) => item !== min));
         if (name === "Extra Pages") {
-          setTotalPrice(Number(totalPrice) - Number(price) * pages);
+          setTotalPrice(Number(totalPrice) - Number(price) * extraPages);
+          setBumpfee(bumpFee - Number(price) * extraPages);
         } else {
           setTotalPrice(Number(totalPrice) - Number(price));
+          setBumpfee(bumpFee - Number(price));
         }
       }
 
@@ -105,16 +177,101 @@ const ProductDetail = () => {
     });
   };
 
-  const handlePageChange = (e, price, index, isChecked) => {
+  const handlePageChange = (e, price, isChecked) => {
     const newPages = e.target.value;
-    setPages(newPages);
+    setExtraPages(newPages);
+    let addPages;
 
+    const updatedProducts = products.map((item) => {
+      if (item.name === "Extra Pages") {
+        addPages = newPages;
+        return { ...item, min_quantity: newPages };
+      }
+      return item;
+    });
+
+    setProducts(updatedProducts);
     if (isChecked) {
+      if (pages[1]) {
+        pages[1] = addPages;
+      }
       setTotalPrice((prevTotalPrice) => {
         const updatedPrice =
-          prevTotalPrice - Number(price) * pages + Number(price) * newPages;
+          prevTotalPrice -
+          Number(price) * extraPages +
+          Number(price) * newPages;
         return updatedPrice;
       });
+      setBumpfee((prevTotalPrice) => {
+        const updatedPrice =
+          prevTotalPrice -
+          Number(price) * extraPages +
+          Number(price) * newPages;
+        return updatedPrice;
+      });
+    }
+  };
+
+  const theme = useTheme();
+
+  const handleLicenseChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+
+    let initialPrice = 0;
+    if (value.includes("Regular License")) {
+      initialPrice += Number(product?.regular_price);
+    }
+    if (value.includes("Extended License")) {
+      initialPrice += Number(product?.extended_price);
+    }
+
+    let updatedTotalPrice = initialPrice;
+    Object.keys(checkedItems).forEach((index) => {
+      const isChecked = checkedItems[index];
+      console.log(isChecked, " checked");
+      const bump = product?.bumps[index];
+
+      if (isChecked) {
+        if (bump.name === "Extra Pages") {
+          updatedTotalPrice += Number(bump.price) * extraPages;
+        } else {
+          updatedTotalPrice += Number(bump.price);
+        }
+      }
+    });
+
+    setTotalPrice(updatedTotalPrice);
+    setLicenseType(typeof value === "string" ? value.split(",") : value);
+  };
+  const handleLicenseIndex = (e, index) => {
+    setLinceseIndex(index + 1);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const order_number = window.localStorage.getItem("order_Number");
+    if (product?.bumps?.length > 0) {
+      const formData = {
+        _token: "BNiq5lIb9RM11nI6MvODcZCcWMyksqkayrN0A3G0",
+        product_id: encrypted_id,
+        bump_fee: bumpFee,
+        license: LinceseIndex,
+        bump: bumps,
+        pages,
+        ...(order_number && { order_number: order_number }),
+      };
+      dispatch(addToCart(formData));
+    } else {
+      const formData = {
+        _token: "BNiq5lIb9RM11nI6MvODcZCcWMyksqkayrN0A3G0",
+        product_id: encrypted_id,
+        bump_fee: bumpFee,
+        license: LinceseIndex,
+        ...(order_number && { order_number: order_number }),
+      };
+      dispatch(addToCart(formData));
     }
   };
 
@@ -317,112 +474,148 @@ const ProductDetail = () => {
           <Grid item md={6} sm={12}>
             <Card sx={{ background: "#ECECEC" }}>
               <CardContent>
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Typography sx={styles.priceTitle}>
-                    {isLoading ? <Skeleton width={100} /> : "Regular License"}
-                  </Typography>
-                  <Typography sx={styles.priceText}>
+                <form onSubmit={handleSubmit}>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <FormControl sx={{ display: "flex" }}>
+                      <Select
+                        displayEmpty
+                        value={LicenseType}
+                        onChange={(e) => handleLicenseChange(e)}
+                        input={
+                          <OutlinedInput
+                            sx={{ ...styles.licenseName, minWidth: "300px" }}
+                          />
+                        }
+                        MenuProps={MenuProps}
+                        inputProps={{ "aria-label": "Without label" }}
+                      >
+                        {Licenese.map((name, index) => (
+                          <MenuItem
+                            key={name}
+                            value={name}
+                            style={getStyles(name, LicenseType, theme)}
+                            data-index={index}
+                            onClick={(e) => handleLicenseIndex(e, index)}
+                          >
+                            {name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+
+                    <Typography sx={styles.priceText}>
+                      {isLoading ? (
+                        <Skeleton width={100} />
+                      ) : (
+                        `$${Number(totalPrice).toFixed(2)}`
+                      )}
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    component="hr"
+                    sx={{ borderTop: "1px soild #D9D9D9" }}
+                  ></Box>
+                  <Typography sx={styles.detailsText}>
                     {isLoading ? (
-                      <Skeleton width={100} />
+                      <Skeleton height={20} width="80%" />
                     ) : (
-                      `$${Number(totalPrice).toFixed(2)}`
+                      "1. Quality Checked by JD Funnel Marketplace Future Updates 6 Months"
                     )}
                   </Typography>
-                </Box>
-                <Box
-                  component="hr"
-                  sx={{ borderTop: "1px soild #D9D9D9" }}
-                ></Box>
-                <Typography sx={styles.detailsText}>
-                  {isLoading ? (
-                    <Skeleton height={20} width="80%" />
-                  ) : (
-                    "1. Quality Checked by JD Funnel Marketplace Future Updates 6 Months"
-                  )}
-                </Typography>
-                <Typography sx={styles.detailsText}>
-                  {isLoading ? (
-                    <Skeleton height={20} width="50%" />
-                  ) : (
-                    "2. Future Updates"
-                  )}
-                </Typography>
-                <Typography sx={styles.detailsText}>
-                  {isLoading ? (
-                    <Skeleton height={20} width="70%" />
-                  ) : (
-                    "3. 6 Months support from JD Funnel"
-                  )}
-                </Typography>
-                {product?.bumps?.length > 0 && (
-                  <Box sx={{ mt: 3 }}>
-                    {product?.bumps?.map((item, index) => (
-                      <Box
-                        sx={{
-                          ...styles.productBumps,
-                        }}
-                      >
+                  <Typography sx={styles.detailsText}>
+                    {isLoading ? (
+                      <Skeleton height={20} width="50%" />
+                    ) : (
+                      "2. Future Updates"
+                    )}
+                  </Typography>
+                  <Typography sx={styles.detailsText}>
+                    {isLoading ? (
+                      <Skeleton height={20} width="70%" />
+                    ) : (
+                      "3. 6 Months support from JD Funnel"
+                    )}
+                  </Typography>
+                  {product?.bumps?.length > 0 && (
+                    <Box sx={{ mt: 3 }}>
+                      {product?.bumps?.map((item, index) => (
                         <Box
-                          display="flex"
                           sx={{
-                            alignItems: "center",
-
-                            flexDirection: "column",
+                            ...styles.productBumps,
                           }}
                         >
                           <Box
                             display="flex"
-                            sx={{ alignItems: "center", gap: 1 }}
+                            sx={{
+                              alignItems: "center",
+
+                              flexDirection: "column",
+                            }}
                           >
-                            <Checkbox
-                              {...label}
-                              sx={{ p: 0 }}
-                              onChange={(e) =>
-                                handleCheckboxChange(
-                                  index,
-                                  item.price,
-                                  item.name
-                                )
-                              }
-                            />
-                            <Typography sx={styles.detailsText}>
-                              {item.name}{" "}
-                            </Typography>
-                            {item.name === "Extra Pages" && (
-                              <input
-                                style={{
-                                  width: "30.944px",
-                                  height: "20px",
-                                }}
-                                value={pages}
-                                type="number"
-                                min={item.min_quantity}
-                                pattern="\d*"
+                            <Box
+                              display="flex"
+                              sx={{ alignItems: "center", gap: 1 }}
+                            >
+                              <Checkbox
+                                {...label}
+                                sx={{ p: 0 }}
                                 onChange={(e) =>
-                                  handlePageChange(
-                                    e,
-                                    item.price,
+                                  handleCheckboxChange(
                                     index,
-                                    checkedItems[index]
+                                    item.price,
+                                    item.name,
+                                    item.min_quantity
                                   )
                                 }
                               />
-                            )}
-                          </Box>
-                        </Box>
-                        <Typography sx={styles.detailsText}>
-                          $ {item.price}
-                        </Typography>
-                      </Box>
-                    ))}
-                  </Box>
-                )}
+                              <Typography sx={styles.detailsText}>
+                                {item.name}{" "}
+                              </Typography>
+                              {item.name === "Extra Pages" && (
+                                <input
+                                  style={{
+                                    width: "30.944px",
+                                    height: "20px",
+                                  }}
+                                  value={extraPages}
+                                  type="number"
+                                  min={item.min_quantity}
+                                  pattern="\d*"
+                                  onChange={(e) =>
+                                    handlePageChange(
+                                      e,
+                                      item.price,
 
-                <CardActions>
-                  <Button variant="contained" sx={{ ...styles.addCard, mt: 3 }}>
-                    Add to cart
-                  </Button>
-                </CardActions>
+                                      checkedItems[index]
+                                    )
+                                  }
+                                />
+                              )}
+                            </Box>
+                          </Box>
+                          <Typography sx={styles.detailsText}>
+                            $ {item.price}
+                          </Typography>
+                        </Box>
+                      ))}
+                    </Box>
+                  )}
+
+                  <CardActions>
+                    <Button
+                      variant="contained"
+                      sx={{ ...styles.addCard, mt: 3 }}
+                      type="submit"
+                      disabled={isLoadingCart}
+                    >
+                      {isLoadingCart ? "Adding into cart" : "Add to cart"}
+                    </Button>
+                    <ToastContainer />
+                  </CardActions>
+                </form>
               </CardContent>
             </Card>
             <Card sx={{ background: "#ECECEC", mt: 2 }}>

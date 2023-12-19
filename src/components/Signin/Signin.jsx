@@ -1,27 +1,31 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+import { useState } from "react";
 
 import {
   Box,
-  Grid,
   Paper,
   TextField,
   Container,
   Typography,
   Button,
-  OutlinedInput,
   Link,
+  Grid,
 } from "@mui/material";
 import logo from "../../assets/jdlogo1.svg";
 import { FaRegEye } from "react-icons/fa";
 import { useFormik } from "formik";
 import { signinSchema } from "./Regex";
 import { FaEyeSlash } from "react-icons/fa";
-import { useNavigate, Link as NavLink } from "react-router-dom";
-
+import { useNavigate, Link as NavLink, json } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { BsApple } from "react-icons/bs";
 import { BsFacebook } from "react-icons/bs";
 import styles from "./styles";
+import { toast } from "react-toastify";
+import { authLoginApi, signIn, storageKey } from "../../Redux/api/api";
+import { useDispatch } from "react-redux";
+import axios from "axios";
 
 const initialValues = {
   email: "",
@@ -29,6 +33,7 @@ const initialValues = {
 };
 
 export default function Signin({ setIsLoggedIn }) {
+  const dispatch = useDispatch();
   const handleSignIn = () => {
     setIsLoggedIn(true);
   };
@@ -45,12 +50,49 @@ export default function Signin({ setIsLoggedIn }) {
       initialValues: initialValues,
       validationSchema: signinSchema,
       onSubmit: async (values, actions) => {
-        console.log(values);
-        setLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        actions.resetForm();
-        setLoading(false);
-        navigate("/");
+        try {
+          setLoading(true);
+          const res = await axios.post(authLoginApi, {
+            login: values.email,
+            password: values.password,
+          });
+
+          if (res.status === 200) {
+            const {
+              data: { user_name: username, email },
+              access_token: token,
+            } = res.data;
+
+            localStorage.setItem(
+              storageKey,
+              JSON.stringify({ username, email, token })
+            );
+            await dispatch(signIn(storageKey));
+          }
+
+          setLoading(false);
+          setIsLoggedIn(true);
+          navigate("/");
+          toast.success("User signed in successfully", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        } catch (error) {
+          setLoading(false);
+
+          toast.error("Email or password is incorrect. Please try again.", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        }
       },
     });
 
@@ -111,93 +153,100 @@ export default function Signin({ setIsLoggedIn }) {
               >
                 Continue with Apple
               </Button>
-              /*Form Start */
-              <Box sx={{ ...styles.typoLabel }}>
-                <Typography>Username or Email </Typography>{" "}
-                <Link>Remind me</Link>
-              </Box>
-              <OutlinedInput sx={{ width: "90%" }} />{" "}
-              <Box sx={{ ...styles.typoLabel }}>
-                <Typography>Password </Typography> <Link>Forgot</Link>
-              </Box>
-              <OutlinedInput sx={{ width: "90%" }} />
-              <Button variant="contained" sx={{ ...styles.signInBtn }}>
-                Sign In
-              </Button>
-              /*Form end */
+
+              <form onSubmit={handleSubmit} style={{ textAlign: "center" }}>
+                <Grid
+                  container
+                  spacing={2}
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Grid item xs={12}>
+                    <Box sx={{ ...styles.typoLabel }}>
+                      <Typography sx={{ paddingLeft: "30px" }}>
+                        Username or Email
+                      </Typography>
+                      <Link>Remind me</Link>
+                    </Box>
+                    <TextField
+                      id="email"
+                      required
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.email}
+                      sx={{ width: "90%" }}
+                      size="medium"
+                    />
+                    {errors.email && touched.email ? (
+                      <p
+                        style={{
+                          color: "red",
+                          margin: "0",
+                        }}
+                      >
+                        {errors.email}
+                      </p>
+                    ) : null}
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Box sx={{ ...styles.typoLabel }}>
+                      <Typography sx={{ paddingLeft: "30px" }}>
+                        Password
+                      </Typography>
+                      <Link to="/forget">Forgot</Link>
+                    </Box>
+                    <TextField
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      fullWidth
+                      required
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password}
+                      style={{ marginBottom: "5px" }}
+                      InputProps={{
+                        endAdornment: (
+                          <span onClick={togglePasswordVisibility}>
+                            {showPassword ? <FaRegEye /> : <FaEyeSlash />}
+                          </span>
+                        ),
+                      }}
+                      sx={{ width: "90%" }}
+                    />
+                    {errors.password && touched.password ? (
+                      <p
+                        style={{
+                          color: "red",
+                          margin: "0",
+                        }}
+                      >
+                        {errors.password}
+                      </p>
+                    ) : null}
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{ ...styles.signInBtn }}
+                    >
+                      Sign In
+                    </Button>
+                  </Grid>
+                </Grid>
+              </form>
+
               <Box sx={{ ...styles.typoLabel1 }}>
-                <Typography>New Here? </Typography>{" "}
+                <Typography>New Here? </Typography>
                 <NavLink
                   style={{ textDecoration: "none", color: "#2697FA" }}
                   to={"/signup"}
                 >
-                  {" "}
-                  Create an account{" "}
+                  Create an account
                 </NavLink>
               </Box>
-              {/* <form onSubmit={handleSubmit}>
-                <TextField
-                  id="email"
-                  label="Email"
-                  variant="standard"
-                  fullWidth
-                  required
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.email}
-                  style={{ marginBottom: "5px" }}
-                />
-                {errors.email && touched.email ? (
-                  <p
-                    style={{ color: "red", margin: "0", marginBottom: "15px" }}
-                  >
-                    {errors.email}
-                  </p>
-                ) : null}
-
-                <TextField
-                  id="password"
-                  label="Password"
-                  variant="standard"
-                  type={showPassword ? "text" : "password"}
-                  fullWidth
-                  required
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.password}
-                  style={{ marginBottom: "5px" }}
-                  InputProps={{
-                    endAdornment: (
-                      <span onClick={togglePasswordVisibility}>
-                        {showPassword ? <FaRegEye /> : <FaEyeSlash />}
-                      </span>
-                    ),
-                  }}
-                />
-
-                {errors.password && touched.password ? (
-                  <p
-                    style={{ color: "red", margin: "0", marginBottom: "15px" }}
-                  >
-                    {errors.password}
-                  </p>
-                ) : null}
-
-                <br />
-                <br />
-
-                <Button
-                  onClick={handleSignIn}
-                  style={{ marginTop: "10px" }}
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  disableElevation
-                  disabled={loading}
-                >
-                  {loading ? "Loading..." : "Sign IN"}
-                </Button>
-              </form> */}
             </Box>
           </Paper>
         </Container>

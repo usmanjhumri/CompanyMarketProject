@@ -96,7 +96,8 @@ const Styles = {
     fontWeight: 500,
     lineHeight: "normal",
     color: "black",
-    margin: "0.5rem",
+    textAlign:"center",
+    marginTop:"1rem"
     
   },
   filterRefine: {
@@ -114,15 +115,19 @@ const Styles = {
     marginLeft: { md: "30px", sm: "0px" },
   },
   formCenter: {
-    flexDirection: { md: "column", xs: "row" },
+    flexDirection: { md: "column", xs: "row", sm:"row" },
     alignItems: {md:"flex-start", xs:"center"},
-    // justifyContent:{md:"flex-start", xs:"center"},
-    marginLeft:{md:"2rem", xs:"1rem"}
+    padding:"1rem 2rem",
+    marginLeft:{md:"2rem", xs:"1rem"},
+    "@media (max-width: 1300px)":{
+      flexDirection:"row",
+    }
 
   },
   priceCenter: {
     display: "flex",
     justifyContent: "center",
+   
   },
   priceAlign: {
     width: "30%",
@@ -143,6 +148,7 @@ const Styles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    marginBottom:"0.6rem"
   },
   buttonText: {
     margin: "4px",

@@ -5,15 +5,15 @@
 
 body {
   margin: 0px;
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: "Be Vietnam Pro", sans-serif;
 }
 
 #root {
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: "Be Vietnam Pro", sans-serif;
 }
 
 .MuiTypography-root {
-  font-family: 'Be Vietnam Pro', sans-serif !important;
+  font-family: "Be Vietnam Pro", sans-serif !important;
 }
 
 .swiper-button-prev {
@@ -42,6 +42,10 @@ body {
     /* Remove default focus outline */
     border-bottom: 1px solid #222222;
     /* Change the border color on focus */
+  }
+  #phoneNumber {
+    border: "none" !important;
+    padding-left: 50px;
   }
 }
 

@@ -1,3 +1,4 @@
+import { BorderBottom } from "@mui/icons-material";
 import Colors from "../colors";
 const styles = {
   boxMargin: {
@@ -299,6 +300,16 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  licenseName: {
+    /* Heading 24 */
+    fontFamily: "Be Vietnam Pro",
+    fontSize: "24px",
+    fontStyle: "normal",
+    fontWeight: 500,
+    lineHeight: "normal",
+    color: Colors.primary,
+    BorderBottom: "none",
   },
 };
 export default styles;

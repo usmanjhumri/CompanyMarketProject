@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import styles from "./styles";
 import { Box, Typography, InputBase, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -60,9 +60,12 @@ const Home = () => {
   const [searchProducts, setSearchProducts] = useState("");
 
   const handleSearch = () => {
-    console.log(searchProducts);
     navigate(`/product/search?search=${searchProducts}`);
-
+  };
+  const handlekeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   return (
@@ -88,6 +91,7 @@ const Home = () => {
               value={searchProducts}
               placeholder="(E’g Responsive Landing Pages and Websites)"
               inputProps={{ "aria-label": "search" }}
+              onKeyUp={handlekeyPress}
               endAdornment={
                 <Button
                   variant="contained"

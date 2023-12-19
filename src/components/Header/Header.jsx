@@ -16,7 +16,7 @@ import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 // import { HeaderItemArray } from "./HeaderItemArray";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { useSelector } from "react-redux";
 // import './Header.css'
@@ -76,18 +76,22 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false); // show drawer on mobile screen
-  const [anchorEl, setAnchorEl] = useState(null); // Open and Closing menu
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElCart, setAnchorElCart] = useState(null); // Open and Closing menu
   const [selectedCat, setSelectedCat] = useState(null); // selecting catgoery for subcat
   const catergories = useSelector((state) => state?.home?.catergories); // getting categories from API
-  const [activeOffeset, setActiveOffeset] = useState(false)
+  const totalProducts = useSelector((state) => state?.getcart?.data);
+  console.log(totalProducts); //
 
-  window.addEventListener('scroll', () => {
-    if(window.scrollY > 100){
-      setActiveOffeset(true)
-    }else{
-      setActiveOffeset(false)
+  const [activeOffeset, setActiveOffeset] = useState(false);
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 100) {
+      setActiveOffeset(true);
+    } else {
+      setActiveOffeset(false);
     }
-  })
+  });
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -108,8 +112,12 @@ const Header = () => {
     [catergories, anchorEl, setAnchorEl, setSelectedCat]
   );
 
-  const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handlePopoverOpenCart = (event) => {
+    setAnchorElCart(event.currentTarget);
+  };
+
+  const handlePopoverCloseCart = () => {
+    setAnchorElCart(null);
   };
 
   const handlePopoverClose = () => {
@@ -117,13 +125,12 @@ const Header = () => {
   };
 
   const open = Boolean(anchorEl);
-
-  
+  const openCartPopup = Boolean(anchorElCart);
 
   return (
     <>
       {/* upper header code  */}
-      <Box sx={activeOffeset? styles.upperNav: styles.upperNavone} p={2}>
+      <Box sx={activeOffeset ? styles.upperNav : styles.upperNavone} p={2}>
         <Container maxWidth="100%">
           <Box
             sx={{
@@ -147,10 +154,44 @@ const Header = () => {
               ))}
             </Box>
             <Box sx={style.outter}>
-              <Box sx={style.cartBox}>
-                <PiShoppingCartLight style={style.cartIcon} />
-                <Typography sx={style.cartTypo}>0</Typography>
-              </Box>
+              <Link
+                style={{ textDecoration: "none", color: "black" }}
+                to="/cart"
+              >
+                <Box
+                  sx={style.cartBox}
+                  aria-owns={openCartPopup ? "mouse-over-popover" : undefined}
+                  aria-haspopup="true"
+                  onMouseEnter={handlePopoverOpenCart}
+                >
+                  <PiShoppingCartLight style={style.cartIcon} />
+                  <Typography sx={style.cartTypo}>
+                    {totalProducts?.length}
+                  </Typography>
+                  <Popover
+                    open={openCartPopup}
+                    anchorEl={anchorElCart}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
+                    }}
+                    onClose={handlePopoverCloseCart}
+                    sx={{ mt: 1 }}
+                    onClick={handlePopoverCloseCart}
+                  >
+                    <Typography
+                      sx={{ padding: "10px" }}
+                      onMouseLeave={handlePopoverCloseCart}
+                    >
+                      No Product in Cart
+                    </Typography>
+                  </Popover>
+                </Box>
+              </Link>
               <Box sx={{ display: { md: "flex", xs: "none" } }}>
                 <FiUser />
                 <Typography
@@ -188,7 +229,7 @@ const Header = () => {
       {/* End upper header code  */}
 
       {/* Lower header code  */}
-      <Box >
+      <Box>
         <AppBar component="nav" sx={style.root} position="static">
           <Container
             maxWidth="100%"
@@ -202,18 +243,18 @@ const Header = () => {
               </Box>
 
               <Hidden lgDown>
-                <Box sx={{
-                   display: "flex",
-                    alignItems: "center", 
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
                     gap: 3,
-              
-              }}>
+                  }}
+                >
                   {catergories?.map((item, index) => (
                     <Fragment key={index}>
                       <Typography
                         aria-owns={open ? "mouse-over-popover" : undefined}
                         aria-haspopup="true"
-                        onMouseEnter={handlePopoverOpen}
                         onClick={handlePopoverClose}
                         sx={{ zIndex: 10000 }}
                       >
@@ -317,7 +358,6 @@ const Header = () => {
         </nav>
       </Box>
       {/* End Lower header code  */}
-      
     </>
   );
 };

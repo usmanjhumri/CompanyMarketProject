@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchHomeData } from "../api/api";
-
 const homeSlice = createSlice({
   name: "home",
   initialState: {
@@ -37,7 +36,6 @@ const homeSlice = createSlice({
       state.featureProducts = [];
       state.isLoading = false;
       state.errorMessage = action.error.message;
-      console.log(action.error.message, "action to de");
     });
   },
 });

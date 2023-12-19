@@ -6,9 +6,8 @@ const styles = {
     // alignItems: "center",
     // justifyContent: "space-between",
   },
-  upperNavone:{
-  
-    background:"transparent"
+  upperNavone: {
+    background: "transparent",
   },
   upperNav: {
     position: "fixed",
@@ -17,8 +16,8 @@ const styles = {
     padding: "10px",
     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
     background: "white",
-    height:"4vh",
-    width:"100%"
+    height: "4vh",
+    width: "100%",
   },
   signupLoginStyle: {
     textDecoration: "none",
@@ -62,9 +61,11 @@ const styles = {
   },
   cartTypo: {
     fontSize: "14px",
+    textDecoration: "none",
   },
   cartIcon: {
     fontSize: "14px",
+    textDecoration: "none",
   },
 
   link: {
@@ -103,17 +104,17 @@ const styles = {
     color: "#000000",
     fontSize: "14px",
   },
-  drawerChildlink:{
+  drawerChildlink: {
     fontFamily: "Be Vietnam Pro , sans-serif",
     color: "#000000",
     fontSize: "14px",
     textDecoration: "none",
     lineHeight: "17.53px",
-    display:"flex",
-    flexDirection:"column",
+    display: "flex",
+    flexDirection: "column",
     textAlign: "justify",
-    transition:"all 0.2s ease",
-    margin:"1rem"
+    transition: "all 0.2s ease",
+    margin: "1rem",
   },
   sidebarBtnBox: {
     display: "flex",
@@ -142,15 +143,14 @@ const styles = {
     position: "absolute",
     left: "87%",
     top: "2%",
-   
+
     fontSize: "20px",
     cursor: "pointer",
   },
-  arrowIconStyle:{
+  arrowIconStyle: {
     cursor: "pointer",
     fontSize: "20px",
-    transition:"all 0.5s ease-in-out"
-
+    transition: "all 0.5s ease-in-out",
   },
   iconBtnStyle: {
     border: "none",

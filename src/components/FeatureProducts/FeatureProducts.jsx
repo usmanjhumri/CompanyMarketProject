@@ -46,7 +46,6 @@ const FeatureProducts = () => {
       featureProduct?.filter((item) => item.category_id == e.target.id)
     );
   };
-  // console.log(filterProduct, "checking on swtich");
   const featureProduct = useSelector((state) => state?.home?.featureProducts);
 
   function TabPanel(props) {

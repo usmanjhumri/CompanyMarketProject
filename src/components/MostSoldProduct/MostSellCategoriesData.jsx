@@ -7,14 +7,9 @@ import CategoriesStyle from "./style";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { Link } from "react-router-dom";
 export default function MostSellCategoriesData({ filterProduct }) {
-  // console.log(filterProduct, "other file");
   return (
     <>
-      <Grid
-        container
-        sx={{ width: { md: "85%", xs: "90%" },  }}
-        margin="auto"
-      >
+      <Grid container sx={{ width: { md: "85%", xs: "90%" } }} margin="auto">
         {filterProduct?.map((item, index) => (
           <Grid item xs={12} md={4} key={index}>
             <Box sx={CategoriesStyle.BoxStyle}>
