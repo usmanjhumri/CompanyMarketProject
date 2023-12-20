@@ -1,9 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-const apiUrl = "https://marketplace.jdfunnel.com/api/";
-export const authLoginApi = "https://testportal.jdftest.xyz/api/auth/login";
+export const apiUrl = "https://marketplace.jdfunnel.com/api/";
+export const authLoginApi = "https://marketplace.jdfunnel.com/api/auth/sign-in";
 export const storageKey = "user";
 export const fetchHomeData = createAsyncThunk("fetchHomeData", async () => {
   const res = await axios.get(`${apiUrl}homepage`);
@@ -77,25 +75,25 @@ export const addToCart = createAsyncThunk(
   }
 );
 
-export const api = createApi({
-  reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-  endpoints: (builder) => ({
-    signup: builder.mutation({
-      query: (userData) => ({
-        url: "/signup",
-        method: "POST",
-        body: userData,
-      }),
-    }),
-  }),
-});
-
 export const signIn = createAsyncThunk("signInReducer", async function (key) {
   const user = JSON.parse(localStorage.getItem(key) ?? "{}");
 
   return Object.keys(user).length ? Promise.resolve(user) : Promise.reject();
 });
 
-export const { useSignupMutation } = api;
-export default api;
+export const signInNew = createAsyncThunk(
+  "signInReducer",
+  async function (data) {
+    const res = await axios.post(`${apiUrl}auth/sign-in`, data);
+
+    if (res) {
+      const localStorageData = JSON.stringify({
+        email: res?.data?.data?.email,
+        username: res?.data?.data?.username,
+        token: res?.data?.access_token,
+      });
+      window.localStorage.setItem(storageKey, localStorageData);
+      return res.data;
+    }
+  }
+);

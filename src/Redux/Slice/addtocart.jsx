@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { createSlice, createAction } from "@reduxjs/toolkit";
 import { addToCart as addToCartApi } from "../api/api";
 export const resetSuccessCart = createAction("addToCart/resetSuccessCart");

@@ -20,6 +20,10 @@ import SearchProduct from "./components/SearchProduct";
 import "react-phone-number-input/style.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import {
+  ProtectedRoutes,
+  SignUpProtectedRouts,
+} from "./components/ProtectedRoutes/ProtectedRoutes";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [orderNumber, setOrderNumber] = useState("");
@@ -29,7 +33,7 @@ function App() {
     dispatch(fetchHomeData());
     setOrderNumber(window.localStorage.getItem("order_Number"));
 
-    dispatch(signIn(storageKey));
+    // dispatch(signIn(storageKey));
 
     if (orderNumber) {
       dispatch(getCart(orderNumber));
@@ -55,14 +59,19 @@ function App() {
             element={<ProductDetail />}
           />
           <Route path="*" element={<Pagenotfound />} />
-          <Route
-            path="/signin"
-            element={<Signin setIsLoggedIn={setIsLoggedIn} />}
-          />
-          <Route
-            path="/signup"
-            element={<Signup setIsLoggedIn={setIsLoggedIn} />}
-          />
+          <Route element={<ProtectedRoutes />}>
+            <Route
+              path="/signin"
+              element={<Signin setIsLoggedIn={setIsLoggedIn} />}
+            />
+          </Route>
+
+          <Route element={<SignUpProtectedRouts />}>
+            <Route
+              path="/signup"
+              element={<Signup setIsLoggedIn={setIsLoggedIn} />}
+            />
+          </Route>
           <Route path="/product/search" element={<SearchProduct />} />
           <Route path="/cart" element={<Shopping />} />
           <Route path="/forget" element={<Signin />} />

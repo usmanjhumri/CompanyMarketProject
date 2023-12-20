@@ -68,7 +68,7 @@ const Shopping = () => {
                   <>
                     <Grid item lg={2}>
                       <img
-                        sx={Styles.logoImg}
+                        style={Styles.logoImg}
                         src={`${imgUrl}/${item?.product?.image}`}
                         alt="img1"
                         width="80%"

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import { FiUserPlus } from "react-icons/fi";
@@ -24,6 +24,8 @@ import styles from "./styles";
 import Colors from "../colors";
 import ResponsiveDrawer from "./Drawer/ResponsiveDrawer";
 import { Fragment } from "react";
+import Useravatar from "./Useravatar";
+import { storageKey } from "../../Redux/api/api";
 
 const navItems = [
   { title: "Home", link: "/" },
@@ -81,9 +83,12 @@ const Header = () => {
   const [selectedCat, setSelectedCat] = useState(null); // selecting catgoery for subcat
   const catergories = useSelector((state) => state?.home?.catergories); // getting categories from API
   const totalProducts = useSelector((state) => state?.getcart?.data);
-  console.log(totalProducts); //
+  // console.log(totalProducts); //
+  const isLoggedIn = useSelector((state) => state?.signInReducer?.isLogedIn);
+  console.log(isLoggedIn, " isLoggedIn");
 
   const [activeOffeset, setActiveOffeset] = useState(false);
+  const [userLogged, setUserLogged] = useState(false);
 
   window.addEventListener("scroll", () => {
     if (window.scrollY > 100) {
@@ -96,6 +101,14 @@ const Header = () => {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+
+  useEffect(() => {
+    if (localStorage.getItem(storageKey)) {
+      setUserLogged(true);
+    } else {
+      setUserLogged(false);
+    }
+  }, [userLogged, isLoggedIn]);
 
   const callfunction = useCallback(
     (event, catergoryId) => {
@@ -141,7 +154,6 @@ const Header = () => {
           >
             <Box sx={{ flexGrow: 1 }}>
               {navItems?.map((item, index) => (
-                // eslint-disable-next-line react/jsx-key
                 <NavLink
                   key={index}
                   to={item.link}
@@ -192,36 +204,42 @@ const Header = () => {
                   </Popover>
                 </Box>
               </Link>
-              <Box sx={{ display: { md: "flex", xs: "none" } }}>
-                <FiUser />
-                <Typography
-                  component="p"
-                  sx={{
-                    // display: { xs: "none", sm: "block" },
-                    color: "black",
-                  }}
-                  style={style.text}
-                >
-                  <NavLink to="/signin" style={style.signupLoginStyle}>
-                    Sign In
-                  </NavLink>
-                </Typography>
-              </Box>
-              <Box sx={{ display: { md: "flex", xs: "none" } }}>
-                <FiUserPlus />
-                <Typography
-                  component="p"
-                  sx={{
-                    // display: { xs: "none", sm: "block" },
-                    color: "black",
-                  }}
-                  style={style.text}
-                >
-                  <NavLink to="/signup" style={style.signupLoginStyle}>
-                    Sign Up
-                  </NavLink>
-                </Typography>
-              </Box>
+              {userLogged ? (
+                <Useravatar setUserLogged={setUserLogged} />
+              ) : (
+                <>
+                  <Box sx={{ display: { md: "flex", xs: "none" } }}>
+                    <FiUser />
+                    <Typography
+                      component="p"
+                      sx={{
+                        // display: { xs: "none", sm: "block" },
+                        color: "black",
+                      }}
+                      style={style.text}
+                    >
+                      <NavLink to="/signin" style={style.signupLoginStyle}>
+                        Sign In
+                      </NavLink>
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: { md: "flex", xs: "none" } }}>
+                    <FiUserPlus />
+                    <Typography
+                      component="p"
+                      sx={{
+                        // display: { xs: "none", sm: "block" },
+                        color: "black",
+                      }}
+                      style={style.text}
+                    >
+                      <NavLink to="/signup" style={style.signupLoginStyle}>
+                        Sign Up
+                      </NavLink>
+                    </Typography>
+                  </Box>
+                </>
+              )}
             </Box>
           </Box>
         </Container>

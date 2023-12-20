@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Box,
@@ -23,8 +23,13 @@ import { BsApple } from "react-icons/bs";
 import { BsFacebook } from "react-icons/bs";
 import styles from "./styles";
 import { toast } from "react-toastify";
-import { authLoginApi, signIn, storageKey } from "../../Redux/api/api";
-import { useDispatch } from "react-redux";
+import {
+  authLoginApi,
+  signIn,
+  storageKey,
+  signInNew,
+} from "../../Redux/api/api";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 const initialValues = {
@@ -34,9 +39,9 @@ const initialValues = {
 
 export default function Signin({ setIsLoggedIn }) {
   const dispatch = useDispatch();
-  const handleSignIn = () => {
-    setIsLoggedIn(true);
-  };
+  const isLoading = useSelector((state) => state?.signInReducer?.isLoading);
+  const success = useSelector((state) => state?.signInReducer?.success);
+
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,48 +55,13 @@ export default function Signin({ setIsLoggedIn }) {
       initialValues: initialValues,
       validationSchema: signinSchema,
       onSubmit: async (values, actions) => {
-        try {
-          setLoading(true);
-          const res = await axios.post(authLoginApi, {
-            login: values.email,
-            password: values.password,
-          });
-
-          if (res.status === 200) {
-            const {
-              data: { user_name: username, email },
-              access_token: token,
-            } = res.data;
-
-            localStorage.setItem(
-              storageKey,
-              JSON.stringify({ username, email, token })
-            );
-            await dispatch(signIn(storageKey));
-          }
-
-          setLoading(false);
-          setIsLoggedIn(true);
+        const res = await dispatch(signInNew(values));
+        console.log(res.payload.success, "WTF");
+        if (res.payload.success) {
+          toast.success("Sign in successfully");
           navigate("/");
-          toast.success("User signed in successfully", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
-        } catch (error) {
-          setLoading(false);
-
-          toast.error("Email or password is incorrect. Please try again.", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
+        } else {
+          toast.error("email or password wrong");
         }
       },
     });
@@ -231,8 +201,9 @@ export default function Signin({ setIsLoggedIn }) {
                       type="submit"
                       variant="contained"
                       sx={{ ...styles.signInBtn }}
+                      disabled={isLoading}
                     >
-                      Sign In
+                      {isLoading ? "Loading..." : "Sign in"}
                     </Button>
                   </Grid>
                 </Grid>
