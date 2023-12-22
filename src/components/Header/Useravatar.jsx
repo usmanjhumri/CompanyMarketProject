@@ -5,28 +5,31 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Tooltip,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
 import { CiUser } from "react-icons/ci";
 import { storageKey } from "../../Redux/api/api";
 import { useDispatch } from "react-redux";
 import { resetSuccessSignin } from "../../Redux/Slice/signin";
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
-const Useravatar = ({ setUserLogged }) => {
+import { useNavigate } from "react-router-dom";
+const settings = [
+  "Profile",
+  "Account",
+  "Dashboard",
+  "Change Password",
+  "Logout",
+];
+const Useravatar = ({
+  setUserLogged,
+  handleOpenUserMenu,
+  handleCloseUserMenu,
+  anchorElUser,
+}) => {
   const dispatch = useDispatch();
-  const [anchorElUser, setAnchorElUser] = useState(null);
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const navigate = useNavigate();
   const handleUserAvatar = (avatarmenu) => {
     switch (avatarmenu) {
       case "Profile":
-        console.log("profile");
         break;
 
       case "Logout":
@@ -35,21 +38,24 @@ const Useravatar = ({ setUserLogged }) => {
         dispatch(resetSuccessSignin());
 
         break;
-      //   case "Dashboard":
-      //     navigate("/dashboard");
-      //     break;
+      case "Change Password":
+        console.log("working");
+        navigate("/changepassword");
+        break;
     }
   };
   return (
     <div>
       <Box sx={{ flexGrow: 0 }}>
-        <Tooltip title="Open settings">
-          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar>
-              <CiUser />
-            </Avatar>
-          </IconButton>
-        </Tooltip>
+        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+          <Avatar
+            sx={{
+              background: "#2697fa",
+            }}
+          >
+            <CiUser />
+          </Avatar>
+        </IconButton>
         <Menu
           sx={{ mt: "45px" }}
           id="menu-appbar"

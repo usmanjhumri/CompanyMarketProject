@@ -59,7 +59,7 @@ const styles = {
   typoLabel: {
     display: "flex",
     justifyContent: "space-between",
-    width: "95%",
+    width: "90%",
     marginTop: 3,
     marginBottom: 1,
   },

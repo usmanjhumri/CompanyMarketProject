@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Styles } from "./Styles";
 import {
   Typography,
@@ -8,16 +8,22 @@ import {
   Card,
   CardContent,
   Container,
+  Skeleton,
 } from "@mui/material";
-// import img1 from "../../assets/jd.png";
 import { IoCloseOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { deleteCart } from "../../Redux/api/api";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const Shopping = () => {
-  const cartData = useSelector((state) => state.getcart.data);
+  const cartData = useSelector((state) => state?.getcart?.data);
   const imgUrl = useSelector((state) => state?.home?.imgPath);
+  const isLoading = useSelector((state) => state?.getcart?.isLoading);
   const [totalPrice, setTotalPrice] = useState(0);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useMemo(() => {
     const sum = cartData
@@ -29,144 +35,180 @@ const Shopping = () => {
       .toFixed(2);
     setTotalPrice(sum);
   }, [cartData]);
+
+  const handleRemoveProduct = async (id) => {
+    const res = await dispatch(deleteCart(id));
+    if (res.payload.message) {
+      toast.success(res.payload.message);
+    }
+    if (res === 500) {
+      navigate("/500");
+    }
+  };
+
   return (
     <>
       <Box mt={3}>
         <Container>
           <Typography sx={Styles.ShoppingHead}>Shopping Cart</Typography>
 
-          <Grid container spacing={2} marginTop={1} justifyContent="center">
-            <Grid item xs={12} md={8} lg={8}>
-              <Card sx={{ width: "100%" }}>
-                <Box sx={Styles.shoppingCard}>
-                  <Link to={"/"}>
-                    <Button sx={Styles.ContinueShop} variant="contained">
-                      Continue Shopping
+          {isLoading ? (
+            <Grid container spacing={2} marginTop={1} justifyContent="center">
+              {[...Array(1)].map((_, index) => (
+                <Grid key={index} item xs={12} md={8} lg={8}>
+                  <Card sx={{ width: "100%" }}>
+                    <Skeleton variant="rectangular" width="100%" height={200} />
+                    <CardContent>
+                      <Skeleton variant="text" width="50%" />
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          ) : cartData?.length === 0 ? (
+            <Typography sx={Styles.noProduct}>No product in cart</Typography>
+          ) : (
+            <Grid container spacing={2} marginTop={1} justifyContent="center">
+              <Grid item xs={12} md={8} lg={8}>
+                <Card sx={{ width: "100%" }}>
+                  <Box sx={Styles.shoppingCard}>
+                    <Link to={"/"}>
+                      <Button
+                        sx={{
+                          ...Styles.ContinueShop,
+                          width: { xs: "100%", md: "auto" },
+                        }}
+                        variant="contained"
+                      >
+                        Continue Shopping
+                      </Button>
+                    </Link>
+                    <Button
+                      sx={{
+                        ...Styles.emptyCard,
+                        width: { xs: "100%", md: "auto" },
+                      }}
+                      variant="contained"
+                      size="small"
+                    >
+                      Empty Cart
                     </Button>
-                  </Link>
-                  <Button
-                    sx={Styles.emptyCard}
-                    variant="contained"
-                    size="small"
-                  >
-                    Empty Cart
-                  </Button>
-                </Box>
-              </Card>
-
-              <Grid
-                container
-                justifyContent="center"
-                sx={{
-                  background: "var(--new-bg-color, #ECECEC)",
-
-                  display: "flex",
-                  paddingTop: "24px",
-                }}
-              >
-                {cartData?.map((item) => (
+                  </Box>
+                </Card>
+                {cartData?.map((item, index) => (
                   <>
-                    <Grid item lg={2}>
-                      <img
-                        style={Styles.logoImg}
-                        src={`${imgUrl}/${item?.product?.image}`}
-                        alt="img1"
-                        width="80%"
-                      />
-                    </Grid>
-                    <Grid item lg={5}>
-                      <Typography sx={Styles.historicHead}>
-                        {item?.product?.name}
-                      </Typography>
-                      <Typography sx={Styles.byFunnel}>By JD Funnel</Typography>
-
-                      <Box
-                        sx={{
-                          display: "flex",
-                          paddingTop: "10px",
-                          marginBottom: "24px",
-                        }}
-                      >
-                        <Typography>
-                          <span style={Styles.license}>License:</span>
-                          <span style={Styles.regularLicense}>
-                            {item.license === 1
-                              ? "Regular License"
-                              : "Extended License"}
-                          </span>
-                          <span style={Styles.license}> Support:</span>
-                          <span style={Styles.regularLicense}>
-                            6 months Support
-                          </span>
-                        </Typography>
-                      </Box>
-                    </Grid>
-
-                    <Grid lg={3}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          marginLeft: "100px",
-                        }}
-                      >
-                        <label style={Styles.qty} htmlFor="quantity">
-                          Qty
-                        </label>
-                        <input
-                          type="number"
-                          id="quantity"
-                          name="quantity"
-                          min="0"
-                          style={Styles.inputNumber}
-                        />
-                      </Box>
-                    </Grid>
-                    <Grid lg={2}>
-                      <Box sx={{ paddingLeft: "70px" }}>
-                        <IoCloseOutline
-                          style={{
-                            width: "21px",
-                            height: "21px",
-                            paddingLeft: "30px",
-                          }}
-                        />
-                        <Typography
+                    <Card sx={{ background: "#ECECEC" }}>
+                      <CardContent>
+                        <Box
                           sx={{
-                            marginTop: "23px",
-                            fontWeight: "500",
-                            fontSize: "24px",
+                            display: "flex",
+                            justifyContent: "space-between",
                           }}
                         >
-                          ${Number(item?.total_price).toFixed(2)}
-                        </Typography>
-                      </Box>
-                    </Grid>
+                          <Box
+                            sx={{
+                              display: "flex",
+                            }}
+                          >
+                            <Box
+                              component="img"
+                              src={`${imgUrl}/${item?.product?.image}`}
+                              width="20%"
+                            />
+                            <Typography sx={{ ...Styles.productName }}>
+                              {item?.product?.name}
+                              <br />
+                              <Typography
+                                component="span"
+                                sx={{ ...Styles.byUser }}
+                              >
+                                By JD Funnel
+                              </Typography>
+                              <br />
+                              <Box
+                                sx={{
+                                  mt: 3,
+                                }}
+                              >
+                                <Typography
+                                  component="span"
+                                  sx={{ fontSize: "12px", fontWeight: 400 }}
+                                >
+                                  License:{" "}
+                                  <Typography
+                                    component="span"
+                                    sx={{
+                                      fontSize: "12px",
+                                      fontWeight: 400,
+                                      color: "#959595",
+                                    }}
+                                  >
+                                    {" "}
+                                    {item.license === 1
+                                      ? "Regular License"
+                                      : "Extended License"}
+                                  </Typography>
+                                </Typography>
+                              </Box>
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                width: "100%",
+                                justifyContent: "end",
+                              }}
+                            >
+                              <IoCloseOutline
+                                style={{ marginLeft: 16 }}
+                                onClick={() =>
+                                  handleRemoveProduct(item.encrypted_id)
+                                }
+                                size={25}
+                              />
+                            </Box>
+                            <Typography
+                              sx={{
+                                mt: 2,
+                                fontSize: "24px",
+                                fontWeight: 500,
+                                color: "#000",
+                              }}
+                            >
+                              ${Number(item?.total_price).toFixed(2)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                    <Box sx={{ mt: 2 }}></Box>
                   </>
                 ))}
               </Grid>
-            </Grid>
 
-            <Grid item xs={12} md={4} lg={4}>
-              <Box
-                sx={{
-                  width: "100%",
-                  borderRadius: "2px",
-                  background: "var(--new-bg-color, #ECECEC)",
-                  display: "flex",
-                  justifyContent: "center",
-                  mt: { xs: 2, md: 0 },
-                }}
-              >
-                <CardContent>
-                  <Typography sx={Styles.total}>Your Cart Total</Typography>
-                  <Typography sx={Styles.price}>US$ {totalPrice}</Typography>
-                  <Button sx={Styles.checkOut} variant="contained">
-                    Check out
-                  </Button>
-                </CardContent>
-              </Box>
+              <Grid item xs={12} md={4} lg={4}>
+                <Box
+                  sx={{
+                    width: "100%",
+                    borderRadius: "2px",
+                    background: "var(--new-bg-color, #ECECEC)",
+                    display: "flex",
+                    justifyContent: "center",
+                    mt: { xs: 2, md: 0 },
+                  }}
+                >
+                  <CardContent>
+                    <Typography sx={Styles.total}>Your Cart Total</Typography>
+                    <Typography sx={Styles.price}>US$ {totalPrice}</Typography>
+                    <Button sx={Styles.checkOut} variant="contained">
+                      Check out
+                    </Button>
+                  </CardContent>
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </Container>
       </Box>
     </>

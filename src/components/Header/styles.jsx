@@ -62,6 +62,7 @@ const styles = {
   cartTypo: {
     fontSize: "14px",
     textDecoration: "none",
+    marginLeft: 1,
   },
   cartIcon: {
     fontSize: "14px",
@@ -160,6 +161,11 @@ const styles = {
     "&:hover": {
       background: Colors.primary,
     },
+  },
+  popoverProduct: {
+    fontSize: "16px",
+    fontWeight: 500,
+    fontFamily: "Be Vietnam Pro,sans-serif",
   },
 };
 

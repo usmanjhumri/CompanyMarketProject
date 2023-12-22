@@ -1,6 +1,12 @@
-.NavLink:hover{
-    background:#2697FA;
-    padding: 0.5rem 0.8rem;
-    border-radius: 4px;
-    color: #FFFFFF;
+/* .NavLink:hover {
+  background: #2697fa;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  color: #ffffff;
+} */
+.zIndex {
+  z-index: 0;
+}
+.zIndexs {
+  z-index: 10000;
 }

@@ -1,31 +1,59 @@
-// authSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { api } from './api';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+export const createUser = createAsyncThunk(
+  "createUser",
+  async (data, { rejectWithValue }) => {
+    console.log(data, "before");
+    try {
+      const response = await fetch(
+        "https://marketplace.jdfunnel.com/api/auth/sign-up",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(`Failed to sign up: ${errorResponse.message}`);
+      }
 
-const authSlice = createSlice({
-  name: 'auth',
+      const res = await response.json();
+      console.log("API Response:", res);
+      return res;
+    } catch (err) {
+      console.log("Error99", err.message);
+      return rejectWithValue({ message: err.message });
+    }
+  }
+);
+
+export const userDetails = createSlice({
+  name: "userDetails",
   initialState: {
-    user: null,
-    status: 'idle',
+    user: [],
+    loading: false,
     error: null,
   },
-  reducers: {},
+
   extraReducers: (builder) => {
     builder
-      .addCase(signupUser.pending, (state) => {
-        state.status = 'loading';
+      .addCase(createUser.pending, (state) => {
+        state.loading = true;
       })
-      .addCase(signupUser.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.user = action.payload;
+      .addCase(createUser.fulfilled, (state, action) => {
+        console.log("API Response:", action.payload);
+        state.loading = false;
+        state.user = action.payload?.user;
       })
-      .addCase(signupUser.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
+      .addCase(createUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export default authSlice.reducer;
+export default userDetails.reducer;

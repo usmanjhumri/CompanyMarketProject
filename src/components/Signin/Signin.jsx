@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-
 import {
   Box,
   Paper,
@@ -17,52 +16,69 @@ import { FaRegEye } from "react-icons/fa";
 import { useFormik } from "formik";
 import { signinSchema } from "./Regex";
 import { FaEyeSlash } from "react-icons/fa";
-import { useNavigate, Link as NavLink, json } from "react-router-dom";
+import { useNavigate, Link as NavLink } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { BsApple } from "react-icons/bs";
 import { BsFacebook } from "react-icons/bs";
 import styles from "./styles";
 import { toast } from "react-toastify";
-import {
-  authLoginApi,
-  signIn,
-  storageKey,
-  signInNew,
-} from "../../Redux/api/api";
+import { signInNew } from "../../Redux/api/api";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import { resetSuccessSignin } from "../../Redux/Slice/signin";
 
 const initialValues = {
   email: "",
   password: "",
 };
 
-export default function Signin({ setIsLoggedIn }) {
+export default function Signin() {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state?.signInReducer?.isLoading);
-  const success = useSelector((state) => state?.signInReducer?.success);
+  const isError = useSelector((state) => state?.signInReducer?.isError);
+  const errorMessage = useSelector(
+    (state) => state?.signInReducer?.errorMessage
+  );
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  useEffect(() => {
+    if (isError) {
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      dispatch(resetSuccessSignin());
+    }
+  }, [isError, errorMessage]);
 
   const { errors, values, handleBlur, handleChange, handleSubmit, touched } =
     useFormik({
       initialValues: initialValues,
       validationSchema: signinSchema,
-      onSubmit: async (values, actions) => {
-        const res = await dispatch(signInNew(values));
-        console.log(res.payload.success, "WTF");
-        if (res.payload.success) {
-          toast.success("Sign in successfully");
-          navigate("/");
-        } else {
-          toast.error("email or password wrong");
-        }
+      onSubmit: (values) => {
+        dispatch(signInNew(values))
+          .then((res) => {
+            if (res.payload.success) {
+              toast.success("Sign in successfully", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+              });
+              navigate("/");
+            }
+          })
+          .catch((e) => console.log(e, "catch"));
       },
     });
 
@@ -152,6 +168,9 @@ export default function Signin({ setIsLoggedIn }) {
                         style={{
                           color: "red",
                           margin: "0",
+                          paddingLeft: "30px",
+                          textAlign: "left",
+                          fontSize: "14px",
                         }}
                       >
                         {errors.email}
@@ -164,7 +183,9 @@ export default function Signin({ setIsLoggedIn }) {
                       <Typography sx={{ paddingLeft: "30px" }}>
                         Password
                       </Typography>
-                      <Link to="/forget">Forgot</Link>
+                      <NavLink to="/forget" style={{ color: "#1976d2" }}>
+                        Forgot
+                      </NavLink>
                     </Box>
                     <TextField
                       id="password"
@@ -178,7 +199,11 @@ export default function Signin({ setIsLoggedIn }) {
                       InputProps={{
                         endAdornment: (
                           <span onClick={togglePasswordVisibility}>
-                            {showPassword ? <FaRegEye /> : <FaEyeSlash />}
+                            {showPassword ? (
+                              <FaRegEye style={{ cursor: "pointer" }} />
+                            ) : (
+                              <FaEyeSlash style={{ cursor: "pointer" }} />
+                            )}
                           </span>
                         ),
                       }}
@@ -189,6 +214,9 @@ export default function Signin({ setIsLoggedIn }) {
                         style={{
                           color: "red",
                           margin: "0",
+                          paddingLeft: "30px",
+                          textAlign: "left",
+                          fontSize: "14px",
                         }}
                       >
                         {errors.password}

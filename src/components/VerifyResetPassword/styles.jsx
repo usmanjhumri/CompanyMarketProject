@@ -5,7 +5,6 @@ const styles = {
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    height: "auto",
     fontFamily: "Be Vietnam Pro,sans-serif",
   },
 
@@ -21,7 +20,7 @@ const styles = {
     alignItems: "center",
     borderRadius: "2px",
     flexDirection: "column",
-    paddingBottom: 5,
+    paddingBottom: 0.5,
   },
   logoDiv: {
     borderRadius: "2px",
@@ -73,7 +72,7 @@ const styles = {
     gap: 1,
   },
   signInBtn: {
-    width: "90%",
+    width: "95%",
     color: Colors.white,
     padding: "12px",
     borderRadius: "0px",
@@ -84,6 +83,7 @@ const styles = {
     lineHeight: "normal",
     textTransform: "capitalize",
     marginTop: 3,
+    marginBottom: 5,
     background: Colors.secondary,
     "&&:hover": {
       background: Colors.secondary,

@@ -1,0 +1,14 @@
+.preloader-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out; /* Adjust the duration as needed */
+  }
+  
+  .preloader-container.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }

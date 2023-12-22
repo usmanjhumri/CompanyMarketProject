@@ -36,6 +36,7 @@ const homeSlice = createSlice({
       state.featureProducts = [];
       state.isLoading = false;
       state.errorMessage = action.error.message;
+      state.isError = true;
     });
   },
 });

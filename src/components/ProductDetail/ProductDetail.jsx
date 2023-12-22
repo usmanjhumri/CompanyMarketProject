@@ -93,7 +93,7 @@ const ProductDetail = () => {
     if (product?.bumps?.length > 0) {
       let newBumps = [];
       product?.bumps?.forEach((item, index) => {
-        if (item.name === "Extra Pages") {
+        if (item.name.trim() === "Extra Pages") {
           setExtraPages(item.min_quantity);
         }
         newBumps.push(item.price);
@@ -105,6 +105,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (successCart) {
+      console.log("working");
       toast.success("Item added to your cart");
       dispatch(resetSuccessCart());
     }
@@ -131,7 +132,7 @@ const ProductDetail = () => {
     setBumps((prevBumps) => {
       const newBumps = [...prevBumps];
       if (!prevBumps[index]) {
-        newBumps[index] = bump.price;
+        newBumps[index] = Number(bump.price);
       } else {
         newBumps.splice(index, 1);
       }
@@ -153,10 +154,7 @@ const ProductDetail = () => {
       };
 
       if (checkingItem[index]) {
-        setBumps((state) => [...state, price]);
-        setBumpsPages((state) => [...state, min]);
-
-        if (name === "Extra Pages") {
+        if (name.trim() === "Extra Pages") {
           setTotalPrice(Number(totalPrice) + Number(price) * extraPages);
           setBumpfee(bumpFee + Number(price) * extraPages);
         } else {
@@ -164,9 +162,7 @@ const ProductDetail = () => {
           setBumpfee(Number(price));
         }
       } else {
-        setBumps((state) => state.filter((item) => item !== price));
-        setBumpsPages((state) => state.filter((item) => item !== min));
-        if (name === "Extra Pages") {
+        if (name.trim() === "Extra Pages") {
           setTotalPrice(Number(totalPrice) - Number(price) * extraPages);
           setBumpfee(bumpFee - Number(price) * extraPages);
         } else {
@@ -185,7 +181,7 @@ const ProductDetail = () => {
     let addPages;
 
     const updatedProducts = products.map((item) => {
-      if (item.name === "Extra Pages") {
+      if (item.name.trim() === "Extra Pages") {
         addPages = newPages;
         return { ...item, min_quantity: newPages };
       }
@@ -195,7 +191,7 @@ const ProductDetail = () => {
     setProducts(updatedProducts);
     if (isChecked) {
       if (pages[1]) {
-        pages[1] = addPages;
+        pages[1] = Number(addPages);
       }
       setTotalPrice((prevTotalPrice) => {
         const updatedPrice =
@@ -236,7 +232,7 @@ const ProductDetail = () => {
       const bump = product?.bumps[index];
 
       if (isChecked) {
-        if (bump.name === "Extra Pages") {
+        if (bump.name.trim() === "Extra Pages") {
           updatedTotalPrice += Number(bump.price) * extraPages;
         } else {
           updatedTotalPrice += Number(bump.price);
@@ -576,7 +572,7 @@ const ProductDetail = () => {
                               <Typography sx={styles.detailsText}>
                                 {item.name}{" "}
                               </Typography>
-                              {item.name === "Extra Pages" && (
+                              {item.name.trim() === "Extra Pages" && (
                                 <input
                                   style={{
                                     width: "30.944px",

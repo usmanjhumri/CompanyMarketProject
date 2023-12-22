@@ -6,6 +6,13 @@ export const Styles = {
     fontSize: "40px",
     fontWeight: "500",
   },
+  noProduct: {
+    color: colors.black,
+    fontFamily: "Be Vietnam",
+    fontSize: "24px",
+    fontWeight: "500",
+    marginTop: 5,
+  },
   shoppingCard: {
     display: "flex",
     justifyContent: "space-between",
@@ -133,5 +140,24 @@ export const Styles = {
     background: " var(--new-bg-color, #ECECEC)",
     WebkitAppearance: "none",
     marginLeft: "5px",
+  },
+  productName: {
+    color: "#2697FA",
+    leadingTrim: "both",
+    textEdge: "cap",
+    fontFamily: "Be Vietnam Pro",
+    fontSize: "18px",
+    fontStyle: "normal",
+    fontWeight: 500,
+    lineHeight: "normal",
+    marginLeft: 3,
+  },
+  byUser: {
+    fontFamily: "Be Vietnam Pro",
+    fontSize: "12px",
+    fontStyle: "normal",
+    fontWeight: 400,
+    lineHeight: "normal",
+    color: "#959595",
   },
 };

@@ -15,18 +15,16 @@ import Logo from "../../assets/logo.png";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-// import { HeaderItemArray } from "./HeaderItemArray";
 import { NavLink, Link } from "react-router-dom";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { useSelector } from "react-redux";
-// import './Header.css'
 import styles from "./styles";
 import Colors from "../colors";
 import ResponsiveDrawer from "./Drawer/ResponsiveDrawer";
 import { Fragment } from "react";
 import Useravatar from "./Useravatar";
 import { storageKey } from "../../Redux/api/api";
-
+import "./Header.css";
 const navItems = [
   { title: "Home", link: "/" },
   { title: "Products", link: "products" },
@@ -85,7 +83,7 @@ const Header = () => {
   const totalProducts = useSelector((state) => state?.getcart?.data);
   // console.log(totalProducts); //
   const isLoggedIn = useSelector((state) => state?.signInReducer?.isLogedIn);
-  console.log(isLoggedIn, " isLoggedIn");
+  // console.log(isLoggedIn, " isLoggedIn");
 
   const [activeOffeset, setActiveOffeset] = useState(false);
   const [userLogged, setUserLogged] = useState(false);
@@ -139,7 +137,14 @@ const Header = () => {
 
   const open = Boolean(anchorEl);
   const openCartPopup = Boolean(anchorElCart);
+  const [anchorElUser, setAnchorElUser] = useState(false);
 
+  const handleOpenUserMenu = () => {
+    setAnchorElUser(true);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(false);
+  };
   return (
     <>
       {/* upper header code  */}
@@ -166,46 +171,84 @@ const Header = () => {
               ))}
             </Box>
             <Box sx={style.outter}>
-              <Link
-                style={{ textDecoration: "none", color: "black" }}
-                to="/cart"
+              <Box
+                sx={style.cartBox}
+                aria-owns={openCartPopup ? "mouse-over-popover" : undefined}
+                aria-haspopup="true"
+                onMouseEnter={handlePopoverOpenCart}
               >
-                <Box
-                  sx={style.cartBox}
-                  aria-owns={openCartPopup ? "mouse-over-popover" : undefined}
-                  aria-haspopup="true"
-                  onMouseEnter={handlePopoverOpenCart}
+                <Link
+                  style={{
+                    textDecoration: "none",
+                    color: "black",
+                    zIndex: 100000,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  to="/cart"
                 >
                   <PiShoppingCartLight style={style.cartIcon} />
+
                   <Typography sx={style.cartTypo}>
                     {totalProducts?.length}
                   </Typography>
-                  <Popover
-                    open={openCartPopup}
-                    anchorEl={anchorElCart}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "center",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "center",
-                    }}
-                    onClose={handlePopoverCloseCart}
-                    sx={{ mt: 1 }}
-                    onClick={handlePopoverCloseCart}
-                  >
+                </Link>
+                <Popover
+                  open={openCartPopup}
+                  anchorEl={anchorElCart}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center",
+                  }}
+                  onClose={handlePopoverCloseCart}
+                  sx={{ mt: 1, zIndex: 10000 }}
+                  onClick={handlePopoverCloseCart}
+                >
+                  {totalProducts?.map((item, index) => (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        flexDirection: "row",
+                        width: "100%",
+                      }}
+                      key={index}
+                    >
+                      <Typography
+                        sx={{ padding: "10px", ...style.popoverProduct }}
+                        onMouseLeave={handlePopoverCloseCart}
+                      >
+                        {item.product?.name}
+                      </Typography>
+                      <Typography
+                        sx={{ padding: "10px" }}
+                        onMouseLeave={handlePopoverCloseCart}
+                      >
+                        ${Number(item.total_price).toFixed(2)}
+                      </Typography>
+                    </Box>
+                  ))}
+                  {totalProducts.length === 0 && (
                     <Typography
                       sx={{ padding: "10px" }}
                       onMouseLeave={handlePopoverCloseCart}
                     >
-                      No Product in Cart
+                      There is no product in the cart.
                     </Typography>
-                  </Popover>
-                </Box>
-              </Link>
+                  )}
+                </Popover>
+              </Box>
               {userLogged ? (
-                <Useravatar setUserLogged={setUserLogged} />
+                <Useravatar
+                  setUserLogged={setUserLogged}
+                  handleCloseUserMenu={handleCloseUserMenu}
+                  handleOpenUserMenu={handleOpenUserMenu}
+                  anchorElUser={anchorElUser}
+                />
               ) : (
                 <>
                   <Box sx={{ display: { md: "flex", xs: "none" } }}>
@@ -251,6 +294,7 @@ const Header = () => {
         <AppBar component="nav" sx={style.root} position="static">
           <Container
             maxWidth="100%"
+            className={anchorElUser ? "zIndex" : "zIndexs"}
             sx={{ padding: { md: "16px", xs: "auto" } }}
           >
             <Toolbar>
@@ -304,7 +348,7 @@ const Header = () => {
                         horizontal: "center",
                       }}
                       onClose={handlePopoverClose}
-                      sx={{ mt: 1 }}
+                      sx={{ mt: 1, zIndex: 0 }}
                       onMouseLeave={handlePopoverClose}
                       onClick={handlePopoverClose}
                     >

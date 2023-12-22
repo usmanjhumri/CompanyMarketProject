@@ -1,14 +1,11 @@
 /* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable react/no-unescaped-entities */
 
-import { useEffect } from "react";
-import { Box, Container, Grid, Typography, Button } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import AuthStyle from "./styles";
-import { PiShoppingCartLight } from "react-icons/pi";
 // import AuthcartArray from "./AuthorCartArray";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useSelector } from "react-redux";
-import Skeletoncard from "../Skeletoncard";
 import Card from "../Cards";
 const AuthsItem = () => {
   const authorProduct = useSelector((state) => state?.home?.authorProduct);

@@ -50,3 +50,6 @@ body {
 }
 
 /* signup phone field css */
+.Toastify__toast-container{
+  z-index:100000 !important;
+}
