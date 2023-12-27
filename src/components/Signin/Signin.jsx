@@ -78,7 +78,7 @@ export default function Signin() {
               navigate("/");
             }
           })
-          .catch((e) => console.log(e, "catch"));
+          .catch((e) => e);
       },
     });
 

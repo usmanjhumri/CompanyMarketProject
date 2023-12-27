@@ -1,4 +1,3 @@
-import React from "react";
 import PreLoader from "../../assets/Loader.gif";
 import "./Preloader.css";
 function Preloader() {

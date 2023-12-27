@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useMemo } from "react";
 import Cards from "../Cards";
@@ -116,13 +117,13 @@ const SearchProduct = () => {
   //   },
   // };
   //
-  
+
   const handleInputSearch = (e) => {
     const searchItems = e.target.value;
     setInputSearch(searchItems);
   };
   const handleSearchBtn = () => {
-    console.log(inputSearch);
+    // console.log(inputSearch);
     navigate(`/product/search?search=${inputSearch}`);
   };
   const handleSearchKey = (e) => {

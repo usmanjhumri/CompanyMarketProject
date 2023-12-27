@@ -148,7 +148,11 @@ const Header = () => {
   return (
     <>
       {/* upper header code  */}
-      <Box sx={activeOffeset ? styles.upperNav : styles.upperNavone} p={2}>
+      <Box
+        sx={activeOffeset ? styles.upperNav : styles.upperNavone}
+        p={2}
+        className={activeOffeset ? "navbar navbar-fixed" : "navbar"}
+      >
         <Container maxWidth="100%">
           <Box
             sx={{

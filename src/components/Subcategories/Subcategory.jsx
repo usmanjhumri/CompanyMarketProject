@@ -1,14 +1,6 @@
-import React, { Fragment, useState, useMemo } from "react";
-import {
-  Box,
-  Typography,
-  Grid,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Skeleton,
-  Slider,
-} from "@mui/material";
+/* eslint-disable react/no-unescaped-entities */
+import { Fragment, useState, useMemo } from "react";
+import { Typography, Grid } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Cards from "../Cards";
 import { useSelector } from "react-redux";

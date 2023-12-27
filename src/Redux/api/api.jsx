@@ -102,7 +102,7 @@ export const signInNew = createAsyncThunk(
   async function (data, { rejectWithValue }) {
     try {
       const res = await axios.post(`${apiUrl}auth/sign-in`, data);
-      console.log(res, " ressss");
+      // console.log(res, " ressss");
       if (res) {
         const localStorageData = JSON.stringify({
           email: res?.data?.data?.email,
@@ -120,19 +120,26 @@ export const signInNew = createAsyncThunk(
 
 export const changePassword = createAsyncThunk(
   "changePassword",
-  async function (data) {
+  async function (data, { rejectWithValue }) {
     const token = JSON.parse(localStorage.getItem(storageKey)).token;
-    console.log(token, "token user");
+    // console.log(token, "token user");
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-    const res = await axios.post(`${apiUrl}password/change`, data, { headers });
-    if (res) {
-      console.log(res, " change password");
-      return res.data;
-    } else {
-      console.error("Unexpected response format:", res);
-      throw new Error("Unexpected response format");
+    try {
+      const res = await axios.post(`${apiUrl}password/change`, data, {
+        headers,
+      });
+      if (res) {
+        // console.log(res.data, " change password");
+        return res.data;
+      } else {
+        // console.error("Unexpected response format:", res);
+        throw new Error("Unexpected response format");
+      }
+    } catch (e) {
+      // console.log(e.response.data.message, "hi this is me");
+      return rejectWithValue(e.response.data.message);
     }
   }
 );

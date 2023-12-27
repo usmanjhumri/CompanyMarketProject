@@ -1,4 +1,20 @@
 import Colors from "../colors";
+const keyframes = {
+  headerSlideDown: {
+    "0%": {
+      marginTop: "-100px",
+      opacity: 0,
+    },
+    "30%": {
+      marginTop: "-50px",
+      opacity: 0,
+    },
+    "100%": {
+      marginTop: 0,
+      opacity: 1,
+    },
+  },
+};
 const styles = {
   root: {
     background: Colors.white,
@@ -8,6 +24,7 @@ const styles = {
   },
   upperNavone: {
     background: "transparent",
+    // width: "100%",
   },
   upperNav: {
     position: "fixed",
@@ -18,7 +35,12 @@ const styles = {
     background: "white",
     height: "4vh",
     width: "100%",
+    animationName: keyframes.headerSlideDown,
+    animationDuration: "0.5s",
+    animationTimingFunction: "ease",
+    animationFillMode: "forwards",
   },
+
   signupLoginStyle: {
     textDecoration: "none",
     color: Colors.black,

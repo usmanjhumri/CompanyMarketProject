@@ -30,7 +30,7 @@ import {
   ProtectedRoutes,
   SignUpProtectedRouts,
 } from "./components/ProtectedRoutes/ProtectedRoutes";
-import ChangePassword from "./components/ChangePassword";
+import ChangePassword from "./components/ChangePassword/ChangePassword";
 function App() {
   const navigate = useNavigate();
   const [orderNumber, setOrderNumber] = useState("");

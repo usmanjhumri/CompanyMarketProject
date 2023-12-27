@@ -8,6 +8,7 @@ const getCartItem = createSlice({
     errorMessage: "",
     success: "",
     data: [],
+    userBalance: null,
   },
   extraReducers: (builder) => {
     builder.addCase(getCart.pending, (state, action) => {
@@ -19,6 +20,7 @@ const getCartItem = createSlice({
       state.errorMessage = "";
       state.success = action.payload.status;
       state.data = action.payload.data;
+      state.userBalance = action.payload.user_balance;
     });
     builder.addCase(getCart.rejected, (state, action) => {
       state.isLoading = false;

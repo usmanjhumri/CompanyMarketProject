@@ -1,5 +1,4 @@
-import React from "react";
-import { Box, Button, Container, Grid, Typography, Link } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import CardStyle from "./styles";
 import Skeleton from "react-loading-skeleton";
 const Skeletoncard = ({ cards }) => {

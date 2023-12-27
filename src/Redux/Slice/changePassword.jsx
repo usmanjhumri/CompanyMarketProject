@@ -1,6 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { createAction, createSlice } from "@reduxjs/toolkit";
 import { changePassword } from "../api/api";
-export const changePasswordSuccess = createAction("signInReducer/resetLogin");
+export const changePasswordSuccess = createAction(
+  "changePasswordReducer/changePassword"
+);
 
 let initialState = {
   isLoading: false,
@@ -19,21 +22,30 @@ const changePasswordSlice = createSlice({
       .addCase(changePassword.pending, (state, action) => {
         state.isLoading = true;
         state.isError = false;
-        state.errorMessage = "";
+        state.Message = "";
       })
       .addCase(changePassword.fulfilled, (state, action) => {
-        console.log(action, " change password action");
-        const userPasswordChanged = action.payload;
+        // console.log(action.payload.message, " change password action");
+        // console.log(state, " state");
+        let userPasswordChanged = action.payload;
         state.isLoading = false;
         state.isError = false;
         state.userPasswordUpdated = userPasswordChanged;
-        state.Message = action.payload.data.message;
+        state.Message = action.payload.message;
+        // console.log(state.Message, " messaged");
       })
       .addCase(changePassword.rejected, (state, action) => {
+        // console.log(action, "rejected payload");
         state.isLoading = false;
         state.isError = true;
-        state.errorMessage = action.error.message || "An error occurred";
+        state.Message = action.payload || "An error occurred";
         state.success = false;
+      })
+      .addCase(changePasswordSuccess, (state) => {
+        state.isLoading = false;
+        state.Message = "";
+        state.success = false;
+        state.isError = false;
       });
   },
 });

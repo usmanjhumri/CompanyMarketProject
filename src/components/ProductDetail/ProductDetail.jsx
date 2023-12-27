@@ -105,7 +105,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (successCart) {
-      console.log("working");
+      // console.log("working");
       toast.success("Item added to your cart");
       dispatch(resetSuccessCart());
     }
@@ -228,7 +228,7 @@ const ProductDetail = () => {
     let updatedTotalPrice = initialPrice;
     Object.keys(checkedItems).forEach((index) => {
       const isChecked = checkedItems[index];
-      console.log(isChecked, " checked");
+      // console.log(isChecked, " checked");
       const bump = product?.bumps[index];
 
       if (isChecked) {

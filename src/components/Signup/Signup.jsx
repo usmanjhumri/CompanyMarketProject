@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import "../../App.css";
 import {
@@ -87,10 +90,10 @@ export default function Signup({ setIsLoggedIn }) {
         const encodedConfirm = btoa(values.password_confirmation);
         values.password_confirmation = encodedConfirm;
 
-        console.log(values, actions);
+        // console.log(values, actions);
 
         const registerResult = await dispatch(createUser(values));
-        console.log(registerResult, "action");
+        // console.log(registerResult, "action");
 
         if (registerResult.payload.success) {
           toast.success(registerResult.payload.message);

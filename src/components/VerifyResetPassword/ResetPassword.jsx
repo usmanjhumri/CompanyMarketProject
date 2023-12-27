@@ -57,13 +57,13 @@ export default function ResetPassword() {
         dispatch(resetForgotState());
       }
 
-      console.log(res, "after otp");
+      // console.log(res, "after otp");
     },
   });
   const handleChangeOTP = (newValue) => {
     setCode(newValue);
     formik.initialValues.code = newValue;
-    console.log(formik.values);
+    // console.log(formik.values);
   };
   return (
     <Box sx={{ ...styles.mainBox }}>

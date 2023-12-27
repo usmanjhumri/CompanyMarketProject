@@ -19,7 +19,7 @@ const forgotPasswordSlice = createSlice({
       state.success = false;
     });
     builder.addCase(forgotPassword.fulfilled, (state, action) => {
-      console.log(action);
+      // console.log(action);
       state.isLoading = false;
       state.isError = false;
       state.success = action.payload.success;

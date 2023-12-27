@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 
@@ -18,46 +19,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../Redux/api/api";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import Button from "@mui/material/Button";
-import { IoIosArrowForward } from "react-icons/io";
-
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-
-// const ITEM_HEIGHT = 48;
-// const ITEM_PADDING_TOP = 8;
-// const MenuProps = {
-//   PaperProps: {
-//     style: {
-//       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-//       width: 250,
-//     },
-//   },
-// };
-
-const names = [
-  " Price ASC",
-  " Price DESC",
-  " Date ASC",
-  " Date DESC",
-  " Sell ASC",
-  "Carlos Abbott",
-  " Sell DESC",
-  " Rating ASC",
-  " Rating DESC",
-];
-
-// function getStyles(name, personName, theme) {
-//   return {
-//     fontWeight:
-//       personName.indexOf(name) === -1
-//         ? theme.typography.fontWeightRegular
-//         : theme.typography.fontWeightMedium,
-//   };
-// }
 const AllProducts = () => {
   const dispatch = useDispatch();
 

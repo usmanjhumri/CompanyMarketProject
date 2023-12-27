@@ -10,3 +10,27 @@
 .zIndexs {
   z-index: 10000;
 }
+.navbar {
+  background-color: transparent;
+}
+.navbar-fixed {
+  background-color: rgba(33, 36, 40, 0.8705882353);
+  box-shadow: rgb(28, 30, 34) 10px 10px 19px 0px,
+    rgb(38, 42, 46) -10px -10px 19px 0px;
+  backdrop-filter: blur(15px);
+  animation: headerSlideDown 0.5s ease forwards;
+}
+@keyframes headerSlideDown {
+  0% {
+    margin-top: -100px;
+    opacity: 0;
+  }
+  30% {
+    margin-top: -50px;
+    opacity: 0;
+  }
+  100% {
+    margin-top: 0;
+    opacity: 1;
+  }
+}

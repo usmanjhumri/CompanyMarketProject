@@ -8,6 +8,7 @@ import getcartReducer from "./Slice/getcart";
 import forgotpassword from "./Slice/forgotpassword";
 import userDetails from "../Redux/Slice/AuthSignup";
 import changePasswordReducer from "../Redux/Slice/changePassword";
+
 export const store = configureStore({
   reducer: {
     home: homeReducer,
@@ -19,5 +20,6 @@ export const store = configureStore({
     app: userDetails,
     forgotpassword: forgotpassword,
     changePassword: changePasswordReducer,
+    // userCheckout: userCheckout,
   },
 });
