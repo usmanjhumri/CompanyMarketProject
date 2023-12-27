@@ -116,8 +116,12 @@ function App() {
               </Route>
               <Route path="/product/search" element={<SearchProduct />} />
               <Route path="/cart" element={<Shopping />} />
-              <Route path="/forget" element={<ForgotPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route element={<ProtectedRoutes />}>
+                <Route path="/forget" element={<ForgotPassword />} />
+              </Route>
+              <Route element={<ProtectedRoutes />}>
+                <Route path="/reset-password" element={<ResetPassword />} />
+              </Route>
               <Route path="/changepassword" element={<ChangePassword />} />
               <Route path="/500" element={<InteranlError />} />
             </Routes>
