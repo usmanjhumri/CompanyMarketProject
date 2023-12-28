@@ -9,7 +9,12 @@ import { Link } from "react-router-dom";
 export default function MostSellCategoriesData({ filterProduct }) {
   return (
     <>
-      <Grid container sx={{ width: { md: "85%", xs: "90%" } }} margin="auto">
+      <Grid
+        container
+        spacing={2}
+        sx={{ width: { md: "90%", xs: "auto" } }}
+        margin="auto"
+      >
         {filterProduct?.map((item, index) => (
           <Grid item xs={12} md={4} key={index}>
             <Box sx={CategoriesStyle.BoxStyle}>

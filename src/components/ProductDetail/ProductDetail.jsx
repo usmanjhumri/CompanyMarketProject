@@ -477,30 +477,39 @@ const ProductDetail = () => {
                     sx={{ display: "flex", justifyContent: "space-between" }}
                   >
                     <FormControl sx={{ display: "flex" }}>
-                      <Select
-                        displayEmpty
-                        value={LicenseType}
-                        onChange={(e) => handleLicenseChange(e)}
-                        input={
-                          <OutlinedInput
-                            sx={{ ...styles.licenseName, minWidth: "300px" }}
-                          />
-                        }
-                        MenuProps={MenuProps}
-                        inputProps={{ "aria-label": "Without label" }}
-                      >
-                        {Licenese.map((name, index) => (
-                          <MenuItem
-                            key={name}
-                            value={name}
-                            style={getStyles(name, LicenseType, theme)}
-                            data-index={index}
-                            onClick={(e) => handleLicenseIndex(e, index)}
-                          >
-                            {name}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                      {isLoading ? (
+                        <Skeleton
+                          variant="rectangular"
+                          width={300}
+                          height={40}
+                          animation="wave"
+                        />
+                      ) : (
+                        <Select
+                          displayEmpty
+                          value={LicenseType}
+                          onChange={(e) => handleLicenseChange(e)}
+                          input={
+                            <OutlinedInput
+                              sx={{ ...styles.licenseName, minWidth: "300px" }}
+                            />
+                          }
+                          MenuProps={MenuProps}
+                          inputProps={{ "aria-label": "Without label" }}
+                        >
+                          {Licenese.map((name, index) => (
+                            <MenuItem
+                              key={name}
+                              value={name}
+                              style={getStyles(name, LicenseType, theme)}
+                              data-index={index}
+                              onClick={(e) => handleLicenseIndex(e, index)}
+                            >
+                              {name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )}
                     </FormControl>
 
                     <Typography sx={styles.priceText}>
@@ -609,7 +618,17 @@ const ProductDetail = () => {
                       type="submit"
                       disabled={isLoadingCart}
                     >
-                      {isLoadingCart ? "Adding into cart" : "Add to cart"}
+                      {isLoading ? (
+                        <Skeleton
+                          variant="text"
+                          width={100}
+                          height={40}
+                          animation="wave"
+                        />
+                      ) : (
+                        "Add to cart"
+                      )}
+                      {/* {isLoadingCart ? "Adding into cart" : "Add to cart"} */}
                     </Button>
                     <ToastContainer />
                   </CardActions>

@@ -23,7 +23,7 @@ const styles = {
     // justifyContent: "space-between",
   },
   upperNavone: {
-    background: "transparent",
+    background: "#F8F9FA",
     // width: "100%",
   },
   upperNav: {
@@ -32,7 +32,7 @@ const styles = {
     zIndex: 1000,
     padding: "10px",
     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-    background: "white",
+    background: "#F8F9FA",
     height: "4vh",
     width: "100%",
     animationName: keyframes.headerSlideDown,

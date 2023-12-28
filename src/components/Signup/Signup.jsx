@@ -27,7 +27,7 @@ import { FaRegEye } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { BsApple } from "react-icons/bs";
 import { BsFacebook } from "react-icons/bs";
-import { MuiTelInput } from "mui-tel-input";
+import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
 import { createUser } from "../../Redux/Slice/AuthSignup";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -53,6 +53,7 @@ export default function Signup({ setIsLoggedIn }) {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state?.app?.loading);
   const [phone, setPhone] = useState("");
+  const [vaildPhoneNumber, setValidPhoneNumber] = useState(false);
 
   const handleSignIn = () => {
     setIsLoggedIn(true);
@@ -71,11 +72,11 @@ export default function Signup({ setIsLoggedIn }) {
   const [mobile, setMobile] = useState("");
   const handePhoneNumber = (newVal, info) => {
     const { countryCallingCode, countryCode } = info;
-
+    const check = matchIsValidTel(newVal);
+    setValidPhoneNumber(check);
     values.mobile_code = countryCallingCode;
     values.country_code = countryCode;
     values.mobile = newVal;
-
     setMobile(newVal);
   };
 
@@ -91,18 +92,20 @@ export default function Signup({ setIsLoggedIn }) {
         values.password_confirmation = encodedConfirm;
 
         // console.log(values, actions);
+        if (vaildPhoneNumber) {
+          const registerResult = await dispatch(createUser(values));
+          if (registerResult.payload.success) {
+            toast.success(registerResult.payload.message);
 
-        const registerResult = await dispatch(createUser(values));
-        // console.log(registerResult, "action");
-
-        if (registerResult.payload.success) {
-          toast.success(registerResult.payload.message);
-
-          navigate("/signin");
+            navigate("/signin");
+          }
+          registerResult.error && registerResult.error.message === "Rejected"
+            ? (toast.error(registerResult.payload.message), actions.resetForm())
+            : null;
+        } else {
+          toast.error("Please check your phone number");
         }
-        registerResult.error && registerResult.error.message === "Rejected"
-          ? (toast.error(registerResult.payload.message), actions.resetForm())
-          : null;
+        // console.log(registerResult, "action");
       },
     });
 
@@ -287,6 +290,7 @@ export default function Signup({ setIsLoggedIn }) {
                     value={values.mobile}
                     onChange={handePhoneNumber}
                     sx={{ marginTop: "20px" }}
+                    forceCallingCode={true}
                   />
 
                   {touched.phoneNumber && errors.phoneNumber && (

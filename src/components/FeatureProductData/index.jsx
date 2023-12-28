@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable react/jsx-no-target-blank */
 import { Fragment, useState, useMemo } from "react";
 import {
   Box,
@@ -9,7 +7,6 @@ import {
   Radio,
   FormControlLabel,
   RadioGroup,
-  
 } from "@mui/material";
 import Styles from "./styles";
 import { styled } from "@mui/material/styles";
@@ -17,7 +14,7 @@ import { PiShoppingCartLight } from "react-icons/pi";
 import { useRadioGroup } from "@mui/material/RadioGroup";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-// eslint-disable-next-line react-refresh/only-export-components
+
 const StyledFormControlLabel = styled((props) => (
   <FormControlLabel {...props} />
 ))(({ theme, checked }) => ({
@@ -30,14 +27,12 @@ const StyledFormControlLabel = styled((props) => (
   },
 }));
 
-// eslint-disable-next-line react-refresh/only-export-components
 function MyFormControlLabel(props) {
   const radioGroup = useRadioGroup();
 
   let checked = false;
 
   if (radioGroup) {
-    // eslint-disable-next-line react/prop-types
     checked = radioGroup.value === props.value;
   }
 
@@ -62,8 +57,6 @@ export default function index({ filterProduct, isLoading }) {
     setValue(subCat[0]?.subcategory?.name);
   }, [filterProduct]);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-
   const handleChange = (event) => {
     setValue(event.target.value);
   };
@@ -86,7 +79,7 @@ export default function index({ filterProduct, isLoading }) {
               alignItems: "flex-start",
               marginTop: 2,
               label: {
-                fontSize: { md: "16px", xs: "14px" }, // Adjust the font size as needed
+                fontSize: { md: "16px", xs: "14px" },
               },
             }}
           >

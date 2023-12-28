@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { resetSuccessSignin } from "../../Redux/Slice/signin";
 import { useNavigate } from "react-router-dom";
 const settings = [
-  "Profile",
+  "Profile Setting",
   "Account",
   "Dashboard",
   "Change Password",
@@ -42,6 +42,8 @@ const Useravatar = ({
         console.log("working");
         navigate("/changepassword");
         break;
+      case "Profile Setting":
+        navigate("/profile-setting");
     }
   };
   return (

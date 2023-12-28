@@ -22,6 +22,7 @@ const Styles = {
 
     maxWidth: "650px",
     margin: "0.8rem auto",
+    marginTop: "3rem",
   },
   BoxStyle: {
     boxShadow: " 0px 0px 15px 0px #0000001A",

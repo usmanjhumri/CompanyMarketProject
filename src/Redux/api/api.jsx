@@ -3,7 +3,7 @@ import axios from "axios";
 export const apiUrl = "https://marketplace.jdfunnel.com/api/";
 export const authLoginApi = "https://marketplace.jdfunnel.com/api/auth/sign-in";
 export const storageKey = "user";
-
+///Home API Started
 export const fetchHomeData = createAsyncThunk("fetchHomeData", async () => {
   const res = await axios.get(`${apiUrl}homepage`);
   return res.data;
@@ -25,16 +25,6 @@ export const fetchAllProducts = createAsyncThunk(
   }
 );
 
-export const productDetail = createAsyncThunk(
-  "productDetail",
-  async (params) => {
-    const res = await axios.get(
-      `${apiUrl}product-details/${params.name}/${params.id}/fetch`
-    );
-    return res.data;
-  }
-);
-
 export const fetchSearchProducts = createAsyncThunk(
   "fetchSearchProducts",
   async function ({ minPrice, maxPrice, checkCatName, orderBy }) {
@@ -51,72 +41,15 @@ export const fetchSearchProducts = createAsyncThunk(
   }
 );
 
-export const getCart = createAsyncThunk(
-  "getCart",
-  async function (orderNumber) {
-    const res = await axios.get(`${apiUrl}product/cart/${orderNumber}`);
-    return res.data;
-  }
-);
-
-export const addToCart = createAsyncThunk(
-  "addToCart",
-  async function (productData, { dispatch }) {
-    const res = await axios.post(`${apiUrl}product/add-to-cart`, productData);
-    if (res) {
-      const orderNumber = res.data.order_number;
-      const existingOrderNumber = window.localStorage.getItem("order_Number");
-      if (!existingOrderNumber) {
-        window.localStorage.setItem("order_Number", orderNumber);
-      }
-      if (res.data) {
-        dispatch(getCart(existingOrderNumber || orderNumber));
-      }
-      return res.data;
-    }
-  }
-);
-
 export const signIn = createAsyncThunk("signInReducer", async function (key) {
   const user = JSON.parse(localStorage.getItem(key) ?? "{}");
 
   return Object.keys(user).length ? Promise.resolve(user) : Promise.reject();
 });
 
-export const deleteCart = createAsyncThunk(
-  "deleteItem",
-  async (id, { dispatch }) => {
-    try {
-      const res = await axios.get(`${apiUrl}product/remove-cart/${id}`);
-      const existingOrderNumber = window.localStorage.getItem("order_Number");
+///Home API Ended
 
-      dispatch(getCart(existingOrderNumber));
-      return res.data;
-    } catch (e) {
-      return e.response.status;
-    }
-  }
-);
-export const signInNew = createAsyncThunk(
-  "signInReducer",
-  async function (data, { rejectWithValue }) {
-    try {
-      const res = await axios.post(`${apiUrl}auth/sign-in`, data);
-      // console.log(res, " ressss");
-      if (res) {
-        const localStorageData = JSON.stringify({
-          email: res?.data?.data?.email,
-          username: res?.data?.data?.username,
-          token: res?.data?.access_token,
-        });
-        window.localStorage.setItem(storageKey, localStorageData);
-        return res.data;
-      }
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+/// Auth APi Started
 
 export const changePassword = createAsyncThunk(
   "changePassword",
@@ -172,3 +105,115 @@ export const resetPasswordVerify = async (data) => {
     return e.response.data;
   }
 };
+
+export const signInNew = createAsyncThunk(
+  "signInReducer",
+  async function (data, { rejectWithValue }) {
+    try {
+      const res = await axios.post(`${apiUrl}auth/sign-in`, data);
+      // console.log(res, " ressss");
+      if (res) {
+        const localStorageData = JSON.stringify({
+          email: res?.data?.data?.email,
+          username: res?.data?.data?.username,
+          token: res?.data?.access_token,
+          balance: res?.data?.data?.balance,
+        });
+        window.localStorage.setItem(storageKey, localStorageData);
+        return res.data;
+      }
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+/// Auth APi Ended
+
+//// Cart APi Started
+export const deleteCart = createAsyncThunk(
+  "deleteItem",
+  async (id, { dispatch }) => {
+    try {
+      const res = await axios.get(`${apiUrl}product/remove-cart/${id}`);
+      const existingOrderNumber = window.localStorage.getItem("order_Number");
+
+      dispatch(getCart(existingOrderNumber));
+      return res.data;
+    } catch (e) {
+      return e.response.status;
+    }
+  }
+);
+
+export const addToCart = createAsyncThunk(
+  "addToCart",
+  async function (productData, { dispatch }) {
+    const res = await axios.post(`${apiUrl}product/add-to-cart`, productData);
+    if (res) {
+      const orderNumber = res.data.order_number;
+      const existingOrderNumber = window.localStorage.getItem("order_Number");
+      if (!existingOrderNumber) {
+        window.localStorage.setItem("order_Number", orderNumber);
+      }
+      if (res.data) {
+        dispatch(getCart(existingOrderNumber || orderNumber));
+      }
+      return res.data;
+    }
+  }
+);
+export const getCart = createAsyncThunk(
+  "getCart",
+  async function (orderNumber) {
+    const res = await axios.get(`${apiUrl}product/cart/${orderNumber}`);
+    return res.data;
+  }
+);
+export const getProfileData = createAsyncThunk(
+  "getProfileData",
+  async function (data) {
+    const res = await axios.get(`${apiUrl}profile/setting/${data}`);
+    console.log(res, " response");
+  }
+);
+
+export const productDetail = createAsyncThunk(
+  "productDetail",
+  async (params) => {
+    const res = await axios.get(
+      `${apiUrl}product-details/${params.name}/${params.id}/fetch`
+    );
+    return res.data;
+  }
+);
+
+export const checkOutCart = createAsyncThunk(
+  "userCheckout",
+  async function (data, { dispatch }) {
+    const token = JSON.parse(localStorage.getItem(storageKey)).token;
+    // console.log(token, "token user");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    const res = await axios.post(`${apiUrl}checkout`, data, { headers });
+    console.log(res.data, "tag 99");
+    if (res.data.success) {
+      const newBalance = res.data.data.balance;
+      const fetchOldBalance = JSON.parse(localStorage.getItem(storageKey));
+      if (fetchOldBalance) {
+        fetchOldBalance.balance = newBalance;
+      }
+      localStorage.setItem(storageKey, JSON.stringify(fetchOldBalance));
+      const orderNumber = res.data.order_number;
+      const existingOrderNumber = window.localStorage.getItem("order_Number");
+      if (!existingOrderNumber) {
+        window.localStorage.setItem("order_Number", orderNumber);
+      }
+      if (res.data.success) {
+        dispatch(getCart(existingOrderNumber || orderNumber));
+      }
+      return res.data;
+    }
+  }
+);
+///// Cart API Ended

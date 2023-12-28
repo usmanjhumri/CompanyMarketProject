@@ -4,12 +4,12 @@
 /* eslint-disable react/jsx-no-target-blank */
 import { Box, Container, Grid, Tab, Tabs, Typography } from "@mui/material";
 import CategoriesStyle from "./style";
-import {  useState, useMemo, Fragment } from "react";
+import { useState, useMemo, Fragment } from "react";
 import { useSelector } from "react-redux";
 import Skeletoncard from "../Skeletoncard";
 import MostSellCategoriesData from "./MostSellCategoriesData";
 import PropTypes from "prop-types";
-
+import "./categories.css";
 function TabPanel({ children, value, index, ...other }) {
   return (
     <div role="tabpanel" hidden={value !== index} {...other}>
@@ -67,7 +67,7 @@ const MostSoldProduct = () => {
         <Typography sx={CategoriesStyle.CategoryTypo}>
           Most Sold Products of Different Categories
         </Typography>
-        <Typography mt={3} sx={CategoriesStyle.CategoryTypo2}>
+        <Typography mt={4} sx={CategoriesStyle.CategoryTypo2}>
           Across various categories, certain products reign supreme. Funnels,
           Websites, Dashboards, Logos
         </Typography>
@@ -78,6 +78,7 @@ const MostSoldProduct = () => {
               sx={{
                 marginBottom: { md: "3rem", xs: "3rem" },
               }}
+              className="soldProduct"
             >
               <Tabs
                 scrollButtons
@@ -94,7 +95,7 @@ const MostSoldProduct = () => {
                     {...a11yProps(index, item.name)}
                     key={index}
                     sx={{
-                      margin: "0px 10px",
+                      margin: "0 1rem",
                     }}
                   />
                 ))}
@@ -109,8 +110,8 @@ const MostSoldProduct = () => {
                   ) : (
                     <Grid
                       container
-                      spacing={2}
-                      sx={{ marginTop: { md: "0rem", xs: "0.5rem" } }}
+                      // spacing={2}
+                      // sx={{ marginTop: { md: "0rem", xs: "0.5rem" } }}
                     >
                       <MostSellCategoriesData
                         filterProduct={state.filterProduct}

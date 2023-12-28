@@ -15,7 +15,7 @@ import Logo from "../../assets/logo.png";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { useSelector } from "react-redux";
 import styles from "./styles";
@@ -79,15 +79,23 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElCart, setAnchorElCart] = useState(null); // Open and Closing menu
   const [selectedCat, setSelectedCat] = useState(null); // selecting catgoery for subcat
+  const [userBalance, setUserBalance] = useState(0);
   const catergories = useSelector((state) => state?.home?.catergories); // getting categories from API
   const totalProducts = useSelector((state) => state?.getcart?.data);
   // console.log(totalProducts); //
   const isLoggedIn = useSelector((state) => state?.signInReducer?.isLogedIn);
   // console.log(isLoggedIn, " isLoggedIn");
-
   const [activeOffeset, setActiveOffeset] = useState(false);
   const [userLogged, setUserLogged] = useState(false);
+  const [searchProduct, setSearchProduct] = useState("");
+  const navigate = useNavigate();
+  const handleChnageProduct = (e) => {
+    if (e.key === "Enter") {
+      navigate(`/product/search?search=${searchProduct}`);
+    }
 
+    // console.log("working");
+  };
   window.addEventListener("scroll", () => {
     if (window.scrollY > 100) {
       setActiveOffeset(true);
@@ -103,6 +111,8 @@ const Header = () => {
   useEffect(() => {
     if (localStorage.getItem(storageKey)) {
       setUserLogged(true);
+      const { balance } = JSON.parse(window.localStorage.getItem(storageKey));
+      setUserBalance(Number(balance).toFixed(2));
     } else {
       setUserLogged(false);
     }
@@ -174,6 +184,7 @@ const Header = () => {
                 </NavLink>
               ))}
             </Box>
+            <Box sx={{ position: "absolute", right: "18%" }}></Box>
             <Box sx={style.outter}>
               <Box
                 sx={style.cartBox}
@@ -185,7 +196,6 @@ const Header = () => {
                   style={{
                     textDecoration: "none",
                     color: "black",
-                    zIndex: 100000,
                     display: "flex",
                     alignItems: "center",
                   }}
@@ -247,12 +257,14 @@ const Header = () => {
                 </Popover>
               </Box>
               {userLogged ? (
-                <Useravatar
-                  setUserLogged={setUserLogged}
-                  handleCloseUserMenu={handleCloseUserMenu}
-                  handleOpenUserMenu={handleOpenUserMenu}
-                  anchorElUser={anchorElUser}
-                />
+                <>
+                  <Useravatar
+                    setUserLogged={setUserLogged}
+                    handleCloseUserMenu={handleCloseUserMenu}
+                    handleOpenUserMenu={handleOpenUserMenu}
+                    anchorElUser={anchorElUser}
+                  />
+                </>
               ) : (
                 <>
                   <Box sx={{ display: { md: "flex", xs: "none" } }}>
@@ -405,6 +417,8 @@ const Header = () => {
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
+                  onChange={(e) => setSearchProduct(e.target.value)}
+                  onKeyDown={handleChnageProduct}
                   placeholder="Search"
                   inputProps={{ "aria-label": "search" }}
                 />

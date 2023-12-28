@@ -23,22 +23,27 @@ import {
 import { IoCloseOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { deleteCart } from "../../Redux/api/api";
+import { deleteCart, checkOutCart } from "../../Redux/api/api";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import stripeimg from "../../assets/5f6f1d4bc69e71601117515.jpg";
+
+// import { checkOut } from "../../Redux/Slice/Checkout";
+
+const wallet = ["Own", "Online Payment"];
 const Shopping = () => {
   const cartData = useSelector((state) => state?.getcart?.data);
   // console.log(cartData.length, " cartDatasssss");
   const imgUrl = useSelector((state) => state?.home?.imgPath);
   const isLoading = useSelector((state) => state?.getcart?.isLoading);
-  const user_balance = useSelector((state) => state?.getcart?.userBalance);
 
   const [totalPrice, setTotalPrice] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCardOpen, setIsCardOpen] = useState(false);
-  // console.log(totalPrice, " total price of cart");
+  const [walletType, setWalletType] = useState(wallet[0]);
+  const [walletIndex, setWalletIndex] = useState(0);
   const [selectedValue, setSelectedValue] = useState(0);
+  const [user_balance, set_User_Balance] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -51,8 +56,14 @@ const Shopping = () => {
       )
       .toFixed(2);
     setTotalPrice(sum);
+    if (window?.localStorage?.getItem("user")) {
+      const { balance } = JSON.parse(window?.localStorage?.getItem("user"));
+      console.log(balance);
+      console.log("working");
+      set_User_Balance(Number(balance).toFixed(2));
+    }
   }, [cartData]);
-
+  console.log(user_balance);
   const handleRemoveProduct = async (id) => {
     const res = await dispatch(deleteCart(id));
     if (res.payload.message) {
@@ -66,21 +77,68 @@ const Shopping = () => {
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
-  const handleOpenCard = () => {
-    setIsCardOpen(true);
+  const handleOpenCard = async () => {
+    if (!window.localStorage.getItem("user")) {
+      toast.info("Please sign in first ");
+      navigate("/signin");
+    }
+    if (walletType.toLowerCase().trim() === "own") {
+      const orderNumber = localStorage.getItem("order_Number");
+      const data = {
+        wallet_type: walletType.toLowerCase(),
+        subscription: 0,
+        order_number: orderNumber,
+      };
+      const res = await dispatch(checkOutCart(data));
+      if (res.payload.success) {
+        console.log("working");
+        toast.success(res.payload.message);
+        localStorage.removeItem("order_Number");
+        navigate("/");
+      } else {
+        return;
+      }
+      handleCloseModal();
+    } else {
+      setIsCardOpen(true);
+      handleCloseModal();
+    }
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+  const handleCheckout = async () => {
+    try {
+      if (selectedValue === "own") {
+        const orderResponse = await placeOrder();
+        const orderNumber = orderResponse?.orderNumber;
 
-  const handleCheckout = () => {
-    handleCloseModal();
+        if (orderNumber) {
+          toast.success(
+            `Order placed successfully! Order Number: ${orderNumber}`
+          );
+        } else {
+          throw new Error("Failed to place the order. Please try again.");
+        }
+      } else if (selectedValue === "online") {
+      }
+
+      handleCloseModal();
+    } catch (error) {
+      toast.error(
+        error.message || "An error occurred while placing the order."
+      );
+    }
   };
-
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-    // console.log("Selected Value:", event.target.value);
+  const handlePaymentChange = (event) => {
+    setWalletType(event.target.value);
+    console.log("Selected Value:", event.target.value);
+    console.log("Wallet Type:", event);
+  };
+  const handlePaymentIndex = (e, index) => {
+    console.log(index);
+    setWalletIndex(index);
   };
   return (
     <>
@@ -133,7 +191,13 @@ const Shopping = () => {
                 </Card>
                 {cartData?.map((item, index) => (
                   <>
-                    <Card sx={{ background: "#ECECEC", p: { xs: 1, md: 2 } }}>
+                    <Card
+                      sx={{
+                        background: "#ECECEC",
+
+                        p: { xs: 1, md: 2 },
+                      }}
+                    >
                       <CardContent>
                         <Box
                           sx={{
@@ -184,7 +248,7 @@ const Shopping = () => {
                               }}
                             >
                               <IoCloseOutline
-                                style={{ marginLeft: 16 }}
+                                style={{ marginLeft: 16, cursor: "pointer" }}
                                 onClick={() =>
                                   handleRemoveProduct(item.encrypted_id)
                                 }
@@ -233,61 +297,75 @@ const Shopping = () => {
                   </CardContent>
                 </Box>
               </Grid>
-
-              <Card
-                open={isCardOpen}
-                sx={{ width: "80%", maxWidth: 300, margin: "auto" }}
-              >
-                <CardContent sx={{ background: "#50b948" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      borderRadius: 4,
-                    }}
-                  >
-                    <Box sx={{ marginRight: 2 }}>
-                      <CardMedia
-                        component="img"
-                        height="70px"
-                        width="30px"
-                        image={stripeimg}
-                        alt="Stripe Logo"
-                        borderRadius="10px"
-                      />
-                    </Box>
-                    <Typography
+              {isCardOpen && (
+                <Card
+                  open={isCardOpen}
+                  sx={{
+                    width: "80%",
+                    maxWidth: 300,
+                    margin: "auto",
+                    position: "absolute",
+                    top: "26%",
+                    right: "3%",
+                    "@media (max-width: 600px)": {
+                      width: "90%",
+                      top: "20%",
+                    },
+                  }}
+                >
+                  <CardContent sx={{ background: "#50b948" }}>
+                    <Box
                       sx={{
-                        color: "white",
-                        display: "inline",
-                        fontSize: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        borderRadius: 4,
                       }}
                     >
-                      Pay by card
-                    </Typography>
-                  </Box>
-                </CardContent>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                  <CardContent>
-                    <Typography>Total: 400 USD</Typography>
-                    <Typography sx={{ paddingTop: 2, textAlign: "center" }}>
-                      Charge: +5%
-                    </Typography>
-                    <CardActions>
-                      <Button
+                      <Box sx={{ marginRight: 2 }}>
+                        <CardMedia
+                          component="img"
+                          height="70px"
+                          width="30px"
+                          image={stripeimg}
+                          alt="Stripe Logo"
+                          borderRadius="10px"
+                        />
+                      </Box>
+                      <Typography
                         sx={{
-                          marginTop: 2,
-                          padding: 1,
+                          color: "white",
+                          display: "inline",
+                          fontSize: "20px",
                         }}
-                        variant="contained"
                       >
-                        Contained
-                      </Button>
-                    </CardActions>
+                        Pay by card
+                      </Typography>
+                    </Box>
                   </CardContent>
-                </Box>
-              </Card>
-
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <CardContent>
+                      <Typography sx={{ textAlign: "center" }}>
+                        Total: {totalPrice * 1.05} USD
+                      </Typography>
+                      <Typography sx={{ paddingTop: 2, textAlign: "center" }}>
+                        Charge: +5%
+                      </Typography>
+                      <CardActions>
+                        <Button
+                          style={{
+                            marginTop: 2,
+                            padding: 1,
+                          }}
+                          sx={Styles.checkOut}
+                          variant="contained"
+                        >
+                          Pay Now
+                        </Button>
+                      </CardActions>
+                    </CardContent>
+                  </Box>
+                </Card>
+              )}
               <Modal open={isModalOpen} onClose={handleCloseModal}>
                 <Box
                   sx={{
@@ -308,25 +386,33 @@ const Shopping = () => {
                   </Typography>
                   <Box paddingTop={2}>
                     <FormControl fullWidth>
-                      <InputLabel id="dropdown-label">Select Value</InputLabel>
+                      <InputLabel id="dropdown-label">
+                        Payment Method
+                      </InputLabel>
                       <Select
                         labelId="dropdown-label"
                         id="dropdown"
-                        value={selectedValue}
-                        label="Select Value"
-                        onChange={handleChange}
+                        value={walletType}
+                        label="Payment Method"
+                        onChange={(e) => handlePaymentChange(e)}
+                        inputProps={{ "aria-label": "Without label" }}
                       >
-                        {totalPrice <= user_balance && user_balance === 0 && (
-                          <MenuItem value="own">
-                            Wallet (${user_balance})
+                        {wallet.map((item, index) => (
+                          <MenuItem
+                            value={item}
+                            key={index}
+                            onClick={(e) => handlePaymentIndex(e, index)}
+                          >
+                            {item}{" "}
+                            {item === "Own" &&
+                              `- $  ${Number(user_balance).toFixed(2)}`}
                           </MenuItem>
-                        )}
-                        <MenuItem value="online">Online Payment</MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Box>
 
-                  <Box paddingTop={7}>
+                  <Box paddingTop={2}>
                     <Button onClick={handleCloseModal}>No</Button>
                     <Button onClick={handleOpenCard}>Yes</Button>
                   </Box>

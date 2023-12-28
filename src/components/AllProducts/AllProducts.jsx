@@ -102,7 +102,7 @@ const AllProducts = () => {
         }}
         spacing={2}
       >
-        <Grid item xs={12} md={2} lg={3} sx={{ order: { xs: 2, md: 1 } }}>
+        <Grid item xs={12} md={2} lg={3}>
           <Box sx={Styles.categoriesStyle}>
             <Typography sx={Styles.filterRefine}>Filter </Typography>
             <Typography sx={Styles.CategoriesText}>Categories</Typography>
@@ -120,7 +120,7 @@ const AllProducts = () => {
           </Box>
         </Grid>
         {/* Main Content Grid */}
-        <Grid item xs={12} md={10} lg={7} sx={{ order: { xs: 2, md: 2 } }}>
+        <Grid item xs={12} md={10} lg={7}>
           <InfiniteScroll
             key={products?.length}
             dataLength={products?.length}

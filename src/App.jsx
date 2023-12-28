@@ -21,16 +21,17 @@ import InteranlError from "./components/InteralServerError";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/VerifyResetPassword";
 import PreLoading from "./components/PreLoader";
-
+import ChangePassword from "./components/ChangePassword";
 import { useNavigate } from "react-router-dom";
 import "react-phone-number-input/style.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+// import Checkout from "./components/Checkout/Checkout";
 import {
   ProtectedRoutes,
   SignUpProtectedRouts,
 } from "./components/ProtectedRoutes/ProtectedRoutes";
-import ChangePassword from "./components/ChangePassword/ChangePassword";
+import ProfileSetting from "./components/ProfileSettings";
 function App() {
   const navigate = useNavigate();
   const [orderNumber, setOrderNumber] = useState("");
@@ -123,11 +124,14 @@ function App() {
                 <Route path="/reset-password" element={<ResetPassword />} />
               </Route>
               <Route path="/changepassword" element={<ChangePassword />} />
-              <Route path="/500" element={<InteranlError />} />
+              <Route path="/profile-setting" element={<ProfileSetting />} />
+              {/* <Route path="/checkout" element={<Checkout />} /> */}
+              {/* <Route path="/checkout" element={<Checkout />} /> */}
             </Routes>
           </SkeletonTheme>
           <Footer />
           <ToastContainer />
+          {/* <StripePaymentForm /> */}
         </>
       )}
     </div>
