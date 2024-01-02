@@ -105,7 +105,6 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (successCart) {
-      // console.log("working");
       toast.success("Item added to your cart");
       dispatch(resetSuccessCart());
     }
@@ -228,7 +227,6 @@ const ProductDetail = () => {
     let updatedTotalPrice = initialPrice;
     Object.keys(checkedItems).forEach((index) => {
       const isChecked = checkedItems[index];
-      // console.log(isChecked, " checked");
       const bump = product?.bumps[index];
 
       if (isChecked) {
@@ -612,24 +610,24 @@ const ProductDetail = () => {
                   )}
 
                   <CardActions>
-                    <Button
-                      variant="contained"
-                      sx={{ ...styles.addCard, mt: 3 }}
-                      type="submit"
-                      disabled={isLoadingCart}
-                    >
-                      {isLoading ? (
-                        <Skeleton
-                          variant="text"
-                          width={100}
-                          height={40}
-                          animation="wave"
-                        />
-                      ) : (
-                        "Add to cart"
-                      )}
-                      {/* {isLoadingCart ? "Adding into cart" : "Add to cart"} */}
-                    </Button>
+                    {isLoading ? (
+                      <Skeleton
+                        variant="text"
+                        width="100%"
+                        height={40}
+                        animation="wave"
+                      />
+                    ) : (
+                      <Button
+                        variant="contained"
+                        sx={{ ...styles.addCard, mt: 3 }}
+                        type="submit"
+                        disabled={isLoadingCart}
+                      >
+                        Add to cart
+                        {/* {isLoadingCart ? "Adding into cart" : "Add to cart"} */}
+                      </Button>
+                    )}
                     <ToastContainer />
                   </CardActions>
                 </form>

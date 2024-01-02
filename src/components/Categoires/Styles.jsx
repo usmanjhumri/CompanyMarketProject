@@ -26,6 +26,8 @@ const CategoriesStyle = {
     textAlign: "center",
     maxWidth: "650px",
     margin: "0.8rem auto",
+    paddingLeft: { md: "10px", xs: "0px" },
+    paddingRight: { md: "10px", xs: "0px" },
   },
   CheckBoxLabel: {
     fontWeight: 500,
@@ -54,7 +56,8 @@ const CategoriesStyle = {
   },
   formCenter: {
     flexDirection: { md: "column", xs: "row" },
-    paddingLeft: { xs: "20px" },
+    paddingLeft: { md: "5px", xs: "10px" },
+
     alignItems: "flex-start",
   },
 };

@@ -169,13 +169,6 @@ export const getCart = createAsyncThunk(
     return res.data;
   }
 );
-export const getProfileData = createAsyncThunk(
-  "getProfileData",
-  async function (data) {
-    const res = await axios.get(`${apiUrl}profile/setting/${data}`);
-    console.log(res, " response");
-  }
-);
 
 export const productDetail = createAsyncThunk(
   "productDetail",
@@ -191,29 +184,117 @@ export const checkOutCart = createAsyncThunk(
   "userCheckout",
   async function (data, { dispatch }) {
     const token = JSON.parse(localStorage.getItem(storageKey)).token;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    if (data.wallet_type === "own") {
+      const res = await axios.post(`${apiUrl}checkout`, data, { headers });
+      if (res.data.success) {
+        const newBalance = res.data.data.balance;
+        const fetchOldBalance = JSON.parse(localStorage.getItem(storageKey));
+        if (fetchOldBalance) {
+          fetchOldBalance.balance = newBalance;
+        }
+        localStorage.setItem(storageKey, JSON.stringify(fetchOldBalance));
+        const orderNumber = res.data.order_number;
+        const existingOrderNumber = window.localStorage.getItem("order_Number");
+        if (!existingOrderNumber) {
+          window.localStorage.setItem("order_Number", orderNumber);
+        }
+        if (res.data.success) {
+          dispatch(getCart(existingOrderNumber || orderNumber));
+        }
+        return res.data;
+      }
+    } else {
+      const res = await axios.post(`${apiUrl}checkout`, data, { headers });
+      if (res.data.success) {
+        return res.data;
+      }
+    }
+  }
+);
+
+export const paymentProcess = async (data) => {
+  try {
+    const token = JSON.parse(localStorage.getItem(storageKey)).token;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    const res = await axios.post(`${apiUrl}checkout/process`, data, {
+      headers,
+    });
+    return res.data.data;
+  } catch (e) {
+    // console.log(e);
+    return e;
+  }
+};
+
+export const paymentStripe = async (data) => {
+  try {
+    const token = JSON.parse(localStorage.getItem(storageKey)).token;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    const res = await axios.post(`${apiUrl}payment/process`, data, { headers });
+    return res.data.data;
+  } catch (e) {
+    return e;
+  }
+};
+///// Cart API Ended
+
+// ProfileSetting API started
+export const getProfileData = createAsyncThunk(
+  "getProfileData",
+  async function () {
+    const token = JSON.parse(localStorage.getItem(storageKey)).token;
     // console.log(token, "token user");
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-    const res = await axios.post(`${apiUrl}checkout`, data, { headers });
-    console.log(res.data, "tag 99");
-    if (res.data.success) {
-      const newBalance = res.data.data.balance;
-      const fetchOldBalance = JSON.parse(localStorage.getItem(storageKey));
-      if (fetchOldBalance) {
-        fetchOldBalance.balance = newBalance;
-      }
-      localStorage.setItem(storageKey, JSON.stringify(fetchOldBalance));
-      const orderNumber = res.data.order_number;
-      const existingOrderNumber = window.localStorage.getItem("order_Number");
-      if (!existingOrderNumber) {
-        window.localStorage.setItem("order_Number", orderNumber);
-      }
-      if (res.data.success) {
-        dispatch(getCart(existingOrderNumber || orderNumber));
-      }
+    const res = await axios.get(`${apiUrl}profile/setting`, { headers });
+    // console.log(res.data, " response");
+    return res.data;
+  }
+);
+
+export const sendProfileData = createAsyncThunk(
+  "sendProfileData",
+  async function (data, { rejectWithValue }) {
+    try {
+      const token = JSON.parse(localStorage.getItem(storageKey)).token;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      const res = await axios.post(`${apiUrl}profile-setting`, data, {
+        headers,
+      });
+      // console.log(res.data, " res");
       return res.data;
+    } catch (error) {
+      // console.log(error, rejectWithValue(), " error");
+      throw rejectWithValue(error.data);
     }
   }
 );
-///// Cart API Ended
+
+// ProfileSetting API  ended
+
+const purchaseHistory = createAsyncThunk(
+  "userpurchasehistory",
+  async function () {
+    try {
+      const token = JSON.parse(localStorage.getItem(storageKey)).token;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      const res = await axios.get(`${apiUrl}user/puchased-list`, { headers });
+      console.log(res.data, "res");
+    } catch (error) {
+      console.log(error, "error purchase history");
+    }
+  }
+);

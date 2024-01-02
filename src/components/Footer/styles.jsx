@@ -2,7 +2,7 @@ import Colors from "../colors";
 const FooterStyle = {
   root: {
     background: "#F4F4F4",
-    padding: "4rem 0px",
+    padding: "7rem 0px",
   },
   Ftype: {
     fontWeight: 500,

@@ -150,6 +150,51 @@ const SearchProduct = () => {
                 placeholder={searchValue}
                 value={inputSearch}
                 sx={{
+                  boxShadow: "none !important",
+                  border: "1px solid gray",
+                  borderRadius: "4px",
+                  backgroundColor: "white",
+                  "&:hover": {
+                    backgroundColor: "rgba(255, 255, 255, 0.9)",
+                  },
+                  ".Mui-focused": {
+                    boxShadow: "none !important",
+                  },
+                  marginLeft: "0",
+                  width: "70ch",
+                  [theme.breakpoints.down("md")]: {
+                    width: "40ch",
+                  },
+                  [theme.breakpoints.down("sm")]: {
+                    width: "20ch",
+                  },
+                  padding: "3px",
+                  transition: "background-color 0.3s",
+                  "& .MuiInputBase-input": {
+                    padding: "8px 12px",
+                    width: "100%",
+                    [theme.breakpoints.down("md")]: {
+                      width: "60%",
+                    },
+                    [theme.breakpoints.down("sm")]: {
+                      width: "40%",
+                    },
+                  },
+                }}
+                startAdornment={<IoMdSearch style={{ fontSize: "2rem" }} />}
+                endAdornment={
+                  <Button variant="contained" onClick={handleSearchBtn}>
+                    Search
+                  </Button>
+                }
+                onChange={handleInputSearch}
+              />
+
+              {/* <InputBase
+                onKeyUp={handleSearchKey}
+                placeholder={searchValue}
+                value={inputSearch}
+                sx={{
                   border: "1px solid gray",
                   borderRadius: "4px",
                   backgroundColor: "white",
@@ -178,7 +223,7 @@ const SearchProduct = () => {
                   </Button>
                 }
                 onChange={handleInputSearch}
-              />
+              /> */}
             </Box>
             <Grid container>
               <Grid

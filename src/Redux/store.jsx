@@ -10,6 +10,7 @@ import userDetails from "../Redux/Slice/AuthSignup";
 import changePasswordReducer from "../Redux/Slice/changePassword";
 import userCheckout from "../Redux/Slice/Checkout";
 import getProfileDataReducer from "../Redux/Slice/getProfileData";
+import sendProfileDataReducer from "../Redux/Slice/sendProfileData";
 export const store = configureStore({
   reducer: {
     home: homeReducer,
@@ -23,5 +24,6 @@ export const store = configureStore({
     changePassword: changePasswordReducer,
     userCheckout: userCheckout,
     getProfileData: getProfileDataReducer,
+    sendProfileData: sendProfileDataReducer,
   },
 });

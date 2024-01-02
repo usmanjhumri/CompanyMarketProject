@@ -12,3 +12,8 @@ export const SignUpProtectedRouts = () => {
 
   return isLoggedIn ? <Navigate to="/" replace /> : <Outlet />;
 };
+
+export const ProtectedRoutesBeforeLoggedIn = () => {
+  const isLoggedIn = localStorage.getItem(storageKey);
+  return isLoggedIn ? <Outlet /> : <Navigate to="/signin" replace />;
+};

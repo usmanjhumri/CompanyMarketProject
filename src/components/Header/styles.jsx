@@ -33,7 +33,7 @@ const styles = {
     padding: "10px",
     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
     background: "#F8F9FA",
-    height: "4vh",
+    height: "6vh",
     width: "100%",
     animationName: keyframes.headerSlideDown,
     animationDuration: "0.5s",
@@ -80,6 +80,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     gap: 0.2,
+    cursor: "pointer",
   },
   cartTypo: {
     fontSize: "14px",
@@ -188,6 +189,13 @@ const styles = {
     fontSize: "16px",
     fontWeight: 500,
     fontFamily: "Be Vietnam Pro,sans-serif",
+  },
+  tooltipStyle: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 2,
+    // margin: "0 1rem",
   },
 };
 

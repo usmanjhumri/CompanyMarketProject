@@ -64,15 +64,6 @@ const Cards = ({ data, isLoading }) => {
                       gap: 2,
                     }}
                   >
-                    <PiShoppingCartLight
-                      style={{
-                        padding: "0.6rem",
-                        border: "1px solid #787878",
-                        borderRadius: "2px",
-                        color: "#787878",
-                      }}
-                    />
-
                     <a href={item.demo_link} target="_blank">
                       <Button sx={Styles.BtnStyle}>Live Preview</Button>
                     </a>

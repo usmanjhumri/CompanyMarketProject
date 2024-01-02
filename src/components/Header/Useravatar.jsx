@@ -36,10 +36,10 @@ const Useravatar = ({
         localStorage.removeItem(storageKey);
         setUserLogged(false);
         dispatch(resetSuccessSignin());
+        navigate("/signin");
 
         break;
       case "Change Password":
-        console.log("working");
         navigate("/changepassword");
         break;
       case "Profile Setting":

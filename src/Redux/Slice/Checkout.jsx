@@ -8,7 +8,8 @@ const userCheckout = createSlice({
     loading: false,
     error: null,
     success: false,
-    success: "",
+    pubKeb: "",
+    gateWay: {},
   },
 
   extraReducers: (builder) => {
@@ -20,6 +21,10 @@ const userCheckout = createSlice({
         console.log("API Response:", action);
         state.loading = false;
         state.checkOut = action.payload?.user;
+        state.pubKeb = action?.payload?.data?.publishable_keys?.stripe;
+        if (action?.payload?.data?.gateway_currency)
+          state.gateWay = action?.payload?.data?.gateway_currency[0];
+        else return;
       })
       .addCase(checkOutCart.rejected, (state, action) => {
         state.loading = false;

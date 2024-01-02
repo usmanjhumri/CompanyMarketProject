@@ -36,7 +36,7 @@ const profileStyles = {
   profileNamePostion: {
     position: "absolute",
     top: "44%",
-    left: "25%",
+    left: "100%",
   },
   profileTitleName: {
     fontSize: "32px",

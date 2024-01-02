@@ -4,7 +4,6 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import "./categories.css";
 import CategoriesStyle from "./style";
-import { PiShoppingCartLight } from "react-icons/pi";
 import { Link } from "react-router-dom";
 export default function MostSellCategoriesData({ filterProduct }) {
   return (
@@ -62,14 +61,6 @@ export default function MostSellCategoriesData({ filterProduct }) {
                       gap: 2,
                     }}
                   >
-                    <PiShoppingCartLight
-                      style={{
-                        padding: "0.6rem",
-                        border: "1px solid #787878",
-                        borderRadius: "2px",
-                        color: "#787878",
-                      }}
-                    />
                     <a href={item.demo_link} target="_blank">
                       <Button sx={CategoriesStyle.BtnStyle}>
                         Live Preview

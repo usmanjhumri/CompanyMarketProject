@@ -9,6 +9,10 @@ let initialState = {
   success: false,
   errorMessage: "",
   profileData: [],
+  description: null,
+  imagePath: "",
+  coverImage: "",
+  logoImage: "",
 };
 
 const getProfilesDatas = createSlice({
@@ -21,10 +25,22 @@ const getProfilesDatas = createSlice({
         state.isLoading = true;
       })
       .addCase(getProfileData.fulfilled, (state, action) => {
-        console.log(action.payload, " getProfileData");
+        // console.log(action.payload, " getProfileData");
         state.isLoading = false;
         state.isError = false;
-        state.errorMessage = "";
+        state.success = true;
+        state.profileData = [action.payload.data];
+        state.description = action.payload.data.description;
+        state.imagePath = action.payload.data.base_url;
+        state.coverImage = action.payload.data.cover_image;
+        state.logoImage = action.payload.data.image;
+      })
+      .addCase(getProfileData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.success = false;
+        state.profileData = null;
+        state.errorMessage = action.payload;
       });
   },
 });

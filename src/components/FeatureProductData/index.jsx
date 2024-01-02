@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import Styles from "./styles";
 import { styled } from "@mui/material/styles";
-import { PiShoppingCartLight } from "react-icons/pi";
 import { useRadioGroup } from "@mui/material/RadioGroup";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -165,14 +164,6 @@ export default function index({ filterProduct, isLoading }) {
                           gap: 2,
                         }}
                       >
-                        <PiShoppingCartLight
-                          style={{
-                            padding: "0.6rem",
-                            border: "1px solid #787878",
-                            borderRadius: "2px",
-                            color: "#787878",
-                          }}
-                        />
                         <a href={item.demo_link} target="_blank">
                           <Button sx={Styles.BtnStyle}>Live Preview</Button>
                         </a>

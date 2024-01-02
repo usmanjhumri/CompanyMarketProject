@@ -8,7 +8,7 @@
   z-index: 1;
 }
 .zIndexs {
-  z-index: 10000;
+  z-index: none;
 }
 @media (max-width: 1200px) {
   .zIndex,
@@ -29,7 +29,7 @@
     opacity: 0;
   }
   30% {
-    margin-top: -50px;
+    margin-top: -60px;
     opacity: 0;
   }
   100% {

@@ -20,8 +20,7 @@ export const Styles = {
     alignItems: "center",
     height: "50px",
     borderRadius: "2px",
-    background:
-      "linear-gradient(0deg, #787878 0%, #787878 100%), var(--Header-Bg, #F3F4F9)",
+    background: "#F8F9FA",
   },
   ContinueShop: {
     borderRadius: "4px",
@@ -39,20 +38,20 @@ export const Styles = {
     },
   },
   emptyCard: {
-    color: "#787878 ",
+    color: "#fff",
     width: "104px",
     borderRadius: "4px",
     "&:hover": {
-      background: " #F3F4F9",
+      background: " #D9D9D9",
     },
-    background: " #F3F4F9",
+    background: " #D9D9D9",
     textTransform: "capitalize",
     maxWidth: { xs: "104px", md: "104px" },
     minWidth: { xs: "100px", md: "100px" },
   },
   logoImg: {
-    width: "90px",
-    height: "90px",
+    width: "5.625rem",
+    height: "5.625rem",
     "@media (max-width: 600px)": {
       textAlign: "center",
     },
@@ -83,6 +82,9 @@ export const Styles = {
     fontWeight: 400,
     "@media (max-width: 600px)": {
       textAlign: "center",
+    },
+    regularLicense: {
+      color: "#F3F4F9 ",
     },
   },
   qty: {

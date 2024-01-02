@@ -24,10 +24,8 @@ const ChangePassword = () => {
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
   const isLoading = useSelector((state) => state?.changePassword?.isLoading);
-  // console.log(isLoading, " usman");
   const isError = useSelector((state) => state?.changePassword?.isError);
   const message = useSelector((state) => state?.changePassword?.Message);
-  // console.log(message, " changepasswords");
   const navigate = useNavigate();
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);

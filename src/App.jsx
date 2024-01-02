@@ -7,8 +7,9 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Pagenotfound from "./components/PageNotFound";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchHomeData, getCart, signIn, storageKey } from "./Redux/api/api";
+import { fetchHomeData, getCart } from "./Redux/api/api";
 import { SkeletonTheme } from "react-loading-skeleton";
+import OnlinePayment from "./components/Onlinepaymentstripe";
 import Signup from "./components/Signup/Signup";
 import Signin from "./components/Signin";
 import Products from "./components/AllProducts";
@@ -26,12 +27,15 @@ import { useNavigate } from "react-router-dom";
 import "react-phone-number-input/style.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-// import Checkout from "./components/Checkout/Checkout";
+import BillDetail from "./components/Bill/BillDetail";
 import {
   ProtectedRoutes,
+  ProtectedRoutesBeforeLoggedIn,
   SignUpProtectedRouts,
 } from "./components/ProtectedRoutes/ProtectedRoutes";
 import ProfileSetting from "./components/ProfileSettings";
+import Dashboard from "./components/Dashboard/Dashboard";
+import PurchaseHistory from "./components/PurchaseHistory/PurchaseHistory";
 function App() {
   const navigate = useNavigate();
   const [orderNumber, setOrderNumber] = useState("");
@@ -51,7 +55,7 @@ function App() {
 
   React.useEffect(() => {
     const handleBeforeUnload = (event) => {
-      window.localStorage.setItem("reloadFlag", "true");
+      navigate("/");
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -59,18 +63,12 @@ function App() {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, []);
+  }, [navigate]);
 
   React.useEffect(() => {
     if (error500) {
       if (errorMsg?.includes("500")) {
-        const reloadFlag = window.localStorage.getItem("reloadFlag");
-        if (reloadFlag) {
-          window.localStorage.removeItem("reloadFlag");
-          navigate("/");
-        } else {
-          navigate("/500");
-        }
+        navigate("/500");
       }
     }
   }, [errorMsg, error500, navigate]);
@@ -108,6 +106,7 @@ function App() {
                 element={<ProductDetail />}
               />
               <Route path="*" element={<Pagenotfound />} />
+
               <Route element={<ProtectedRoutes />}>
                 <Route path="/signin" element={<Signin />} />
               </Route>
@@ -117,21 +116,39 @@ function App() {
               </Route>
               <Route path="/product/search" element={<SearchProduct />} />
               <Route path="/cart" element={<Shopping />} />
-              <Route element={<ProtectedRoutes />}>
+              <Route element={<ProtectedRoutesBeforeLoggedIn />}>
                 <Route path="/forget" element={<ForgotPassword />} />
               </Route>
-              <Route element={<ProtectedRoutes />}>
+              <Route element={<ProtectedRoutesBeforeLoggedIn />}>
                 <Route path="/reset-password" element={<ResetPassword />} />
               </Route>
               <Route path="/changepassword" element={<ChangePassword />} />
-              <Route path="/profile-setting" element={<ProfileSetting />} />
-              {/* <Route path="/checkout" element={<Checkout />} /> */}
-              {/* <Route path="/checkout" element={<Checkout />} /> */}
+
+              <Route element={<ProtectedRoutesBeforeLoggedIn />}>
+                <Route path="/profile-setting" element={<ProfileSetting />} />
+              </Route>
+
+              <Route path="/forget" element={<ForgotPassword />} />
+              <Route element={<ProtectedRoutesBeforeLoggedIn />}>
+                <Route exact path="/billing-detail" element={<BillDetail />} />
+              </Route>
+              <Route element={<ProtectedRoutesBeforeLoggedIn />}>
+                <Route
+                  path="/online-checkout/:trx/:publishable_key"
+                  element={<OnlinePayment />}
+                />
+              </Route>
+
+              <Route exact path="/dashboard" element={<Dashboard />} />
+              <Route
+                exact
+                path="/purchase-history"
+                element={<PurchaseHistory />}
+              />
             </Routes>
           </SkeletonTheme>
           <Footer />
           <ToastContainer />
-          {/* <StripePaymentForm /> */}
         </>
       )}
     </div>

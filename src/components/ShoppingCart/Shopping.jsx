@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, Fragment, useEffect } from "react";
 import { Styles } from "./Styles";
 import {
   Typography,
@@ -33,7 +33,6 @@ import stripeimg from "../../assets/5f6f1d4bc69e71601117515.jpg";
 const wallet = ["Own", "Online Payment"];
 const Shopping = () => {
   const cartData = useSelector((state) => state?.getcart?.data);
-  // console.log(cartData.length, " cartDatasssss");
   const imgUrl = useSelector((state) => state?.home?.imgPath);
   const isLoading = useSelector((state) => state?.getcart?.isLoading);
 
@@ -41,8 +40,6 @@ const Shopping = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCardOpen, setIsCardOpen] = useState(false);
   const [walletType, setWalletType] = useState(wallet[0]);
-  const [walletIndex, setWalletIndex] = useState(0);
-  const [selectedValue, setSelectedValue] = useState(0);
   const [user_balance, set_User_Balance] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -58,12 +55,11 @@ const Shopping = () => {
     setTotalPrice(sum);
     if (window?.localStorage?.getItem("user")) {
       const { balance } = JSON.parse(window?.localStorage?.getItem("user"));
-      console.log(balance);
-      console.log("working");
+
       set_User_Balance(Number(balance).toFixed(2));
     }
   }, [cartData]);
-  console.log(user_balance);
+
   const handleRemoveProduct = async (id) => {
     const res = await dispatch(deleteCart(id));
     if (res.payload.message) {
@@ -78,11 +74,18 @@ const Shopping = () => {
     setIsModalOpen(true);
   };
   const handleOpenCard = async () => {
+    console.log(walletType, "walletType");
+
     if (!window.localStorage.getItem("user")) {
       toast.info("Please sign in first ");
       navigate("/signin");
     }
     if (walletType.toLowerCase().trim() === "own") {
+      if (user_balance < totalPrice) {
+        toast.error("Your wallet balance is low! Please try online payment");
+        handleCloseModal();
+        return;
+      }
       const orderNumber = localStorage.getItem("order_Number");
       const data = {
         wallet_type: walletType.toLowerCase(),
@@ -90,17 +93,26 @@ const Shopping = () => {
         order_number: orderNumber,
       };
       const res = await dispatch(checkOutCart(data));
+      console.log(res);
       if (res.payload.success) {
-        console.log("working");
         toast.success(res.payload.message);
         localStorage.removeItem("order_Number");
         navigate("/");
       } else {
-        return;
+        toast.error("Something went wrong");
       }
       handleCloseModal();
     } else {
-      setIsCardOpen(true);
+      const orderNumber = localStorage.getItem("order_Number");
+      const data = {
+        wallet_type: walletType.substring(0, 6).toLowerCase().trim(),
+        subscription: 0,
+        order_number: orderNumber,
+      };
+      const res = await dispatch(checkOutCart(data));
+      if (res.payload.success) setIsCardOpen(true);
+      else toast.error("Something went wrong!");
+
       handleCloseModal();
     }
   };
@@ -108,38 +120,11 @@ const Shopping = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  const handleCheckout = async () => {
-    try {
-      if (selectedValue === "own") {
-        const orderResponse = await placeOrder();
-        const orderNumber = orderResponse?.orderNumber;
 
-        if (orderNumber) {
-          toast.success(
-            `Order placed successfully! Order Number: ${orderNumber}`
-          );
-        } else {
-          throw new Error("Failed to place the order. Please try again.");
-        }
-      } else if (selectedValue === "online") {
-      }
-
-      handleCloseModal();
-    } catch (error) {
-      toast.error(
-        error.message || "An error occurred while placing the order."
-      );
-    }
-  };
   const handlePaymentChange = (event) => {
     setWalletType(event.target.value);
-    console.log("Selected Value:", event.target.value);
-    console.log("Wallet Type:", event);
   };
-  const handlePaymentIndex = (e, index) => {
-    console.log(index);
-    setWalletIndex(index);
-  };
+
   return (
     <>
       <Box mt={3}>
@@ -160,7 +145,9 @@ const Shopping = () => {
               ))}
             </Grid>
           ) : cartData?.length === 0 ? (
-            <Typography sx={Styles.noProduct}>No product in cart</Typography>
+            <Typography sx={Styles.noProduct} key={"NoProduct"}>
+              No product in cart
+            </Typography>
           ) : (
             <Grid container spacing={2} marginTop={1} justifyContent="center">
               <Grid item xs={12} md={8} lg={8}>
@@ -177,25 +164,15 @@ const Shopping = () => {
                         Continue Shopping
                       </Button>
                     </Link>
-                    <Button
-                      sx={{
-                        ...Styles.emptyCard,
-                        width: { xs: "100%", md: "auto" },
-                      }}
-                      variant="contained"
-                      size="small"
-                    >
-                      Empty Cart
-                    </Button>
                   </Box>
                 </Card>
                 {cartData?.map((item, index) => (
-                  <>
+                  <Fragment key={index}>
                     <Card
                       sx={{
-                        background: "#ECECEC",
-
-                        p: { xs: 1, md: 2 },
+                        background: "#fff",
+                        boxShadow: "0px 0px 6px 2px rgba(0, 0, 0, 0.10)",
+                        borderRadius: "2px",
                       }}
                     >
                       <CardContent>
@@ -214,7 +191,6 @@ const Shopping = () => {
                               component="img"
                               sx={Styles.logoImg}
                               src={`${imgUrl}/${item?.product?.image}`}
-                              width="20%"
                             />
                             <Typography>
                               <Box paddingLeft={3}>
@@ -229,8 +205,8 @@ const Shopping = () => {
                                 <br />
                                 <br />
                                 <Box>
-                                  <span style={Styles.license}>
-                                    License:
+                                  <span style={Styles.license}>License:</span>
+                                  <span style={Styles.regularLicense}>
                                     {item.license === 1
                                       ? "Regular License"
                                       : "Extended License"}
@@ -270,7 +246,7 @@ const Shopping = () => {
                       </CardContent>
                     </Card>
                     <Box sx={{ mt: 2 }}></Box>
-                  </>
+                  </Fragment>
                 ))}
               </Grid>
               <Grid item xs={12} md={4} lg={4}>
@@ -278,9 +254,11 @@ const Shopping = () => {
                   sx={{
                     width: "100%",
                     borderRadius: "2px",
-                    background: "var(--new-bg-color, #ECECEC)",
+                    background: "#fff",
                     display: "flex",
                     justifyContent: "center",
+                    boxShadow: " 0px 0px 6px 2px rgba(0, 0, 0, 0.10)",
+
                     mt: { xs: 2, md: 0 },
                   }}
                 >
@@ -297,75 +275,80 @@ const Shopping = () => {
                   </CardContent>
                 </Box>
               </Grid>
-              {isCardOpen && (
-                <Card
-                  open={isCardOpen}
-                  sx={{
-                    width: "80%",
-                    maxWidth: 300,
-                    margin: "auto",
-                    position: "absolute",
-                    top: "26%",
-                    right: "3%",
-                    "@media (max-width: 600px)": {
-                      width: "90%",
-                      top: "20%",
-                    },
-                  }}
-                >
-                  <CardContent sx={{ background: "#50b948" }}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        borderRadius: 4,
-                      }}
-                    >
-                      <Box sx={{ marginRight: 2 }}>
-                        <CardMedia
-                          component="img"
-                          height="70px"
-                          width="30px"
-                          image={stripeimg}
-                          alt="Stripe Logo"
-                          borderRadius="10px"
-                        />
-                      </Box>
-                      <Typography
+
+              <Grid item xs={12} md={4} lg={8}>
+                {isCardOpen && (
+                  <Card
+                    open={isCardOpen}
+                    sx={{
+                      // width: "80%",
+                      maxWidth: 300,
+                      margin: "auto",
+                      // position: "absolute",
+                      // top: "26%",
+                      // right: "3%",
+                      "@media (max-width: 600px)": {
+                        width: "90%",
+                        top: "20%",
+                      },
+                    }}
+                  >
+                    <CardContent sx={{ background: "#50b948" }}>
+                      <Box
                         sx={{
-                          color: "white",
-                          display: "inline",
-                          fontSize: "20px",
+                          display: "flex",
+                          alignItems: "center",
+                          borderRadius: 4,
                         }}
                       >
-                        Pay by card
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                  <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    <CardContent>
-                      <Typography sx={{ textAlign: "center" }}>
-                        Total: {totalPrice * 1.05} USD
-                      </Typography>
-                      <Typography sx={{ paddingTop: 2, textAlign: "center" }}>
-                        Charge: +5%
-                      </Typography>
-                      <CardActions>
-                        <Button
-                          style={{
-                            marginTop: 2,
-                            padding: 1,
+                        <Box sx={{ marginRight: 2 }}>
+                          <CardMedia
+                            component="img"
+                            height="70px"
+                            width="30px"
+                            image={stripeimg}
+                            alt="Stripe Logo"
+                            borderRadius="10px"
+                          />
+                        </Box>
+                        <Typography
+                          sx={{
+                            color: "white",
+                            display: "inline",
+                            fontSize: "20px",
                           }}
-                          sx={Styles.checkOut}
-                          variant="contained"
                         >
-                          Pay Now
-                        </Button>
-                      </CardActions>
+                          Pay by card
+                        </Typography>
+                      </Box>
                     </CardContent>
-                  </Box>
-                </Card>
-              )}
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                      <CardContent>
+                        <Typography sx={{ textAlign: "center" }}>
+                          Total: {Number(totalPrice * 1.05).toFixed(2)} USD
+                        </Typography>
+                        <Typography sx={{ paddingTop: 2, textAlign: "center" }}>
+                          Charge: +5%
+                        </Typography>
+                        <CardActions>
+                          <Button
+                            style={{
+                              marginTop: 2,
+                              padding: 1,
+                            }}
+                            sx={Styles.checkOut}
+                            variant="contained"
+                            onClick={() => navigate("/billing-detail")}
+                          >
+                            Pay Now
+                          </Button>
+                        </CardActions>
+                      </CardContent>
+                    </Box>
+                  </Card>
+                )}
+              </Grid>
+
               <Modal open={isModalOpen} onClose={handleCloseModal}>
                 <Box
                   sx={{
@@ -398,11 +381,7 @@ const Shopping = () => {
                         inputProps={{ "aria-label": "Without label" }}
                       >
                         {wallet.map((item, index) => (
-                          <MenuItem
-                            value={item}
-                            key={index}
-                            onClick={(e) => handlePaymentIndex(e, index)}
-                          >
+                          <MenuItem value={item} key={index}>
                             {item}{" "}
                             {item === "Own" &&
                               `- $  ${Number(user_balance).toFixed(2)}`}

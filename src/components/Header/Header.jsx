@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useState, useCallback, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
@@ -10,7 +11,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Popover from "@mui/material/Popover";
 import style from "./styles";
-import { Container, Hidden } from "@mui/material";
+import { Container, Hidden, Tooltip, tooltipClasses } from "@mui/material";
 import Logo from "../../assets/logo.png";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
@@ -82,9 +83,7 @@ const Header = () => {
   const [userBalance, setUserBalance] = useState(0);
   const catergories = useSelector((state) => state?.home?.catergories); // getting categories from API
   const totalProducts = useSelector((state) => state?.getcart?.data);
-  // console.log(totalProducts); //
   const isLoggedIn = useSelector((state) => state?.signInReducer?.isLogedIn);
-  // console.log(isLoggedIn, " isLoggedIn");
   const [activeOffeset, setActiveOffeset] = useState(false);
   const [userLogged, setUserLogged] = useState(false);
   const [searchProduct, setSearchProduct] = useState("");
@@ -93,8 +92,9 @@ const Header = () => {
     if (e.key === "Enter") {
       navigate(`/product/search?search=${searchProduct}`);
     }
-
-    // console.log("working");
+  };
+  const handleChangeRouteToCart = () => {
+    navigate("/cart");
   };
   window.addEventListener("scroll", () => {
     if (window.scrollY > 100) {
@@ -155,6 +155,18 @@ const Header = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(false);
   };
+
+  const LightTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.common.white,
+      color: "rgba(0, 0, 0, 0.87)",
+      boxShadow: theme.shadows[1],
+      fontSize: 11,
+      width: "auto",
+    },
+  }));
   return (
     <>
       {/* upper header code  */}
@@ -186,11 +198,52 @@ const Header = () => {
             </Box>
             <Box sx={{ position: "absolute", right: "18%" }}></Box>
             <Box sx={style.outter}>
-              <Box
+              <Box sx={style.cartBox}>
+                <LightTooltip
+                  title={
+                    totalProducts.length === 0 ? (
+                      <Typography sx={{ color: "black" }}>
+                        There is no product in the cart.
+                      </Typography>
+                    ) : (
+                      totalProducts.map((item, index) => (
+                        <Box sx={styles.tooltipStyle} key={index}>
+                          <Typography sx={{ color: "black" }}>
+                            {item.product?.name}
+                          </Typography>
+                          <Typography sx={{ color: "black" }}>
+                            ${Number(item.total_price).toFixed(2)}
+                          </Typography>
+                        </Box>
+                      ))
+                    )
+                  }
+                  // arrow
+                  placement="bottom"
+                  onClick={handlePopoverCloseCart}
+                >
+                  <Link
+                    style={{
+                      textDecoration: "none",
+                      color: "black",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    to="/cart"
+                  >
+                    <PiShoppingCartLight style={style.cartIcon} />
+                    <Typography sx={style.cartTypo}>
+                      {totalProducts?.length}
+                    </Typography>
+                  </Link>
+                </LightTooltip>
+              </Box>
+              {/* <Box
                 sx={style.cartBox}
                 aria-owns={openCartPopup ? "mouse-over-popover" : undefined}
                 aria-haspopup="true"
                 onMouseEnter={handlePopoverOpenCart}
+                onClick={handleChangeRouteToCart}
               >
                 <Link
                   style={{
@@ -255,7 +308,7 @@ const Header = () => {
                     </Typography>
                   )}
                 </Popover>
-              </Box>
+              </Box> */}
               {userLogged ? (
                 <>
                   <Useravatar
@@ -326,6 +379,7 @@ const Header = () => {
                     display: "flex",
                     alignItems: "center",
                     gap: 3,
+                    zIndex: 1,
                   }}
                 >
                   {catergories?.map((item, index) => (

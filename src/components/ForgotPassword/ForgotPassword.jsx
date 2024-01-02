@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Box,
   Paper,
@@ -9,13 +9,13 @@ import {
   Grid,
 } from "@mui/material";
 import logo from "../../assets/jdlogo1.svg";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./styles";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { MuiOtpInput } from "mui-one-time-password-input";
+// import { MuiOtpInput } from "mui-one-time-password-input";
 import { forgotPassword } from "../../Redux/api/api";
 function ForgotPassword() {
   const dispatch = useDispatch();
