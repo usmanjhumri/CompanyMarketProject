@@ -21,13 +21,17 @@ const addToCart = createSlice({
       state.success = action.payload.status;
     });
     builder.addCase(addToCartApi.rejected, (state, action) => {
+      console.log(action, "error");
       state.isLoading = false;
       state.isError = true;
-      state.errorMessage = action.error.message;
+      state.errorMessage = action.payload.message;
       state.success = "";
     });
     builder.addCase(resetSuccessCart, (state) => {
       state.success = "";
+      state.errorMessage = "";
+      state.isError = false;
+      state.isLoading = false;
     });
   },
 });

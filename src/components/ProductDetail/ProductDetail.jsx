@@ -76,6 +76,8 @@ const ProductDetail = () => {
   const product = useSelector((state) => state?.productDetail?.data?.product);
   const isLoading = useSelector((state) => state?.productDetail?.isLoading);
   const isLoadingCart = useSelector((state) => state?.addtocart?.isLoading);
+  const { isError, errorMessage } = useSelector((state) => state?.addtocart);
+
   const imgPath = useSelector((state) => state?.home?.imgPath);
   const successCart = useSelector((state) => state?.addtocart?.success);
   const moreProduct = useSelector(
@@ -108,7 +110,11 @@ const ProductDetail = () => {
       toast.success("Item added to your cart");
       dispatch(resetSuccessCart());
     }
-  }, [successCart]);
+    if (isError) {
+      toast.error("Something went wrong!");
+      dispatch(resetSuccessCart());
+    }
+  }, [successCart, errorMessage, isError]);
 
   const responsive = {
     desktop: {
@@ -129,22 +135,33 @@ const ProductDetail = () => {
   const handleCheckboxChange = (index, price, name) => {
     const bump = products[index];
     setBumps((prevBumps) => {
-      const newBumps = [...prevBumps];
-      if (!prevBumps[index]) {
-        newBumps[index] = Number(bump.price);
+      const newBumps = { ...prevBumps };
+
+      if (!newBumps[bump.id]) {
+        newBumps[bump.id] = Number(bump.price);
       } else {
-        newBumps.splice(index, 1);
+        delete newBumps[bump.id];
       }
-      return newBumps;
+
+      // Filter out undefined values
+      const filteredBumps = Object.values(newBumps).filter(
+        (value) => value !== undefined
+      );
+
+      return filteredBumps.length > 0 ? newBumps : {};
     });
     setPages((prevPages) => {
-      const newPages = [...prevPages];
-      if (!prevPages[index]) {
-        newPages[index] = bump.min_quantity;
+      const newBumps = { ...prevPages };
+      if (!newBumps[bump.id]) {
+        newBumps[bump.id] = Number(bump.min_quantity);
       } else {
-        newPages.splice(index, 1);
+        delete newBumps[bump.id];
       }
-      return newPages;
+      const filteredBumps = Object.values(newBumps).filter(
+        (value) => value !== undefined
+      );
+
+      return filteredBumps.length > 0 ? newBumps : {};
     });
     setCheckedItems((prevCheckedItems) => {
       const checkingItem = {
@@ -189,8 +206,8 @@ const ProductDetail = () => {
 
     setProducts(updatedProducts);
     if (isChecked) {
-      if (pages[1]) {
-        pages[1] = Number(addPages);
+      if (pages[2]) {
+        pages[2] = Number(addPages);
       }
       setTotalPrice((prevTotalPrice) => {
         const updatedPrice =
@@ -249,16 +266,23 @@ const ProductDetail = () => {
     e.preventDefault();
     const order_number = window.localStorage.getItem("order_Number");
     if (product?.bumps?.length > 0) {
-      const formData = {
-        _token: "BNiq5lIb9RM11nI6MvODcZCcWMyksqkayrN0A3G0",
-        product_id: encrypted_id,
-        bump_fee: bumpFee,
-        license: LinceseIndex,
-        bump: bumps,
-        pages,
-        ...(order_number && { order_number: order_number }),
-      };
-      dispatch(addToCart(formData));
+      // const formData = {
+      //   _token: "BNiq5lIb9RM11nI6MvODcZCcWMyksqkayrN0A3G0",
+      //   product_id: encrypted_id,
+      //   bump_fee: bumpFee,
+      //   license: LinceseIndex,
+      //   bump: bumps,
+      //   pages,
+      //   ...(order_number && { order_number: order_number }),
+      // };
+      const data = new FormData();
+      data.append("_token", "BNiq5lIb9RM11nI6MvODcZCcWMyksqkayrN0A3G0");
+      data.append("product_id", encrypted_id);
+      data.append("bump_fee", bumpFee);
+      data.append("license", LinceseIndex);
+      data.append("bump", JSON.stringify(bumps));
+      data.append("pages", JSON.stringify(pages));
+      dispatch(addToCart(data));
     } else {
       const formData = {
         _token: "BNiq5lIb9RM11nI6MvODcZCcWMyksqkayrN0A3G0",
@@ -521,7 +545,7 @@ const ProductDetail = () => {
 
                   <Box
                     component="hr"
-                    sx={{ borderTop: "1px soild #D9D9D9" }}
+                    sx={{ borderTop: "1px soild #D9D9D9", mt: 1, mb: 1 }}
                   ></Box>
                   <Typography sx={styles.detailsText}>
                     {isLoading ? (
@@ -581,10 +605,7 @@ const ProductDetail = () => {
                               </Typography>
                               {item.name.trim() === "Extra Pages" && (
                                 <input
-                                  style={{
-                                    width: "30.944px",
-                                    height: "20px",
-                                  }}
+                                  style={{ width: "18%" }}
                                   value={extraPages}
                                   type="number"
                                   min={item.min_quantity}
@@ -624,8 +645,7 @@ const ProductDetail = () => {
                         type="submit"
                         disabled={isLoadingCart}
                       >
-                        Add to cart
-                        {/* {isLoadingCart ? "Adding into cart" : "Add to cart"} */}
+                        {isLoadingCart ? "Adding into cart" : "Add to cart"}
                       </Button>
                     )}
                     <ToastContainer />

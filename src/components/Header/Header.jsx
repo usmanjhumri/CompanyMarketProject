@@ -18,14 +18,15 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { PiShoppingCartLight } from "react-icons/pi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./styles";
 import Colors from "../colors";
 import ResponsiveDrawer from "./Drawer/ResponsiveDrawer";
 import { Fragment } from "react";
 import Useravatar from "./Useravatar";
-import { storageKey } from "../../Redux/api/api";
+import { getProfileData, storageKey } from "../../Redux/api/api";
 import "./Header.css";
+import { RiArrowDropDownLine } from "react-icons/ri";
 const navItems = [
   { title: "Home", link: "/" },
   { title: "Products", link: "products" },
@@ -76,6 +77,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 const Header = () => {
+  const firstName = useSelector((state) => state?.getProfileData?.firstName);
   const [mobileOpen, setMobileOpen] = useState(false); // show drawer on mobile screen
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElCart, setAnchorElCart] = useState(null); // Open and Closing menu
@@ -88,6 +90,7 @@ const Header = () => {
   const [userLogged, setUserLogged] = useState(false);
   const [searchProduct, setSearchProduct] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleChnageProduct = (e) => {
     if (e.key === "Enter") {
       navigate(`/product/search?search=${searchProduct}`);
@@ -113,10 +116,11 @@ const Header = () => {
       setUserLogged(true);
       const { balance } = JSON.parse(window.localStorage.getItem(storageKey));
       setUserBalance(Number(balance).toFixed(2));
+      dispatch(getProfileData());
     } else {
       setUserLogged(false);
     }
-  }, [userLogged, isLoggedIn]);
+  }, [userLogged, isLoggedIn, dispatch]);
 
   const callfunction = useCallback(
     (event, catergoryId) => {
@@ -167,6 +171,9 @@ const Header = () => {
       width: "auto",
     },
   }));
+  const handleopenDropDownMenue = () => {
+    console.log("working");
+  };
   return (
     <>
       {/* upper header code  */}
@@ -196,7 +203,8 @@ const Header = () => {
                 </NavLink>
               ))}
             </Box>
-            <Box sx={{ position: "absolute", right: "18%" }}></Box>
+
+            {/* <Box sx={{ position: "absolute", right: "18%" }}></Box> */}
             <Box sx={style.outter}>
               <Box sx={style.cartBox}>
                 <LightTooltip
@@ -311,12 +319,28 @@ const Header = () => {
               </Box> */}
               {userLogged ? (
                 <>
-                  <Useravatar
-                    setUserLogged={setUserLogged}
-                    handleCloseUserMenu={handleCloseUserMenu}
-                    handleOpenUserMenu={handleOpenUserMenu}
-                    anchorElUser={anchorElUser}
-                  />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                    }}
+                  >
+                    <Useravatar
+                      setUserLogged={setUserLogged}
+                      handleCloseUserMenu={handleCloseUserMenu}
+                      handleOpenUserMenu={handleOpenUserMenu}
+                      anchorElUser={anchorElUser}
+                    />
+                    {/* <Typography>{firstName}</Typography>
+                    <RiArrowDropDownLine
+                      style={{
+                        fontSize: "1.6rem",
+                        cursor: "pointer",
+                      }}
+                      onClick={handleopenDropDownMenue} this is for future comment Maybe it used in Future
+                    /> */}
+                  </Box>
                 </>
               ) : (
                 <>

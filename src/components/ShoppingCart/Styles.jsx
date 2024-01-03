@@ -193,6 +193,15 @@ export const Styles = {
     color: "#fff",
     padding: "0.625rem 1.25rem",
   },
+  extraBumps: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+  },
+  extraBumpsTypo: {
+    fontSize: "14px",
+  },
 };
 
 //   withdrawCard: {

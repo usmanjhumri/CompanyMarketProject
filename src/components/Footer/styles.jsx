@@ -55,7 +55,7 @@ const FooterStyle = {
   },
   copyRightStyle: {
     background: Colors.primary,
-    padding: "1.2rem",
+    padding: "1.5rem",
   },
   copyRightTypo: {
     fontSize: "14px",

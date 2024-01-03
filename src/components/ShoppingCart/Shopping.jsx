@@ -27,6 +27,7 @@ import { deleteCart, checkOutCart } from "../../Redux/api/api";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import stripeimg from "../../assets/5f6f1d4bc69e71601117515.jpg";
+import styles from "../Header/styles";
 
 // import { checkOut } from "../../Redux/Slice/Checkout";
 
@@ -35,6 +36,10 @@ const Shopping = () => {
   const cartData = useSelector((state) => state?.getcart?.data);
   const imgUrl = useSelector((state) => state?.home?.imgPath);
   const isLoading = useSelector((state) => state?.getcart?.isLoading);
+
+  const data = useSelector((state) => state?.getcart.data);
+
+  console.log(data, " extra pages");
 
   const [totalPrice, setTotalPrice] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -125,6 +130,7 @@ const Shopping = () => {
     setWalletType(event.target.value);
   };
 
+  console.log("cartData", cartData);
   return (
     <>
       <Box mt={3}>
@@ -215,6 +221,7 @@ const Shopping = () => {
                               </Box>
                             </Typography>
                           </Box>
+
                           <Box>
                             <Box
                               sx={{
@@ -242,6 +249,120 @@ const Shopping = () => {
                               ${Number(item?.total_price).toFixed(2)}
                             </Typography>
                           </Box>
+                        </Box>
+                        <Box>
+                          <Typography
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            Extra Bumps
+                          </Typography>
+
+                          {item?.bumpresponses?.map((bumpResponse, index) => (
+                            <div key={index}>
+                              <>
+                                <Box sx={Styles.extraBumps}>
+                                  <Typography sx={Styles.extraBumpsTypo}>
+                                    Name
+                                  </Typography>
+                                  <Typography sx={Styles.extraBumpsTypo}>
+                                    {bumpResponse.bump.name}
+                                  </Typography>
+                                </Box>
+                                <Box sx={Styles.extraBumps}>
+                                  <Typography sx={Styles.extraBumpsTypo}>
+                                    Price
+                                  </Typography>
+                                  <Typography sx={Styles.extraBumpsTypo}>
+                                    {Number(bumpResponse.price).toFixed(2)}
+                                  </Typography>
+                                </Box>
+                              </>
+                              {bumpResponse.pages ? (
+                                <>
+                                  <Box sx={Styles.extraBumps}>
+                                    <Typography sx={Styles.extraBumpsTypo}>
+                                      Pages
+                                    </Typography>
+                                    <Typography sx={Styles.extraBumpsTypo}>
+                                      {bumpResponse.pages}
+                                    </Typography>
+                                  </Box>
+                                </>
+                              ) : null}
+                            </div>
+                          ))}
+
+                          {/* {zeroPages ? (
+                            <>
+                              <Box sx={Styles.extraBumps}>
+                                <Typography sx={Styles.extraBumpsTypo}>
+                                  Name
+                                </Typography>
+                                <Typography sx={Styles.extraBumpsTypo}>
+                                  {zeroPagesName}
+                                </Typography>
+                              </Box>
+                              <Box sx={Styles.extraBumps}>
+                                <Typography sx={Styles.extraBumpsTypo}>
+                                  Price
+                                </Typography>
+                                <Typography sx={Styles.extraBumpsTypo}>
+                                  {Number(zeroPagesPrice).toFixed(2)}
+                                </Typography>
+                              </Box>
+                            </>
+                          ) : sixPages ? (
+                            <>
+                              <Box sx={Styles.extraBumps}>
+                                <Typography sx={Styles.extraBumpsTypo}>
+                                  Name
+                                </Typography>
+                                <Typography sx={Styles.extraBumpsTypo}>
+                                  {sixPagesName}
+                                </Typography>
+                              </Box>
+                              <Box sx={Styles.extraBumps}>
+                                <Typography sx={Styles.extraBumpsTypo}>
+                                  Pages
+                                </Typography>
+                                <Typography sx={Styles.extraBumpsTypo}>
+                                  {sixPages}
+                                </Typography>
+                              </Box>
+                              <Box sx={Styles.extraBumps}>
+                                <Typography sx={Styles.extraBumpsTypo}>
+                                  Price
+                                </Typography>
+                                <Typography sx={Styles.extraBumpsTypo}>
+                                  {Number(sixPagesPrice).toFixed(2)}
+                                </Typography>
+                              </Box>
+                            </>
+                          ) : null} */}
+
+                          {/* <Box sx={Styles.extraBumps}>
+                            //{" "}
+                            <Typography sx={Styles.extraBumpsTypo}>
+                              // Name //{" "}
+                            </Typography>
+                            //{" "}
+                            <Typography sx={Styles.extraBumpsTypo}>
+                              // name of quantity //{" "}
+                            </Typography>
+                          </Box>
+
+                          <Box sx={Styles.extraBumps}>
+                            //{" "}
+                            <Typography sx={Styles.extraBumpsTypo}>
+                              // Quantity //{" "}
+                            </Typography>
+                            //{" "}
+                            <Typography sx={Styles.extraBumpsTypo}>
+                              // 2 //{" "}
+                            </Typography>
+                          </Box> */}
                         </Box>
                       </CardContent>
                     </Card>

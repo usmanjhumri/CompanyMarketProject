@@ -13,6 +13,7 @@ let initialState = {
   imagePath: "",
   coverImage: "",
   logoImage: "",
+  firstName: "",
 };
 
 const getProfilesDatas = createSlice({
@@ -34,6 +35,8 @@ const getProfilesDatas = createSlice({
         state.imagePath = action.payload.data.base_url;
         state.coverImage = action.payload.data.cover_image;
         state.logoImage = action.payload.data.image;
+        state.firstName = action.payload.data.firstname;
+        // console.log(state.firstName, "firsname of user");
       })
       .addCase(getProfileData.rejected, (state, action) => {
         state.isLoading = false;

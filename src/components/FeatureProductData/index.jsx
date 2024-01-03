@@ -94,6 +94,7 @@ export default function index({ filterProduct, isLoading }) {
         </Box>
       </Grid>
       <Grid
+        item
         container
         spacing={2}
         xs={12}

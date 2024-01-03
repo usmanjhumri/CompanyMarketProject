@@ -71,8 +71,6 @@ const BillStyle = {
     background: "#F8F9FA",
   },
   boxCardPayment: {
-    display: "flex",
-
     border: "1px solid  #D9D9D9",
     display: "flex",
     justifyContent: "center",

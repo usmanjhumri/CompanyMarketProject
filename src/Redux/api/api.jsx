@@ -21,6 +21,7 @@ export const fetchAllProducts = createAsyncThunk(
         search: searchValue,
       },
     });
+    // console.log(res, " data");
     return res.data;
   }
 );
@@ -147,18 +148,22 @@ export const deleteCart = createAsyncThunk(
 
 export const addToCart = createAsyncThunk(
   "addToCart",
-  async function (productData, { dispatch }) {
-    const res = await axios.post(`${apiUrl}product/add-to-cart`, productData);
-    if (res) {
-      const orderNumber = res.data.order_number;
-      const existingOrderNumber = window.localStorage.getItem("order_Number");
-      if (!existingOrderNumber) {
-        window.localStorage.setItem("order_Number", orderNumber);
+  async function (productData, { dispatch, rejectWithValue }) {
+    try {
+      const res = await axios.post(`${apiUrl}product/add-to-cart`, productData);
+      if (res) {
+        const orderNumber = res.data.order_number;
+        const existingOrderNumber = window.localStorage.getItem("order_Number");
+        if (!existingOrderNumber) {
+          window.localStorage.setItem("order_Number", orderNumber);
+        }
+        if (res.data) {
+          dispatch(getCart(existingOrderNumber || orderNumber));
+        }
+        return res.data;
       }
-      if (res.data) {
-        dispatch(getCart(existingOrderNumber || orderNumber));
-      }
-      return res.data;
+    } catch (e) {
+      throw rejectWithValue(e.response.data);
     }
   }
 );
@@ -283,18 +288,21 @@ export const sendProfileData = createAsyncThunk(
 
 // ProfileSetting API  ended
 
-const purchaseHistory = createAsyncThunk(
+export const purchaseHistory = createAsyncThunk(
   "userpurchasehistory",
   async function () {
+    console.log("working with");
     try {
       const token = JSON.parse(localStorage.getItem(storageKey)).token;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
       const res = await axios.get(`${apiUrl}user/puchased-list`, { headers });
-      console.log(res.data, "res");
+      console.log(res.data.data, "res");
+      return res.data.data;
     } catch (error) {
       console.log(error, "error purchase history");
+      return rejectWithValue(error.data.data);
     }
   }
 );

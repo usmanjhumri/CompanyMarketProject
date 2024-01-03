@@ -9,6 +9,7 @@ import {
   OutlinedInput,
   Typography,
 } from "@mui/material";
+import "./Profile.css";
 import BG from "../../assets/settingBg.png";
 import ProfilPic from "../../assets/profilePic.png";
 import CAMERA from "../../assets/cameraselect.png";
@@ -28,6 +29,7 @@ const ProfileSetting = () => {
     coverImage,
     logoImage,
   } = useSelector((state) => state?.getProfileData);
+  // console.log(profileData, " profileData");
   const { isError, Message, success, logoImageType } = useSelector(
     (state) => state.sendProfileData
   );
@@ -52,7 +54,7 @@ const ProfileSetting = () => {
   const [coverPhotoName, setCoverPhotoName] = useState();
   const [companyLogo, setCompanyLogo] = useState();
   const [disable, setDisable] = useState(null);
-  console.log(uploadCoverPhoto, " image uploaded");
+  // console.log(uploadCoverPhoto, " image uploaded");
   const inputRefs = {
     img: useRef(null),
     cover: useRef(null),
@@ -310,7 +312,7 @@ const ProfileSetting = () => {
                   "city",
                 ].map((fieldName) => (
                   <Grid item xs={12} md={6} key={fieldName}>
-                    <FormControl sx={{ m: 1 }} fullWidth>
+                    <FormControl sx={{ m: 1 }} fullWidth className="inputBase">
                       <Box sx={profileStyles.labelStyle}>
                         <label
                           htmlFor={fieldName}
@@ -345,7 +347,7 @@ const ProfileSetting = () => {
                 ))}
 
                 <Grid item xs={12} md={12}>
-                  <FormControl sx={{ m: 1 }} fullWidth variant="outlined">
+                  <FormControl sx={{ m: 1 }} fullWidth className="inputBase">
                     <Box sx={profileStyles.labelStyle}>
                       <label
                         htmlFor="description"
