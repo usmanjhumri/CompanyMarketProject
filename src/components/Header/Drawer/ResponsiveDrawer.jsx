@@ -18,25 +18,47 @@ import styles from "../styles";
 import { IoClose } from "react-icons/io5";
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import Logo from "../../../assets/logo.png";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { storageKey } from "../../../Const/CONST";
+import { resetSuccessSignin } from "../../../Redux/Slice/signin";
 const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state?.signInReducer?.isLogedIn);
+  console.log(isLoggedIn, " loggedin");
+  const [userLogged, setUserLogged] = useState(false);
+
+  useEffect(() => {
+    setUserLogged(isLoggedIn);
+  }, [isLoggedIn]);
+
+  const handleLogOut = () => {
+    localStorage.removeItem(storageKey);
+    dispatch(resetSuccessSignin());
+    navigate("/signin");
+  };
+
   const [openMenu, setOpenMenu] = useState(null);
   const [changeIcon, setChangeIcon] = useState(true);
   const handleMenuOpen = (index) => {
     setChangeIcon(!changeIcon);
     setOpenMenu(openMenu === index ? null : index);
-    
   };
   const handleCloseDrawer = () => {
-    setMobileOpen(false)
-  }
-  const navigateRout = useNavigate()
-  const [serachProduct, setSearchProduct] = useState("")
+    setMobileOpen(false);
+  };
+  const navigateRout = useNavigate();
+  const [serachProduct, setSearchProduct] = useState("");
   const handleSearchBtn = () => {
-    navigateRout(`/product/search?search=${serachProduct}`)
-    handleCloseDrawer()
-  }
+    navigateRout(`/product/search?search=${serachProduct}`);
+    handleCloseDrawer();
+  };
+  const handleLogOutandCloseDrawer = () => {
+    handleLogOut();
+    handleCloseDrawer();
+  };
   return (
     <>
       <SwipeableDrawer
@@ -48,7 +70,11 @@ const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
         <Box>
           <Divider />
           <List key={1}>
-            <Link to="/" style={{ margin: "0px 1rem" }} onClick={()=> handleCloseDrawer()}>
+            <Link
+              to="/"
+              style={{ margin: "0px 1rem" }}
+              onClick={() => handleCloseDrawer()}
+            >
               <Box mt={2} component="img" src={Logo} />
             </Link>
 
@@ -59,13 +85,16 @@ const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
             <Box sx={{ margin: "0.5rem 1rem" }}>
               <FormControl sx={{ padding: "7px 4px" }}>
                 <OutlinedInput
-                onChange={(e) => setSearchProduct(e.target.value)}
+                  onChange={(e) => setSearchProduct(e.target.value)}
                   size="small"
                   sx={{ padding: "8px 5px !important" }}
                   placeholder="E’g Responsive Landing Pages and Websites"
                   endAdornment={
                     <InputAdornment position="end">
-                      <Button sx={styles.iconBtnStyle} onClick={handleSearchBtn}>
+                      <Button
+                        sx={styles.iconBtnStyle}
+                        onClick={handleSearchBtn}
+                      >
                         <LuSearch style={{ color: "#FFFFFF" }} />
                       </Button>
                     </InputAdornment>
@@ -76,8 +105,6 @@ const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
             {catergories?.map((item, index) => (
               <Fragment key={index}>
                 <Box
-
-               
                   sx={{
                     textAlign: "justify",
                     padding: "0px 2rem",
@@ -89,33 +116,46 @@ const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
                 >
                   <Box>
                     <Typography>
-                      <Link to={`/categories/${item.name.toLowerCase().trim()}/${item.id}`} style={styles.drawerlink}  onClick={()=>handleCloseDrawer()}>
+                      <Link
+                        to={`/categories/${item.name.toLowerCase().trim()}/${
+                          item.id
+                        }`}
+                        style={styles.drawerlink}
+                        onClick={() => handleCloseDrawer()}
+                      >
                         {item.name}
                       </Link>
                     </Typography>
                     {item.subcategories && (
                       <Box>
-                        <Collapse in={openMenu === index}  timeout={400} unmountOnExit>
-                        {openMenu === index && (
-                          <List>
-                            {item.subcategories.map((child, childIndex) => (
-                              <>
-                                <Typography key={childIndex} >
-                                  <Link
-                                    to={`/${item.id}/sub-categories/${child.name.toLowerCase().trim()}/${child.id}`}
-                                    key={childIndex}
-                                    style={styles.drawerChildlink}
-                                    onClick={()=> handleCloseDrawer()}
-                                  >
-                                    {child.name}
-                                  </Link>
-                                </Typography>
-                              </>
-                            ))}
-                          </List>
-                        )}
-
-                        </Collapse> 
+                        <Collapse
+                          in={openMenu === index}
+                          timeout={400}
+                          unmountOnExit
+                        >
+                          {openMenu === index && (
+                            <List>
+                              {item.subcategories.map((child, childIndex) => (
+                                <>
+                                  <Typography key={childIndex}>
+                                    <Link
+                                      to={`/${
+                                        item.id
+                                      }/sub-categories/${child.name
+                                        .toLowerCase()
+                                        .trim()}/${child.id}`}
+                                      key={childIndex}
+                                      style={styles.drawerChildlink}
+                                      onClick={() => handleCloseDrawer()}
+                                    >
+                                      {child.name}
+                                    </Link>
+                                  </Typography>
+                                </>
+                              ))}
+                            </List>
+                          )}
+                        </Collapse>
                       </Box>
                     )}
                   </Box>
@@ -137,18 +177,39 @@ const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
                 </Box>
               </Fragment>
             ))}
-            <Box textAlign="center">
-              <Box sx={{ maxWidth: "100%" }}>
-                <Link to="/signin">
-                <Button sx={styles.SidebarBtnStyle} onClick={()=> handleCloseDrawer()}>Sign in</Button>
-                </Link>
+            {userLogged ? (
+              <Box sx={{ maxWidth: "100%", textAlign: "center" }}>
+                <Button
+                  sx={styles.SidebarBtnStyle}
+                  onClick={handleLogOutandCloseDrawer}
+                >
+                  Sign out
+                </Button>
               </Box>
-              <Box sx={{ maxWidth: "100%" }}>
-                <Link to="signup">
-                <Button sx={styles.SidebarBtnStyle} onClick={()=> handleCloseDrawer()}>Sign up</Button>
-                </Link>
+            ) : (
+              <Box textAlign="center">
+                <Box sx={{ maxWidth: "100%" }}>
+                  <Link to="/signin">
+                    <Button
+                      sx={styles.SidebarBtnStyle}
+                      onClick={handleCloseDrawer}
+                    >
+                      Sign in
+                    </Button>
+                  </Link>
+                </Box>
+                <Box sx={{ maxWidth: "100%" }}>
+                  <Link to="/signup">
+                    <Button
+                      sx={styles.SidebarBtnStyle}
+                      onClick={handleCloseDrawer}
+                    >
+                      Sign up
+                    </Button>
+                  </Link>
+                </Box>
               </Box>
-            </Box>
+            )}
           </List>
         </Box>
       </SwipeableDrawer>

@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable react/prop-types */
 
-import { PiShoppingCartLight } from "react-icons/pi";
+// import { PiShoppingCartLight } from "react-icons/pi";
 import { Box, Button, Grid, Typography, Container } from "@mui/material";
 import Styles from "./Styles";
 import SkeletonCard from "../Skeletoncard";

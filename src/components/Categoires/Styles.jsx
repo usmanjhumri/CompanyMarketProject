@@ -3,7 +3,7 @@ const CategoriesStyle = {
   CatHeading: {
     fontWeight: 600,
     fontSize: { md: "32px", xs: "28px" },
-    color: Colors.black,
+    color: Colors.primary,
     fontFamily: "Be Vietnam Pro , sans-serif",
     lineHeight: "35.06px",
     textAlign: "center",

@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { storageKey } from "../../Redux/api/api";
+import { storageKey } from "../../Const/CONST";
 
 export const ProtectedRoutes = () => {
   const isLoggedIn = localStorage.getItem(storageKey);
@@ -15,5 +15,5 @@ export const SignUpProtectedRouts = () => {
 
 export const ProtectedRoutesBeforeLoggedIn = () => {
   const isLoggedIn = localStorage.getItem(storageKey);
-  return isLoggedIn ? <Outlet /> : <Navigate to="/signin" replace />;
+  return !isLoggedIn ? <Outlet /> : <Navigate to="/signin" replace />;
 };

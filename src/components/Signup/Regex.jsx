@@ -21,6 +21,6 @@ export const signupSchema = Yup.object({
       "Need one special character"
     ),
   password_confirmation: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Password must matched")
-    .required(`Password confirm is required`),
+    .required(`Password confirm is required`)
+    .oneOf([Yup.ref("password"), null], "Password must matched"),
 });

@@ -19,6 +19,7 @@ import {
   CardHeader,
   CardActions,
   CardMedia,
+  Checkbox,
 } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
@@ -27,20 +28,21 @@ import { deleteCart, checkOutCart } from "../../Redux/api/api";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import stripeimg from "../../assets/5f6f1d4bc69e71601117515.jpg";
+import { order_number } from "../../Const/CONST";
 import styles from "../Header/styles";
+import { BiSolidCheckboxChecked } from "react-icons/bi";
+import { ImCheckboxChecked } from "react-icons/im";
 
 // import { checkOut } from "../../Redux/Slice/Checkout";
 
 const wallet = ["Own", "Online Payment"];
 const Shopping = () => {
   const cartData = useSelector((state) => state?.getcart?.data);
+  console.log(cartData, " cartData");
   const imgUrl = useSelector((state) => state?.home?.imgPath);
   const isLoading = useSelector((state) => state?.getcart?.isLoading);
-
-  const data = useSelector((state) => state?.getcart.data);
-
-  console.log(data, " extra pages");
-
+  const isLoadingCheck = useSelector((state) => state?.userCheckout?.loading);
+  // console.log(isLoadingCheck);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCardOpen, setIsCardOpen] = useState(false);
@@ -79,7 +81,7 @@ const Shopping = () => {
     setIsModalOpen(true);
   };
   const handleOpenCard = async () => {
-    console.log(walletType, "walletType");
+    // console.log(walletType, "walletType");
 
     if (!window.localStorage.getItem("user")) {
       toast.info("Please sign in first ");
@@ -91,24 +93,24 @@ const Shopping = () => {
         handleCloseModal();
         return;
       }
-      const orderNumber = localStorage.getItem("order_Number");
+      const orderNumber = localStorage.getItem(order_number);
       const data = {
         wallet_type: walletType.toLowerCase(),
         subscription: 0,
         order_number: orderNumber,
       };
       const res = await dispatch(checkOutCart(data));
-      console.log(res);
+      // console.log(res);
       if (res.payload.success) {
         toast.success(res.payload.message);
-        localStorage.removeItem("order_Number");
+        localStorage.removeItem(order_number);
         navigate("/");
       } else {
         toast.error("Something went wrong");
       }
       handleCloseModal();
     } else {
-      const orderNumber = localStorage.getItem("order_Number");
+      const orderNumber = localStorage.getItem(order_number);
       const data = {
         wallet_type: walletType.substring(0, 6).toLowerCase().trim(),
         subscription: 0,
@@ -130,7 +132,25 @@ const Shopping = () => {
     setWalletType(event.target.value);
   };
 
-  console.log("cartData", cartData);
+  const handleCheckout = async () => {
+    const orderNumber = localStorage.getItem(order_number);
+    if (!window.localStorage.getItem("user")) {
+      toast.info("Please sign in first ");
+      navigate("/signin");
+    }
+    const data = {
+      wallet_type: "online",
+      subscription: 0,
+      order_number: orderNumber,
+    };
+    const res = await dispatch(checkOutCart(data));
+    if (res.payload.success) {
+      navigate(
+        `/billing-detail/${res.payload.data.order.trx}/${res.payload.data.publishable_keys.stripe}`
+      );
+    }
+  };
+
   return (
     <>
       <Box mt={3}>
@@ -250,10 +270,14 @@ const Shopping = () => {
                             </Typography>
                           </Box>
                         </Box>
-                        <Box>
+                        <Box mt={2}>
                           <Typography
+                            mb={2}
                             sx={{
-                              textAlign: "center",
+                              fontSize: "1.6rem",
+                              color: "#2697fa",
+                              marginLeft: { md: "7rem", xs: "0rem" },
+                              fontFamily: "Be Vietnam Pro,sans-serif",
                             }}
                           >
                             Extra Bumps
@@ -262,107 +286,78 @@ const Shopping = () => {
                           {item?.bumpresponses?.map((bumpResponse, index) => (
                             <div key={index}>
                               <>
-                                <Box sx={Styles.extraBumps}>
-                                  <Typography sx={Styles.extraBumpsTypo}>
-                                    Name
-                                  </Typography>
-                                  <Typography sx={Styles.extraBumpsTypo}>
-                                    {bumpResponse.bump.name}
-                                  </Typography>
-                                </Box>
-                                <Box sx={Styles.extraBumps}>
-                                  <Typography sx={Styles.extraBumpsTypo}>
-                                    Price
-                                  </Typography>
-                                  <Typography sx={Styles.extraBumpsTypo}>
-                                    {Number(bumpResponse.price).toFixed(2)}
+                                <Box
+                                  sx={{
+                                    ...Styles.productBumps,
+                                  }}
+                                >
+                                  <Box
+                                    display="flex"
+                                    sx={{
+                                      alignItems: "center",
+                                      gap: 1,
+                                      marginLeft: { md: "7rem", xs: "0rem" },
+                                    }}
+                                  >
+                                    <ImCheckboxChecked />
+
+                                    <Box>
+                                      <Box>{bumpResponse.bump.name}</Box>
+                                    </Box>
+                                  </Box>
+
+                                  {bumpResponse.pages ? (
+                                    <>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          gap: 2,
+                                        }}
+                                      >
+                                        <Typography
+                                          sx={{
+                                            fontSize: {
+                                              md: "1.4rem",
+                                              xs: "16px",
+                                            },
+                                          }}
+                                        >
+                                          Qty
+                                        </Typography>
+                                        <input
+                                          type="number"
+                                          value={bumpResponse.pages}
+                                          style={{
+                                            width: "70px",
+                                          }}
+                                        />
+                                        <Typography
+                                          sx={{
+                                            fontSize: {
+                                              md: "1.4rem",
+                                              xs: "16px",
+                                            },
+                                          }}
+                                        >
+                                          Price
+                                        </Typography>
+                                      </Box>
+                                    </>
+                                  ) : null}
+
+                                  <Typography
+                                    sx={{
+                                      ...Styles.detailsText,
+                                      textAlign: "right",
+                                    }}
+                                  >
+                                    $ {Number(bumpResponse.price).toFixed(2)}
                                   </Typography>
                                 </Box>
                               </>
-                              {bumpResponse.pages ? (
-                                <>
-                                  <Box sx={Styles.extraBumps}>
-                                    <Typography sx={Styles.extraBumpsTypo}>
-                                      Pages
-                                    </Typography>
-                                    <Typography sx={Styles.extraBumpsTypo}>
-                                      {bumpResponse.pages}
-                                    </Typography>
-                                  </Box>
-                                </>
-                              ) : null}
                             </div>
                           ))}
-
-                          {/* {zeroPages ? (
-                            <>
-                              <Box sx={Styles.extraBumps}>
-                                <Typography sx={Styles.extraBumpsTypo}>
-                                  Name
-                                </Typography>
-                                <Typography sx={Styles.extraBumpsTypo}>
-                                  {zeroPagesName}
-                                </Typography>
-                              </Box>
-                              <Box sx={Styles.extraBumps}>
-                                <Typography sx={Styles.extraBumpsTypo}>
-                                  Price
-                                </Typography>
-                                <Typography sx={Styles.extraBumpsTypo}>
-                                  {Number(zeroPagesPrice).toFixed(2)}
-                                </Typography>
-                              </Box>
-                            </>
-                          ) : sixPages ? (
-                            <>
-                              <Box sx={Styles.extraBumps}>
-                                <Typography sx={Styles.extraBumpsTypo}>
-                                  Name
-                                </Typography>
-                                <Typography sx={Styles.extraBumpsTypo}>
-                                  {sixPagesName}
-                                </Typography>
-                              </Box>
-                              <Box sx={Styles.extraBumps}>
-                                <Typography sx={Styles.extraBumpsTypo}>
-                                  Pages
-                                </Typography>
-                                <Typography sx={Styles.extraBumpsTypo}>
-                                  {sixPages}
-                                </Typography>
-                              </Box>
-                              <Box sx={Styles.extraBumps}>
-                                <Typography sx={Styles.extraBumpsTypo}>
-                                  Price
-                                </Typography>
-                                <Typography sx={Styles.extraBumpsTypo}>
-                                  {Number(sixPagesPrice).toFixed(2)}
-                                </Typography>
-                              </Box>
-                            </>
-                          ) : null} */}
-
-                          {/* <Box sx={Styles.extraBumps}>
-                            //{" "}
-                            <Typography sx={Styles.extraBumpsTypo}>
-                              // Name //{" "}
-                            </Typography>
-                            //{" "}
-                            <Typography sx={Styles.extraBumpsTypo}>
-                              // name of quantity //{" "}
-                            </Typography>
-                          </Box>
-
-                          <Box sx={Styles.extraBumps}>
-                            //{" "}
-                            <Typography sx={Styles.extraBumpsTypo}>
-                              // Quantity //{" "}
-                            </Typography>
-                            //{" "}
-                            <Typography sx={Styles.extraBumpsTypo}>
-                              // 2 //{" "}
-                            </Typography>
-                          </Box> */}
                         </Box>
                       </CardContent>
                     </Card>
@@ -387,11 +382,12 @@ const Shopping = () => {
                     <Typography sx={Styles.total}>Your Cart Total</Typography>
                     <Typography sx={Styles.price}>US$ {totalPrice}</Typography>
                     <Button
-                      onClick={handleOpenModal}
+                      onClick={handleCheckout}
                       sx={Styles.checkOut}
                       variant="contained"
+                      disabled={isLoadingCheck}
                     >
-                      Check out
+                      {isLoadingCheck ? "Checking out" : "Check out"}
                     </Button>
                   </CardContent>
                 </Box>

@@ -8,8 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import { CiUser } from "react-icons/ci";
-import { getProfileData, storageKey } from "../../Redux/api/api";
+import { getProfileData } from "../../Redux/api/api";
 import { useDispatch, useSelector } from "react-redux";
+import { storageKey } from "../../Const/CONST";
 import { resetSuccessSignin } from "../../Redux/Slice/signin";
 import { useNavigate } from "react-router-dom";
 import { RiArrowDropDownLine } from "react-icons/ri";
@@ -20,7 +21,7 @@ const settings = [
   "Dashboard",
   "Change Password",
   "Purchase History",
-  "Logout",
+  "Sign out",
 ];
 const Useravatar = ({
   setUserLogged,
@@ -41,7 +42,7 @@ const Useravatar = ({
       case "Profile":
         break;
 
-      case "Logout":
+      case "Sign out":
         localStorage.removeItem(storageKey);
         setUserLogged(false);
         dispatch(resetSuccessSignin());
@@ -97,13 +98,14 @@ const Useravatar = ({
             onClose={handleCloseUserMenu}
           >
             {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                <Typography
-                  textAlign="center"
-                  onClick={() => handleUserAvatar(setting)}
-                >
-                  {setting}
-                </Typography>
+              <MenuItem
+                key={setting}
+                onClick={() => {
+                  handleUserAvatar(setting);
+                  handleCloseUserMenu();
+                }}
+              >
+                <Typography textAlign="center">{setting}</Typography>
               </MenuItem>
             ))}
           </Menu>

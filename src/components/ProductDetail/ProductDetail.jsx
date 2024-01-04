@@ -25,6 +25,8 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Carousel from "react-multi-carousel";
+import { order_number as orderNumber } from "../../Const/CONST";
+
 import "react-multi-carousel/lib/styles.css";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
@@ -264,7 +266,7 @@ const ProductDetail = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const order_number = window.localStorage.getItem("order_Number");
+    const order_number = window.localStorage.getItem(orderNumber);
     if (product?.bumps?.length > 0) {
       // const formData = {
       //   _token: "BNiq5lIb9RM11nI6MvODcZCcWMyksqkayrN0A3G0",
@@ -471,15 +473,6 @@ const ProductDetail = () => {
                               gap: 2,
                             }}
                           >
-                            <PiShoppingCartLight
-                              style={{
-                                padding: "0.6rem",
-                                border: "1px solid #787878",
-                                borderRadius: "2px",
-                                color: "#787878",
-                              }}
-                            />
-
                             <a href={item.demo_link} target="_blank">
                               <Button sx={styles.BtnStyle}>Live Preview</Button>
                             </a>

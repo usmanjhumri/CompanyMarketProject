@@ -24,7 +24,8 @@ import Colors from "../colors";
 import ResponsiveDrawer from "./Drawer/ResponsiveDrawer";
 import { Fragment } from "react";
 import Useravatar from "./Useravatar";
-import { getProfileData, storageKey } from "../../Redux/api/api";
+import { getProfileData } from "../../Redux/api/api";
+import { storageKey } from "../../Const/CONST";
 import "./Header.css";
 import { RiArrowDropDownLine } from "react-icons/ri";
 const navItems = [
@@ -171,9 +172,9 @@ const Header = () => {
       width: "auto",
     },
   }));
-  const handleopenDropDownMenue = () => {
-    console.log("working");
-  };
+  // const handleopenDropDownMenue = () => {
+  //   console.log("working");
+  // };
   return (
     <>
       {/* upper header code  */}
@@ -246,77 +247,7 @@ const Header = () => {
                   </Link>
                 </LightTooltip>
               </Box>
-              {/* <Box
-                sx={style.cartBox}
-                aria-owns={openCartPopup ? "mouse-over-popover" : undefined}
-                aria-haspopup="true"
-                onMouseEnter={handlePopoverOpenCart}
-                onClick={handleChangeRouteToCart}
-              >
-                <Link
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                  to="/cart"
-                >
-                  <PiShoppingCartLight style={style.cartIcon} />
 
-                  <Typography sx={style.cartTypo}>
-                    {totalProducts?.length}
-                  </Typography>
-                </Link>
-                <Popover
-                  open={openCartPopup}
-                  anchorEl={anchorElCart}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "center",
-                  }}
-                  onClose={handlePopoverCloseCart}
-                  sx={{ mt: 1, zIndex: 10000 }}
-                  onClick={handlePopoverCloseCart}
-                >
-                  {totalProducts?.map((item, index) => (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        width: "100%",
-                      }}
-                      key={index}
-                    >
-                      <Typography
-                        sx={{ padding: "10px", ...style.popoverProduct }}
-                        onMouseLeave={handlePopoverCloseCart}
-                      >
-                        {item.product?.name}
-                      </Typography>
-                      <Typography
-                        sx={{ padding: "10px" }}
-                        onMouseLeave={handlePopoverCloseCart}
-                      >
-                        ${Number(item.total_price).toFixed(2)}
-                      </Typography>
-                    </Box>
-                  ))}
-                  {totalProducts.length === 0 && (
-                    <Typography
-                      sx={{ padding: "10px" }}
-                      onMouseLeave={handlePopoverCloseCart}
-                    >
-                      There is no product in the cart.
-                    </Typography>
-                  )}
-                </Popover>
-              </Box> */}
               {userLogged ? (
                 <>
                   <Box

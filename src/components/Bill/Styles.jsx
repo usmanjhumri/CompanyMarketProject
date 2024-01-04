@@ -1,7 +1,6 @@
 const BillStyle = {
   mainBox: {
     height: "80vh",
-    marginTop: "40px",
   },
   boxHead: {
     border: "1px solid  #D9D9D9",
@@ -13,8 +12,9 @@ const BillStyle = {
   },
   billingDetailCard: {
     minWidth: 275,
-    width: "50%",
+    width: "100%",
     background: "#F8F9FA",
+    marginLeft: 10,
   },
 
   billingDetailTypo: {
@@ -30,7 +30,8 @@ const BillStyle = {
     alignItems: "center",
   },
   cardHis: {
-    width: "50%",
+    width: "100%",
+    marginLeft: 10,
     minWidth: 275,
   },
   boxHis: {

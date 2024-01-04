@@ -36,6 +36,7 @@ import {
 import ProfileSetting from "./components/ProfileSettings";
 import Dashboard from "./components/Dashboard/Dashboard";
 import PurchaseHistory from "./components/PurchaseHistory/PurchaseHistory";
+import { order_number } from "./Const/CONST";
 function App() {
   const navigate = useNavigate();
   const [orderNumber, setOrderNumber] = useState("");
@@ -45,13 +46,17 @@ function App() {
   const isLoading = useSelector((state) => state?.home?.isLoading);
 
   React.useEffect(() => {
-    dispatch(fetchHomeData());
-    setOrderNumber(window.localStorage.getItem("order_Number"));
+    setOrderNumber(window.localStorage.getItem(order_number));
 
     if (orderNumber) {
       dispatch(getCart(orderNumber));
     }
-  }, [dispatch, orderNumber]);
+  }, [orderNumber]);
+
+  React.useEffect(() => {
+    const getHomeData = () => dispatch(fetchHomeData());
+    return () => getHomeData();
+  }, []);
 
   React.useEffect(() => {
     const handleBeforeUnload = (event) => {
@@ -110,6 +115,7 @@ function App() {
               <Route element={<ProtectedRoutes />}>
                 <Route path="/signin" element={<Signin />} />
               </Route>
+              <Route path="/forget" element={<ForgotPassword />} />
 
               <Route element={<SignUpProtectedRouts />}>
                 <Route path="/signup" element={<Signup />} />
@@ -128,9 +134,12 @@ function App() {
                 <Route path="/profile-setting" element={<ProfileSetting />} />
               </Route>
 
-              <Route path="/forget" element={<ForgotPassword />} />
               <Route element={<ProtectedRoutesBeforeLoggedIn />}>
-                <Route exact path="/billing-detail" element={<BillDetail />} />
+                <Route
+                  exact
+                  path="/billing-detail/:trx/:publishable_key"
+                  element={<BillDetail />}
+                />
               </Route>
               <Route element={<ProtectedRoutesBeforeLoggedIn />}>
                 <Route

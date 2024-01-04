@@ -28,7 +28,7 @@ const forgotPasswordSlice = createSlice({
     });
     // eslint-disable-next-line no-unused-vars
     builder.addCase(forgotPassword.rejected, (state, action) => {
-      state.errorMessage = action.error.message;
+      state.errorMessage = action.payload || action.error.message;
       state.isError = true;
       state.isLoading = false;
     });

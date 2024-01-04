@@ -28,9 +28,10 @@ import { FcGoogle } from "react-icons/fc";
 import { BsApple } from "react-icons/bs";
 import { BsFacebook } from "react-icons/bs";
 import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
-import { createUser } from "../../Redux/Slice/AuthSignup";
+// import { createUser } from "../../Redux/Slice/AuthSignup";
+import { signUp } from "../../Redux/api/api";
 import { useDispatch, useSelector } from "react-redux";
-
+import { order_number } from "../../Const/CONST";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -45,11 +46,13 @@ const initialValues = {
   password_confirmation: "",
   country_code: "",
   country: "",
+  order_number: "",
 };
 const handleOtpChange = (otp) => {
   setOtp(otp);
 };
 export default function Signup({ setIsLoggedIn }) {
+  const [id, setID] = useState("");
   const dispatch = useDispatch();
   const loading = useSelector((state) => state?.app?.loading);
   const [phone, setPhone] = useState("");
@@ -86,26 +89,39 @@ export default function Signup({ setIsLoggedIn }) {
       validationSchema: signupSchema,
 
       onSubmit: async (values, actions) => {
+        const Order = localStorage.getItem("order_Number");
+        values.order_number = Order ? Order : "";
+
+        console.log(values, actions, "working");
+
         const encodedPassword = btoa(values.password);
         values.password = encodedPassword;
         const encodedConfirm = btoa(values.password_confirmation);
         values.password_confirmation = encodedConfirm;
 
-        // console.log(values, actions);
-        if (vaildPhoneNumber) {
-          const registerResult = await dispatch(createUser(values));
-          if (registerResult.payload.success) {
-            toast.success(registerResult.payload.message);
+        // Assuming vaildPhoneNumber is a function that checks the validity of the phone number
+        if (vaildPhoneNumber(values.phone)) {
+          const orderNumber = localStorage.getItem("order_number"); // Corrected the key name
+          values.order_number = orderNumber ? orderNumber : "";
 
-            navigate("/signin");
+          try {
+            const registerResult = await dispatch(signUp(values));
+            if (registerResult.payload.success) {
+              toast.success(registerResult.payload.message);
+              // Assuming you want to navigate after successful registration
+              // You can uncomment the following line and replace "/signin" with the desired route
+              // navigate("/signin");
+            } else {
+              toast.error(registerResult.payload.message);
+            }
+          } catch (error) {
+            // Handle registration error, e.g., display an error message and reset the form
+            toast.error("An error occurred during registration");
+            actions.resetForm();
           }
-          registerResult.error && registerResult.error.message === "Rejected"
-            ? (toast.error(registerResult.payload.message), actions.resetForm())
-            : null;
         } else {
           toast.error("Please check your phone number");
         }
-        // console.log(registerResult, "action");
       },
     });
 
@@ -151,7 +167,7 @@ export default function Signup({ setIsLoggedIn }) {
                   Sign up
                 </Typography>
               </Box>
-              <Button
+              {/* <Button
                 variant="outlined"
                 startIcon={<FcGoogle size={30} />}
                 sx={{ ...styles.btnLoginWith }}
@@ -171,7 +187,7 @@ export default function Signup({ setIsLoggedIn }) {
                 sx={{ ...styles.btnLoginWith }}
               >
                 Continue with Apple
-              </Button>
+              </Button> */}
 
               <form
                 onSubmit={handleSubmit}
@@ -380,7 +396,8 @@ export default function Signup({ setIsLoggedIn }) {
                     ),
                   }}
                 />
-                {errors.confirmpassword && touched.confirmpassword ? (
+                {errors.password_confirmation &&
+                touched.password_confirmation ? (
                   <p
                     style={{
                       color: "red",
@@ -389,7 +406,7 @@ export default function Signup({ setIsLoggedIn }) {
                       fontSize: "14px",
                     }}
                   >
-                    {errors.confirmpassword}
+                    {errors.password_confirmation}
                   </p>
                 ) : null}
 

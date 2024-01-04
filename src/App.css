@@ -8,6 +8,12 @@
   padding-top: 64px;
   /* Adjust this value based on your Header height */
 }
+.MuiOutlinedInput-input,
+.MuiInputBase-input,
+.Mui-focused {
+  box-shadow: none;
+  border-radius: none;
+}
 
 body {
   font-family: "Be Vietnam Pro", sans-serif;
@@ -35,8 +41,6 @@ body {
   display: "none";
 }
 
-/* signup phone field css */
-
 .PhoneInputInput {
   border-top: 0px;
   border-left: 0px;
@@ -45,14 +49,11 @@ body {
 
   &::placeholder {
     color: #999;
-    /* Adjust the color as needed */
   }
 
   &:focus {
     outline: none;
-    /* Remove default focus outline */
     border-bottom: 1px solid #222222;
-    /* Change the border color on focus */
   }
   #phoneNumber {
     border: "none" !important;
@@ -60,7 +61,6 @@ body {
   }
 }
 
-/* signup phone field css */
 .Toastify__toast-container {
   z-index: 100000 !important;
 }

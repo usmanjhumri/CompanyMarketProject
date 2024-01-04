@@ -25,6 +25,7 @@ import useResponsiveFontSize from "./useResponsiveFontSize";
 import { paymentStripe, getCart } from "../../Redux/api/api";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { order_number } from "../../Const/CONST";
 const useOptions = () => {
   const fontSize = useResponsiveFontSize();
   const options = useMemo(
@@ -84,14 +85,14 @@ function Checkoutstrip() {
       data.append("track", trx);
       data.append("stripe_token", token.id);
       const res = await paymentStripe(data);
-      console.log(res.status === "succeeded");
-      if (res.status === "succeeded") {
+      console.log(res, "wow");
+      if (res.success) {
         toast.success("Payment has been processed");
         navigate("/");
-        const orderNumber = localStorage.getItem("order_Number");
+        const orderNumber = localStorage.getItem(order_number);
 
         dispatch(getCart(orderNumber));
-        localStorage.removeItem("order_Number");
+        localStorage.removeItem(order_number);
       } else {
         toast.error("Payment failed");
       }
@@ -107,7 +108,6 @@ function Checkoutstrip() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "80vh",
         width: "100%",
       }}
     >

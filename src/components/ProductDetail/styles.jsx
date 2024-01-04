@@ -204,8 +204,9 @@ const styles = {
   },
   ImgStyle: {
     width: "100%",
-
+    height: "200px",
     borderRadius: "2px, 2px, 0px, 0px",
+    objectFit: "cover",
   },
   BoxTypo: {
     fontWeight: 500,

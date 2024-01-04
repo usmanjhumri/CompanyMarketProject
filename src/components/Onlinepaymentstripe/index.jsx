@@ -7,8 +7,8 @@ import { useSelector } from "react-redux";
 import { Elements } from "@stripe/react-stripe-js";
 import Checkoutform from "./checkoutForm";
 import { useParams } from "react-router-dom";
-function Checkoutstrip() {
-  const { publishable_key } = useParams();
+function Checkoutstrip({ publishable_key, trx }) {
+  console.log(publishable_key, "stripe");
   const [stripePromise, setStripePromise] = useState(null);
   useEffect(() => {
     setStripePromise(loadStripe(publishable_key));

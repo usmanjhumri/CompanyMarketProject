@@ -26,7 +26,7 @@ const getProfilesDatas = createSlice({
         state.isLoading = true;
       })
       .addCase(getProfileData.fulfilled, (state, action) => {
-        // console.log(action.payload, " getProfileData");
+        console.log(action.payload, " getProfileData");
         state.isLoading = false;
         state.isError = false;
         state.success = true;

@@ -8,6 +8,7 @@ import FeatureProducts from "../FeatureProducts";
 import Slider from "./Slider";
 import MostSoldProduct from "../MostSoldProduct/MostSoldProducts";
 import { useNavigate } from "react-router-dom";
+import "./Home.css";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -53,6 +54,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       width: "20ch",
     },
   },
+  "& .Mui-focused": {
+    boxShadow: "none",
+  },
 }));
 
 const Home = () => {
@@ -88,6 +92,7 @@ const Home = () => {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              className="styledinput"
               value={searchProducts}
               placeholder="(E’g Responsive Landing Pages and Websites)"
               inputProps={{ "aria-label": "search" }}

@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import { profileSuccessData } from "../../Redux/Slice/sendProfileData";
 import Skeletoncard from "../Skeletoncard/Skeletoncard";
 import Skeleton from "react-loading-skeleton";
+import "./profile.css";
 const ProfileSetting = () => {
   const {
     profileData,
@@ -43,6 +44,7 @@ const ProfileSetting = () => {
     state: "",
     zipCode: "",
     city: "",
+    country: "",
   });
   // base_url + image  + cover_image
   const [inputFocusDescription, setInputFocusDescription] = useState(false);
@@ -328,20 +330,23 @@ const ProfileSetting = () => {
                           Edit
                         </Typography>
                       </Box>
-
-                      <OutlinedInput
-                        inputRef={inputRefs[fieldName]}
-                        autoFocus={inputFocus[fieldName]}
-                        placeholder={
-                          fieldName.charAt(0).toUpperCase() +
-                            fieldName.slice(1) || <Skeleton width={150} />
-                        }
-                        value={inputValues[fieldName]}
-                        onChange={(e) => handleInputChangeValue(fieldName, e)}
-                        size="small"
-                        sx={profileStyles.inputStyle}
-                        disabled={disable !== fieldName}
-                      />
+                      {isLoading ? (
+                        <Skeleton variant="text" animation="wave" width={150} />
+                      ) : (
+                        <OutlinedInput
+                          inputRef={inputRefs[fieldName]}
+                          autoFocus={inputFocus[fieldName]}
+                          placeholder={
+                            fieldName.charAt(0).toUpperCase() +
+                              fieldName.slice(1) || <Skeleton width={150} />
+                          }
+                          value={inputValues[fieldName]}
+                          onChange={(e) => handleInputChangeValue(fieldName, e)}
+                          size="small"
+                          sx={profileStyles.inputStyle}
+                          disabled={disable !== fieldName}
+                        />
+                      )}
                     </FormControl>
                   </Grid>
                 ))}

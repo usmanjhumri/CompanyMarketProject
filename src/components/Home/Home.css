@@ -1,0 +1,8 @@
+.inputBase .MuiInputBase-input {
+  border-radius: none;
+  box-shadow: none;
+}
+.inputBase .Mui-focused {
+  border-radius: none;
+  box-shadow: none;
+}

@@ -30,7 +30,8 @@ const Styles = {
   },
   ImgStyle: {
     width: "100%",
-
+    height: "200px",
+    objectFit: "cover",
     borderRadius: "2px, 2px, 0px, 0px",
   },
   BoxTypo: {

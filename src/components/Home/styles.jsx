@@ -166,7 +166,7 @@ const styles = {
     textAlign: "center",
     marginTop: "50px",
     fontFamily: "Be Vietnam Pro,sans-serif",
-    color: "black",
+    color: Colors.primary,
     fontWeight: "500",
     "@media (max-width: 500px)": {
       // Adjust styles for screens with a minimum width of 960px

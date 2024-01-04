@@ -7,7 +7,7 @@ const AuthStyle = {
   AuthTypo: {
     fontWeight: 600,
     fontSize: { md: "32px", xs: "20px" },
-    color: "#000000",
+    color: Colors.primary,
     fontFamily: "Be Vietnam Pro , sans-serif",
     lineHeight: "35.06px",
     textAlign: "center",
@@ -41,7 +41,7 @@ const AuthStyle = {
     textAlign: "left",
     "@media (min-width: 900px)": {
       fontSize: "15px",
-      fontWeight:600,
+      fontWeight: 600,
     },
   },
   BoxTypo2: {

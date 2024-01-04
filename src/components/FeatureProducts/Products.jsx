@@ -1,4 +1,4 @@
-import IMG from "../../assets/AuthItems.png";
+'import IMG from "../../assets/AuthItems.png";
 
 const Products = [
   {

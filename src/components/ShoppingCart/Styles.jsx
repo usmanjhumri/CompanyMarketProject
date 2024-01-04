@@ -1,7 +1,7 @@
 import colors from "../colors";
 export const Styles = {
   ShoppingHead: {
-    color: colors.black,
+    color: colors.primary,
     fontFamily: "Be Vietnam",
     fontSize: "40px",
     fontWeight: "500",
@@ -201,6 +201,13 @@ export const Styles = {
   },
   extraBumpsTypo: {
     fontSize: "14px",
+  },
+  productBumps: {
+    p: 0,
+    mt: 0,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 };
 

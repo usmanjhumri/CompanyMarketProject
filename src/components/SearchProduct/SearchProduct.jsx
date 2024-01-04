@@ -21,7 +21,7 @@ import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
-
+import "./SearchProduct.css";
 // const names = [
 //   " Price ASC",
 //   " Price DESC",
@@ -139,6 +139,7 @@ const SearchProduct = () => {
           <Grid>
             <Typography sx={Styles.AuthTypo}>Search Products</Typography>
             <Box
+              className="inputBaseStyle"
               sx={{
                 margin: "1rem 0",
                 display: "flex",
@@ -157,9 +158,7 @@ const SearchProduct = () => {
                   "&:hover": {
                     backgroundColor: "rgba(255, 255, 255, 0.9)",
                   },
-                  ".Mui-focused": {
-                    boxShadow: "none !important",
-                  },
+
                   marginLeft: "0",
                   width: "70ch",
                   [theme.breakpoints.down("md")]: {

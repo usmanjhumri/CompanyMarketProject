@@ -1,18 +1,21 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-export const apiUrl = "https://marketplace.jdfunnel.com/api/";
-export const authLoginApi = "https://marketplace.jdfunnel.com/api/auth/sign-in";
-export const storageKey = "user";
+import { api_base_URL, storageKey, order_number } from "../../Const/CONST";
+
 ///Home API Started
 export const fetchHomeData = createAsyncThunk("fetchHomeData", async () => {
-  const res = await axios.get(`${apiUrl}homepage`);
-  return res.data;
+  try {
+    const res = await axios.get(`${api_base_URL}homepage`);
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 export const fetchAllProducts = createAsyncThunk(
   "fetchAllProducts",
   async function ({ minPrice, maxPrice, checkCatName, orderBy, searchValue }) {
-    const res = await axios.get(`${apiUrl}product/filtered/data`, {
+    const res = await axios.get(`${api_base_URL}product/filtered/data`, {
       params: {
         min: minPrice,
         max: maxPrice,
@@ -29,7 +32,7 @@ export const fetchAllProducts = createAsyncThunk(
 export const fetchSearchProducts = createAsyncThunk(
   "fetchSearchProducts",
   async function ({ minPrice, maxPrice, checkCatName, orderBy }) {
-    const res = await axios.get(`${apiUrl}product/filtered/data`, {
+    const res = await axios.get(`${api_base_URL}product/filtered/data`, {
       params: {
         min: minPrice,
         max: maxPrice,
@@ -50,8 +53,7 @@ export const signIn = createAsyncThunk("signInReducer", async function (key) {
 
 ///Home API Ended
 
-/// Auth APi Started
-
+//Auth API Started
 export const changePassword = createAsyncThunk(
   "changePassword",
   async function (data, { rejectWithValue }) {
@@ -61,7 +63,7 @@ export const changePassword = createAsyncThunk(
       Authorization: `Bearer ${token}`,
     };
     try {
-      const res = await axios.post(`${apiUrl}password/change`, data, {
+      const res = await axios.post(`${api_base_URL}password/change`, data, {
         headers,
       });
       if (res) {
@@ -79,13 +81,21 @@ export const changePassword = createAsyncThunk(
 );
 export const forgotPassword = createAsyncThunk(
   "forgotPassword",
-  async function (data) {
+  async function (data, { rejectWithValue }) {
     const headers = {
       "Content-Type": "application/json",
     };
-    const res = await axios.post(`${apiUrl}auth/password/reset`, data, headers);
-    if (res) {
-      return res.data;
+    try {
+      const res = await axios.post(
+        `${api_base_URL}auth/password/reset`,
+        data,
+        headers
+      );
+      if (res) {
+        return res.data;
+      }
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
     }
   }
 );
@@ -96,7 +106,7 @@ export const resetPasswordVerify = async (data) => {
   };
   try {
     const res = await axios.post(
-      `${apiUrl}auth/password/update`,
+      `${api_base_URL}auth/password/update`,
       data,
       headers
     );
@@ -111,7 +121,7 @@ export const signInNew = createAsyncThunk(
   "signInReducer",
   async function (data, { rejectWithValue }) {
     try {
-      const res = await axios.post(`${apiUrl}auth/sign-in`, data);
+      const res = await axios.post(`${api_base_URL}auth/sign-in`, data);
       // console.log(res, " ressss");
       if (res) {
         const localStorageData = JSON.stringify({
@@ -121,6 +131,7 @@ export const signInNew = createAsyncThunk(
           balance: res?.data?.data?.balance,
         });
         window.localStorage.setItem(storageKey, localStorageData);
+        console.log(res.data);
         return res.data;
       }
     } catch (error) {
@@ -128,15 +139,30 @@ export const signInNew = createAsyncThunk(
     }
   }
 );
+
+export const signUp = createAsyncThunk(
+  "createUser",
+  async function (data, { rejectWithValue }) {
+    try {
+      const res = await axios.post(`${api_base_URL}auth/sign-up`, data);
+      if (res) {
+        localStorage.setItem("id", res.data.data.id);
+        return res.data;
+      }
+    } catch (e) {
+      return rejectWithValue(e.response.data);
+    }
+  }
+);
 /// Auth APi Ended
 
-//// Cart APi Started
+//// Cart & checkout APi Started
 export const deleteCart = createAsyncThunk(
   "deleteItem",
   async (id, { dispatch }) => {
     try {
-      const res = await axios.get(`${apiUrl}product/remove-cart/${id}`);
-      const existingOrderNumber = window.localStorage.getItem("order_Number");
+      const res = await axios.get(`${api_base_URL}product/remove-cart/${id}`);
+      const existingOrderNumber = window.localStorage.getItem(order_number);
 
       dispatch(getCart(existingOrderNumber));
       return res.data;
@@ -150,12 +176,15 @@ export const addToCart = createAsyncThunk(
   "addToCart",
   async function (productData, { dispatch, rejectWithValue }) {
     try {
-      const res = await axios.post(`${apiUrl}product/add-to-cart`, productData);
+      const res = await axios.post(
+        `${api_base_URL}product/add-to-cart`,
+        productData
+      );
       if (res) {
         const orderNumber = res.data.order_number;
-        const existingOrderNumber = window.localStorage.getItem("order_Number");
+        const existingOrderNumber = window.localStorage.getItem(order_number);
         if (!existingOrderNumber) {
-          window.localStorage.setItem("order_Number", orderNumber);
+          window.localStorage.setItem(order_number, orderNumber);
         }
         if (res.data) {
           dispatch(getCart(existingOrderNumber || orderNumber));
@@ -170,8 +199,13 @@ export const addToCart = createAsyncThunk(
 export const getCart = createAsyncThunk(
   "getCart",
   async function (orderNumber) {
-    const res = await axios.get(`${apiUrl}product/cart/${orderNumber}`);
-    return res.data;
+    try {
+      const res = await axios.get(`${api_base_URL}product/cart/${orderNumber}`);
+      console.log(res, " ss");
+      return res.data;
+    } catch (e) {
+      console.log(e);
+    }
   }
 );
 
@@ -179,7 +213,7 @@ export const productDetail = createAsyncThunk(
   "productDetail",
   async (params) => {
     const res = await axios.get(
-      `${apiUrl}product-details/${params.name}/${params.id}/fetch`
+      `${api_base_URL}product-details/${params.name}/${params.id}/fetch`
     );
     return res.data;
   }
@@ -188,36 +222,41 @@ export const productDetail = createAsyncThunk(
 export const checkOutCart = createAsyncThunk(
   "userCheckout",
   async function (data, { dispatch }) {
+    // console.log(data);
     const token = JSON.parse(localStorage.getItem(storageKey)).token;
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-
-    if (data.wallet_type === "own") {
-      const res = await axios.post(`${apiUrl}checkout`, data, { headers });
-      if (res.data.success) {
-        const newBalance = res.data.data.balance;
-        const fetchOldBalance = JSON.parse(localStorage.getItem(storageKey));
-        if (fetchOldBalance) {
-          fetchOldBalance.balance = newBalance;
-        }
-        localStorage.setItem(storageKey, JSON.stringify(fetchOldBalance));
-        const orderNumber = res.data.order_number;
-        const existingOrderNumber = window.localStorage.getItem("order_Number");
-        if (!existingOrderNumber) {
-          window.localStorage.setItem("order_Number", orderNumber);
-        }
-        if (res.data.success) {
-          dispatch(getCart(existingOrderNumber || orderNumber));
-        }
-        return res.data;
-      }
-    } else {
-      const res = await axios.post(`${apiUrl}checkout`, data, { headers });
-      if (res.data.success) {
-        return res.data;
-      }
+    const res = await axios.post(`${api_base_URL}checkout`, data, { headers });
+    if (res.data.success) {
+      return res.data;
     }
+
+    // if (data.wallet_type === "own") {
+    //   const res = await axios.post(`${api_base_URL}checkout`, data, { headers });
+    //   if (res.data.success) {
+    //     const newBalance = res.data.data.balance;
+    //     const fetchOldBalance = JSON.parse(localStorage.getItem(storageKey));
+    //     if (fetchOldBalance) {
+    //       fetchOldBalance.balance = newBalance;
+    //     }
+    //     localStorage.setItem(storageKey, JSON.stringify(fetchOldBalance));
+    //     const orderNumber = res.data.order_number;
+    //     const existingOrderNumber = window.localStorage.getItem(order_number);
+    //     if (!existingOrderNumber) {
+    //       window.localStorage.setItem(order_number, orderNumber);
+    //     }
+    //     if (res.data.success) {
+    //       dispatch(getCart(existingOrderNumber || orderNumber));
+    //     }
+    //     return res.data;
+    //   }
+    // } else {
+    //   const res = await axios.post(`${api_base_URL}checkout`, data, { headers });
+    //   if (res.data.success) {
+    //     return res.data;
+    //   }
+    // }
   }
 );
 
@@ -227,7 +266,7 @@ export const paymentProcess = async (data) => {
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-    const res = await axios.post(`${apiUrl}checkout/process`, data, {
+    const res = await axios.post(`${api_base_URL}checkout/process`, data, {
       headers,
     });
     return res.data.data;
@@ -243,8 +282,11 @@ export const paymentStripe = async (data) => {
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-    const res = await axios.post(`${apiUrl}payment/process`, data, { headers });
-    return res.data.data;
+    const res = await axios.post(`${api_base_URL}payment/process`, data, {
+      headers,
+    });
+    // console.log(res, "api");
+    return res.data;
   } catch (e) {
     return e;
   }
@@ -260,7 +302,7 @@ export const getProfileData = createAsyncThunk(
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-    const res = await axios.get(`${apiUrl}profile/setting`, { headers });
+    const res = await axios.get(`${api_base_URL}profile/setting`, { headers });
     // console.log(res.data, " response");
     return res.data;
   }
@@ -274,7 +316,7 @@ export const sendProfileData = createAsyncThunk(
       const headers = {
         Authorization: `Bearer ${token}`,
       };
-      const res = await axios.post(`${apiUrl}profile-setting`, data, {
+      const res = await axios.post(`${api_base_URL}profile-setting`, data, {
         headers,
       });
       // console.log(res.data, " res");
@@ -291,18 +333,19 @@ export const sendProfileData = createAsyncThunk(
 export const purchaseHistory = createAsyncThunk(
   "userpurchasehistory",
   async function () {
-    console.log("working with");
+    // console.log("working with");
     try {
       const token = JSON.parse(localStorage.getItem(storageKey)).token;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
-      const res = await axios.get(`${apiUrl}user/puchased-list`, { headers });
-      console.log(res.data.data, "res");
+      const res = await axios.get(`${api_base_URL}user/puchased-list`, {
+        headers,
+      });
+      // console.log(res.data.data, "res");
       return res.data.data;
     } catch (error) {
       console.log(error, "error purchase history");
-      return rejectWithValue(error.data.data);
     }
   }
 );

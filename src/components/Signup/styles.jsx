@@ -41,6 +41,7 @@ const styles = {
     fontStyle: "normal",
     fontWeight: 500,
     lineHeight: "normal",
+    color: Colors.primary,
   },
   btnLoginWith: {
     width: "85%",

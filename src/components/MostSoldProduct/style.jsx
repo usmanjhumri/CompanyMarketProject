@@ -8,7 +8,7 @@ const CategoriesStyle = {
   CategoryTypo: {
     fontWeight: 600,
     fontSize: { md: "32px", xs: "20px" },
-    color: "#000000",
+    color: colors.primary,
     fontFamily: "Be Vietnam Pro , sans-serif",
 
     textAlign: "center",
@@ -48,6 +48,8 @@ const CategoriesStyle = {
   ImgStyle: {
     width: "100%",
     borderRadius: "2px, 2px, 0px, 0px",
+    height: "200px", // Set the fixed height for all images (adjust as needed)
+    objectFit: "cover",
   },
   BoxTypo: {
     fontWeight: 500,

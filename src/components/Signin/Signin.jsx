@@ -17,18 +17,20 @@ import { useFormik } from "formik";
 import { signinSchema } from "./Regex";
 import { FaEyeSlash } from "react-icons/fa";
 import { useNavigate, Link as NavLink } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
-import { BsApple } from "react-icons/bs";
-import { BsFacebook } from "react-icons/bs";
+// import { FcGoogle } from "react-icons/fc";
+// import { BsApple } from "react-icons/bs";
+// import { BsFacebook } from "react-icons/bs";
 import styles from "./styles";
 import { toast } from "react-toastify";
 import { signInNew } from "../../Redux/api/api";
 import { useDispatch, useSelector } from "react-redux";
 import { resetSuccessSignin } from "../../Redux/Slice/signin";
+import { order_number } from "../../Const/CONST";
 
 const initialValues = {
   email: "",
   password: "",
+  order_number: "",
 };
 
 export default function Signin() {
@@ -64,6 +66,18 @@ export default function Signin() {
       initialValues: initialValues,
       validationSchema: signinSchema,
       onSubmit: (values) => {
+        const id = localStorage.getItem("id");
+        const order_Number = localStorage.getItem(order_number);
+        if (id) {
+          console.log(values.order_number, "whs");
+          values.order_number = id;
+        } else if (order_Number) {
+          values.order_number = order_Number;
+        } else {
+          values.order_number = "";
+        }
+        console.log(values, "whs");
+
         dispatch(signInNew(values))
           .then((res) => {
             if (res.payload.success) {
@@ -75,7 +89,7 @@ export default function Signin() {
                 pauseOnHover: true,
                 draggable: true,
               });
-              navigate("/");
+              navigate(-1);
             }
           })
           .catch((e) => e);
@@ -118,28 +132,29 @@ export default function Signin() {
                   Sign in
                 </Typography>
               </Box>
-              <Button
-                variant="outlined"
-                startIcon={<FcGoogle size={30} />}
-                sx={{ ...styles.btnLoginWith }}
-              >
-                Continue with Google
-              </Button>
-              <Button
-                variant="outlined"
-                startIcon={<BsFacebook size={30} color="#4762b4" />}
-                sx={{ ...styles.btnLoginWith }}
-              >
-                Continue with Apple
-              </Button>
-              <Button
-                variant="outlined"
-                startIcon={<BsApple size={30} />}
-                sx={{ ...styles.btnLoginWith }}
-              >
-                Continue with Apple
-              </Button>
-
+              {/* <Box>
+                <Button
+                  variant="outlined"
+                  startIcon={<FcGoogle size={30} />}
+                  sx={{ ...styles.btnLoginWith }}
+                >
+                  Continue with Google
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<BsFacebook size={30} color="#4762b4" />}
+                  sx={{ ...styles.btnLoginWith }}
+                >
+                  Continue with Facebook
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<BsApple size={30} />}
+                  sx={{ ...styles.btnLoginWith }}
+                >
+                  Continue with Apple
+                </Button>
+              </Box> */}
               <form onSubmit={handleSubmit} style={{ textAlign: "center" }}>
                 <Grid
                   container

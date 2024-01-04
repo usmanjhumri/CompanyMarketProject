@@ -8,16 +8,15 @@ const CardStyle = {
   CardTypo: {
     fontWeight: 600,
     fontSize: { md: "32px", xs: "20px" },
-    color: "#000000",
+    color: colors.black,
     fontFamily: "Be Vietnam Pro , sans-serif",
     marginTop: "20px",
-
     textAlign: "center",
   },
   CardTypo2: {
     fontWeight: 400,
     fontSize: { md: "16px", xs: "14px" },
-    color: "#000000",
+    color: colors.black,
     fontFamily: "Be Vietnam Pro , sans-serif",
     lineHeight: "23.38px",
     textAlign: "center",
@@ -31,13 +30,14 @@ const CardStyle = {
   },
   ImgStyle: {
     width: "100%",
-
+    height: "200px",
     borderRadius: "2px, 2px, 0px, 0px",
+    objectFit: "cover",
   },
   BoxTypo: {
     fontWeight: 500,
     fontSize: { md: "24px", xs: "18px" },
-    color: "#000000",
+    color: colors.black,
     fontFamily: "Be Vietnam Pro , sans-serif",
     lineHeight: "20.45px",
     textAlign: "left",
@@ -48,7 +48,7 @@ const CardStyle = {
   BoxTypo2: {
     fontWeight: 500,
     fontSize: { md: "14px", xs: "12px" },
-    color: "#000000",
+    color: colors.black,
     fontFamily: "Be Vietnam Pro , sans-serif",
     lineHeight: "20.45px",
     textAlign: "left",
@@ -79,7 +79,7 @@ const CardStyle = {
   },
   BtnStyle: {
     background: colors.primary,
-    color: "#FFFFFF",
+    color: colors.white,
     padding: "0.4rem 0.6rem",
     textTransform: "capitalize",
     ":hover": {
