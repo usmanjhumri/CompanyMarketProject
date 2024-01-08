@@ -24,7 +24,12 @@ import {
 import { IoCloseOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { deleteCart, checkOutCart } from "../../Redux/api/api";
+import {
+  deleteCart,
+  checkOutCart,
+  emptyCart,
+  getCart,
+} from "../../Redux/api/api";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import stripeimg from "../../assets/5f6f1d4bc69e71601117515.jpg";
@@ -38,11 +43,9 @@ import { ImCheckboxChecked } from "react-icons/im";
 const wallet = ["Own", "Online Payment"];
 const Shopping = () => {
   const cartData = useSelector((state) => state?.getcart?.data);
-  console.log(cartData, " cartData");
   const imgUrl = useSelector((state) => state?.home?.imgPath);
   const isLoading = useSelector((state) => state?.getcart?.isLoading);
   const isLoadingCheck = useSelector((state) => state?.userCheckout?.loading);
-  // console.log(isLoadingCheck);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCardOpen, setIsCardOpen] = useState(false);
@@ -81,8 +84,6 @@ const Shopping = () => {
     setIsModalOpen(true);
   };
   const handleOpenCard = async () => {
-    // console.log(walletType, "walletType");
-
     if (!window.localStorage.getItem("user")) {
       toast.info("Please sign in first ");
       navigate("/signin");
@@ -100,7 +101,6 @@ const Shopping = () => {
         order_number: orderNumber,
       };
       const res = await dispatch(checkOutCart(data));
-      // console.log(res);
       if (res.payload.success) {
         toast.success(res.payload.message);
         localStorage.removeItem(order_number);
@@ -151,6 +151,17 @@ const Shopping = () => {
     }
   };
 
+  const deleteAllProducts = async () => {
+    if (cartData[0].encrypted_order_number) {
+      const res = await emptyCart(cartData[0].encrypted_order_number);
+      if (res.status === "Success") {
+        toast.success(res.message);
+        dispatch(getCart());
+        localStorage.removeItem(order_number);
+      }
+    }
+  };
+
   return (
     <>
       <Box mt={3}>
@@ -190,6 +201,19 @@ const Shopping = () => {
                         Continue Shopping
                       </Button>
                     </Link>
+
+                    {cartData?.length > 0 && (
+                      <Button
+                        sx={{
+                          ...Styles.emptyCard,
+                          // width: { xs: "100%", md: "auto" },
+                        }}
+                        // variant="contained"
+                        onClick={deleteAllProducts}
+                      >
+                        Empty Cart
+                      </Button>
+                    )}
                   </Box>
                 </Card>
                 {cartData?.map((item, index) => (
@@ -226,7 +250,7 @@ const Shopping = () => {
 
                                 {/* <br /> */}
                                 <span style={Styles.byFunnel}>
-                                  By JD Funnel
+                                  By JD Funnel Marketplace
                                 </span>
                                 <br />
                                 <br />
@@ -271,17 +295,19 @@ const Shopping = () => {
                           </Box>
                         </Box>
                         <Box mt={2}>
-                          <Typography
-                            mb={2}
-                            sx={{
-                              fontSize: "1.6rem",
-                              color: "#2697fa",
-                              marginLeft: { md: "7rem", xs: "0rem" },
-                              fontFamily: "Be Vietnam Pro,sans-serif",
-                            }}
-                          >
-                            Extra Bumps
-                          </Typography>
+                          {item?.bumpresponses.length > 0 && (
+                            <Typography
+                              mb={2}
+                              sx={{
+                                fontSize: "16px",
+                                color: "#2697fa",
+                                marginLeft: { md: "7rem", xs: "0rem" },
+                                fontFamily: "Be Vietnam Pro,sans-serif",
+                              }}
+                            >
+                              Extra Bumps
+                            </Typography>
+                          )}
 
                           {item?.bumpresponses?.map((bumpResponse, index) => (
                             <div key={index}>
@@ -331,6 +357,7 @@ const Shopping = () => {
                                           style={{
                                             width: "70px",
                                           }}
+                                          disabled={true}
                                         />
                                         <Typography
                                           sx={{

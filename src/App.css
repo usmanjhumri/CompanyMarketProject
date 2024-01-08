@@ -102,3 +102,13 @@ input:focus,
 .StripeElement.PaymentRequestButton {
   height: 40px;
 }
+.soldProduct .MuiTabs-flexContainer {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+@media (max-width: 1310px) {
+  .soldProduct .MuiTabs-flexContainer {
+    justify-content: start !important;
+  }
+}

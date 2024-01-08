@@ -1,10 +1,9 @@
 {
   "name": "market-portal",
-  "homepage": "https://staging.marketplace.jdfunnel.com/",
+  "homepage": "https://beta.marketplace.jdfunnel.com/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage":"https://staging.marketplace.jdfunnel.com/",
 
   "scripts": {
     "dev": "vite",

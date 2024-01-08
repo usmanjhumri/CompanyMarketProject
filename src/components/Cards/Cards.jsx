@@ -2,14 +2,22 @@
 /* eslint-disable react/prop-types */
 
 // import { PiShoppingCartLight } from "react-icons/pi";
+import { useEffect, useState } from "react";
 import { Box, Button, Grid, Typography, Container } from "@mui/material";
 import Styles from "./Styles";
 import SkeletonCard from "../Skeletoncard";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { order_number } from "../../Const/CONST";
 
 const Cards = ({ data, isLoading }) => {
   const imgPath = useSelector((state) => state?.home?.imgPath);
+  const [orderNumber, setOrderNumber] = useState("");
+  useEffect(() => {
+    const orderNumber = localStorage.getItem(order_number);
+    const id = localStorage.getItem("id");
+    setOrderNumber(id ? id : orderNumber ? orderNumber : "");
+  }, []);
   return (
     <Box sx={Styles.mainBox}>
       <Container maxWidth="100%">
@@ -20,7 +28,7 @@ const Cards = ({ data, isLoading }) => {
                 <Link
                   to={`/product/${item.category_id}/${item.name
                     .toLowerCase()
-                    .replace(/[\s-]/g, "-")}/${item.id}`}
+                    .replace(/[\s-]/g, "-")}/${item.id}/${orderNumber}`}
                   style={{ textDecoration: "none" }}
                 >
                   <Box sx={Styles.imgBoxDiv}>
@@ -36,7 +44,7 @@ const Cards = ({ data, isLoading }) => {
                   </Typography>
 
                   <Typography mt={1} sx={Styles.BoxTypo2}>
-                    By {item.user?.username}
+                    By {item?.user?.firstname}
                   </Typography>
 
                   <Box mt={2} sx={{ display: "flex", gap: 2 }}>

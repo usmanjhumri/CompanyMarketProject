@@ -123,7 +123,6 @@ const SearchProduct = () => {
     setInputSearch(searchItems);
   };
   const handleSearchBtn = () => {
-    // console.log(inputSearch);
     navigate(`/product/search?search=${inputSearch}`);
   };
   const handleSearchKey = (e) => {

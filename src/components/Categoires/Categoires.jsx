@@ -117,22 +117,6 @@ const Categoires = () => {
                   />
                 ))}
               </FormGroup>
-
-              {/* <Box
-                component="div"
-                sx={{ display: "flex", flexDirection: "column" }}
-              >
-                <Typography sx={Styles.SubCatHeading}>Price </Typography>
-              </Box> */}
-              {/* <Slider
-                value={priceRange}
-                onChange={handlePriceChange}
-                valueLabelDisplay="auto"
-                valueLabelFormat={`$ ${priceRange}`}
-                min={0}
-                max={1000}
-                sx={{ width: "70%" }}
-              /> */}
             </Box>
           )}
         </Grid>

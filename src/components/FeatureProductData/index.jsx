@@ -1,4 +1,4 @@
-import { Fragment, useState, useMemo } from "react";
+import { Fragment, useState, useMemo, useEffect } from "react";
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import { styled } from "@mui/material/styles";
 import { useRadioGroup } from "@mui/material/RadioGroup";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { order_number } from "../../Const/CONST";
 const StyledFormControlLabel = styled((props) => (
   <FormControlLabel {...props} />
 ))(({ theme, checked }) => ({
@@ -43,6 +43,14 @@ export default function index({ filterProduct, isLoading }) {
   const [value, setValue] = useState("");
 
   const imgPath = useSelector((state) => state?.home?.imgPath);
+
+  const [orderNumber, setOrderNumber] = useState("");
+
+  useEffect(() => {
+    const orderNumber = localStorage.getItem(order_number);
+    const id = localStorage.getItem("id");
+    setOrderNumber(id ? id : orderNumber ? orderNumber : "");
+  }, []);
 
   useMemo(() => {
     const subCat = filterProduct.reduce(
@@ -118,7 +126,7 @@ export default function index({ filterProduct, isLoading }) {
                   <Link
                     to={`/product/${item.category_id}/${item.name
                       .toLowerCase()
-                      .replace(/[\s-]/g, "-")}/${item.id}`}
+                      .replace(/[\s-]/g, "-")}/${item.id}/${orderNumber}`}
                     style={{ textDecoration: "none" }}
                   >
                     <Box component="div" sx={Styles.imgBoxDiv}>
@@ -135,7 +143,7 @@ export default function index({ filterProduct, isLoading }) {
                     </Typography>
 
                     <Typography mt={1} sx={Styles.BoxTypo2}>
-                      By {item.user.username}
+                      By {item?.user?.firstname}
                     </Typography>
 
                     <Box mt={2} sx={{ display: "flex", gap: 2 }}>

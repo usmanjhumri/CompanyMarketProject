@@ -6,7 +6,6 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import FooterStyle from "./styles";
 import { LiaCopyrightSolid } from "react-icons/lia";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Fragment } from "react";
 
 const Footer = () => {
@@ -38,34 +37,34 @@ const Footer = () => {
               padding: { md: "0px 2rem", xs: "auto" },
             }}
           >
-            <Grid item xs={6} md={3}>
+            <Grid item xs={6} md={4}>
               <Box>
                 <Typography variant="h3" sx={FooterStyle.Ftype}>
-                  JD Funnel MarketPlace
+                  JD Funnel Marketplace MarketPlace
                 </Typography>
                 <Fragment>
                   <Typography sx={FooterStyle.linkTypo}>
                     <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
-                    <Link href="/Insurance" sx={FooterStyle.link}>
+                    <NavLink to="/terms-conditions" style={FooterStyle.link}>
                       Terms
-                    </Link>
+                    </NavLink>
                   </Typography>
                   <Typography sx={FooterStyle.linkTypo}>
                     <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
-                    <Link href="/Insurance" sx={FooterStyle.link}>
+                    <Link href="#" sx={FooterStyle.link}>
                       Licenses
                     </Link>
                   </Typography>
                   <Typography sx={FooterStyle.linkTypo}>
                     <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
-                    <Link href="/Insurance" sx={FooterStyle.link}>
+                    <Link href="#" sx={FooterStyle.link}>
                       Become an affiliate
                     </Link>
                   </Typography>
                 </Fragment>
               </Box>
             </Grid>
-            <Grid item xs={6} md={3}>
+            <Grid item xs={6} md={4}>
               <Box>
                 <Typography variant="h3" sx={FooterStyle.Ftype}>
                   Help
@@ -73,47 +72,20 @@ const Footer = () => {
                 <Fragment>
                   <Typography sx={FooterStyle.linkTypo}>
                     <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
-                    <Link href="/Insurance" sx={FooterStyle.link}>
+                    <Link href="#" sx={FooterStyle.link}>
                       Help Center
                     </Link>
                   </Typography>
                   <Typography sx={FooterStyle.linkTypo}>
                     <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
-                    <Link href="/Insurance" sx={FooterStyle.link}>
+                    <Link href="#" sx={FooterStyle.link}>
                       Authors
                     </Link>
                   </Typography>
                 </Fragment>
               </Box>
             </Grid>
-            <Grid item xs={6} md={3}>
-              <Box>
-                <Typography variant="h3" sx={FooterStyle.Ftype}>
-                  Our Community
-                </Typography>
-                <Fragment>
-                  <Typography sx={FooterStyle.linkTypo}>
-                    <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
-                    <Link href="/Insurance" sx={FooterStyle.link}>
-                      Community
-                    </Link>
-                  </Typography>
-                  <Typography sx={FooterStyle.linkTypo}>
-                    <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
-                    <Link href="/Insurance" sx={FooterStyle.link}>
-                      Blog
-                    </Link>
-                  </Typography>
-                  <Typography sx={FooterStyle.linkTypo}>
-                    <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
-                    <Link href="/Insurance" sx={FooterStyle.link}>
-                      Forums
-                    </Link>
-                  </Typography>
-                </Fragment>
-              </Box>
-            </Grid>
-            <Grid item xs={6} md={3}>
+            <Grid item xs={6} md={4}>
               <Box>
                 <Typography variant="h3" sx={FooterStyle.Ftype}>
                   Meet Us
@@ -121,19 +93,19 @@ const Footer = () => {
                 <Fragment>
                   <Typography sx={FooterStyle.linkTypo}>
                     <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
-                    <Link href="/Insurance" sx={FooterStyle.link}>
+                    <NavLink to="/about" style={FooterStyle.link}>
                       About us
-                    </Link>
+                    </NavLink>
                   </Typography>
                   <Typography sx={FooterStyle.linkTypo}>
                     <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
-                    <Link href="/Insurance" sx={FooterStyle.link}>
+                    <NavLink to="/privacy-policy" style={FooterStyle.link}>
                       Privacy Policy
-                    </Link>
+                    </NavLink>
                   </Typography>
                   <Typography sx={FooterStyle.linkTypo}>
                     <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
-                    <Link href="/Insurance" sx={FooterStyle.link}>
+                    <Link href="#" sx={FooterStyle.link}>
                       Sitemap
                     </Link>
                   </Typography>
@@ -146,7 +118,7 @@ const Footer = () => {
       <Box sx={FooterStyle.copyRightStyle}>
         <Typography sx={FooterStyle.copyRightTypo}>
           Copyright <LiaCopyrightSolid /> 2023 | All Right Reserved By JD Funnel
-          Marketplace
+          Marketplace Marketplace
         </Typography>
       </Box>
     </>

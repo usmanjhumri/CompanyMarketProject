@@ -23,7 +23,6 @@ const signInSlice = createSlice({
       .addCase(signInNew.fulfilled, (state, action) => {
         // console.log(action.payload);
         let { email, username, token } = action.payload;
-        console.log(action.payload, "after condition");
         state.isLoading = false;
         state.isError = false;
         state.username = username;

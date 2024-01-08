@@ -8,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import { CiUser } from "react-icons/ci";
-import { getProfileData } from "../../Redux/api/api";
 import { useDispatch, useSelector } from "react-redux";
 import { storageKey } from "../../Const/CONST";
 import { resetSuccessSignin } from "../../Redux/Slice/signin";
@@ -33,10 +32,6 @@ const Useravatar = ({
   const navigate = useNavigate();
   const firstName = useSelector((state) => state?.getProfileData?.firstName);
 
-  useEffect(() => {
-    dispatch(getProfileData);
-  }, [dispatch]);
-
   const handleUserAvatar = (avatarmenu) => {
     switch (avatarmenu) {
       case "Profile":
@@ -57,6 +52,10 @@ const Useravatar = ({
         break;
       case "Purchase History":
         navigate("/purchase-history");
+        break;
+      case "Dashboard":
+        navigate("/dashboard");
+        break;
     }
   };
   return (

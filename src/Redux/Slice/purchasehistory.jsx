@@ -13,7 +13,6 @@ const purchaseHistorySlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(purchaseHistory.fulfilled, (state, action) => {
-      console.log(action, "isAction");
       state.isLoading = false;
       state.data = action.payload;
       state.isError = false;

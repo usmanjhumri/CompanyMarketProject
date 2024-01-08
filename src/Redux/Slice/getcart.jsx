@@ -16,7 +16,6 @@ const getCartItem = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getCart.fulfilled, (state, action) => {
-      console.log(action.payload, " action payload");
       state.isLoading = false;
       state.isError = false;
       state.errorMessage = "";

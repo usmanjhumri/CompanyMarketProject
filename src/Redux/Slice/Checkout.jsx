@@ -18,7 +18,6 @@ const userCheckout = createSlice({
         state.loading = true;
       })
       .addCase(checkOutCart.fulfilled, (state, action) => {
-        console.log("API Response:", action);
         state.loading = false;
         state.checkOut = action.payload?.user;
         state.pubKeb = action?.payload?.data?.publishable_keys?.stripe;

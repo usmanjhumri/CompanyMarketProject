@@ -16,7 +16,7 @@ import { FaRegEye } from "react-icons/fa";
 import { useFormik } from "formik";
 import { signinSchema } from "./Regex";
 import { FaEyeSlash } from "react-icons/fa";
-import { useNavigate, Link as NavLink } from "react-router-dom";
+import { useNavigate, Link as NavLink, useLocation } from "react-router-dom";
 // import { FcGoogle } from "react-icons/fc";
 // import { BsApple } from "react-icons/bs";
 // import { BsFacebook } from "react-icons/bs";
@@ -69,14 +69,12 @@ export default function Signin() {
         const id = localStorage.getItem("id");
         const order_Number = localStorage.getItem(order_number);
         if (id) {
-          console.log(values.order_number, "whs");
           values.order_number = id;
         } else if (order_Number) {
           values.order_number = order_Number;
         } else {
           values.order_number = "";
         }
-        console.log(values, "whs");
 
         dispatch(signInNew(values))
           .then((res) => {
@@ -89,8 +87,10 @@ export default function Signin() {
                 pauseOnHover: true,
                 draggable: true,
               });
-              navigate(-1);
             }
+            setTimeout(() => {
+              navigate(-1);
+            }, 200);
           })
           .catch((e) => e);
       },
@@ -167,6 +167,7 @@ export default function Signin() {
                       <Typography sx={{ paddingLeft: "30px" }}>
                         Username or Email
                       </Typography>
+
                       <Link>Remind me</Link>
                     </Box>
                     <TextField
@@ -179,17 +180,7 @@ export default function Signin() {
                       size="medium"
                     />
                     {errors.email && touched.email ? (
-                      <p
-                        style={{
-                          color: "red",
-                          margin: "0",
-                          paddingLeft: "30px",
-                          textAlign: "left",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {errors.email}
-                      </p>
+                      <p style={styles.errorP}>{errors.email}</p>
                     ) : null}
                   </Grid>
 
@@ -225,17 +216,7 @@ export default function Signin() {
                       sx={{ width: "90%" }}
                     />
                     {errors.password && touched.password ? (
-                      <p
-                        style={{
-                          color: "red",
-                          margin: "0",
-                          paddingLeft: "30px",
-                          textAlign: "left",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {errors.password}
-                      </p>
+                      <p style={styles.errorP}>{errors.password}</p>
                     ) : null}
                   </Grid>
 

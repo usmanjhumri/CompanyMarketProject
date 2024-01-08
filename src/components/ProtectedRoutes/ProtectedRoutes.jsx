@@ -15,5 +15,5 @@ export const SignUpProtectedRouts = () => {
 
 export const ProtectedRoutesBeforeLoggedIn = () => {
   const isLoggedIn = localStorage.getItem(storageKey);
-  return !isLoggedIn ? <Outlet /> : <Navigate to="/signin" replace />;
+  return isLoggedIn ? <Outlet /> : <Navigate to="/signin" replace />;
 };

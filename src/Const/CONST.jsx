@@ -6,3 +6,5 @@ export const api_base_URL = isStaging
 export const storageKey = "user";
 export const api_base_URL_iFrame =
   "https://staging.marketplace.jdfunnel.com/api/iframe/";
+
+export const id = "id";

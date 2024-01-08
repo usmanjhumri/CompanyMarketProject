@@ -28,7 +28,6 @@ const sendProfileDatas = createSlice({
         state.isError = false;
       })
       .addCase(sendProfileData.fulfilled, (state, action) => {
-        console.log(action.payload, " sendProfileData");
         state.isLoading = false;
         state.isError = false;
         state.success = true;
@@ -36,7 +35,6 @@ const sendProfileDatas = createSlice({
         state.imgPath = action.payload;
       })
       .addCase(sendProfileData.rejected, (state, action) => {
-        console.log(action.payload.message, " rejected action payload");
         state.isLoading = false;
         state.isError = true;
         state.success = false;

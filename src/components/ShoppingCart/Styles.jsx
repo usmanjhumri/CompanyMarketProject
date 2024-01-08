@@ -38,7 +38,7 @@ export const Styles = {
     },
   },
   emptyCard: {
-    color: "#fff",
+    color: "black",
     width: "104px",
     borderRadius: "4px",
     "&:hover": {

@@ -88,6 +88,28 @@ const styles = {
     "&&:hover": {
       background: Colors.secondary,
     },
+    formCenter: {
+      textAlign: "center",
+    },
+    currentPassword: {
+      paddingLeft: "30px",
+    },
+    currentPasswordError: {
+      color: "red",
+      margin: "0",
+      paddingLeft: "15px",
+      marginTop: "10px",
+      textAlign: "left",
+      fontSize: "14px",
+    },
+    errorsP: {
+      color: "red",
+      margin: "0",
+      paddingLeft: "30px",
+      marginTop: "10px",
+      textAlign: "left",
+      fontSize: "14px",
+    },
   },
 };
 export default styles;

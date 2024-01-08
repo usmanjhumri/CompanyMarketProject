@@ -90,5 +90,12 @@ const styles = {
       background: Colors.secondary,
     },
   },
+  errorP: {
+    color: "red",
+    margin: "0",
+    paddingLeft: "30px",
+    textAlign: "left",
+    fontSize: "14px",
+  },
 };
 export default styles;

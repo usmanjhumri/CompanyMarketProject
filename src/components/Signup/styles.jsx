@@ -90,5 +90,17 @@ const styles = {
       background: Colors.secondary,
     },
   },
+  errorsP: {
+    color: "red",
+    margin: "0",
+    marginBottom: "15px",
+    fontSize: "14px",
+  },
+  errorUername: {
+    color: "red",
+    margin: "0",
+    marginBottom: "15px",
+    fontSize: "14px",
+  },
 };
 export default styles;

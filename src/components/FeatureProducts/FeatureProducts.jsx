@@ -83,6 +83,7 @@ const FeatureProducts = () => {
               marginBottom: { md: "3rem", xs: "3rem" },
               marginTop: "2rem",
             }}
+            className="soldProduct "
           >
             <Tabs
               scrollButtons

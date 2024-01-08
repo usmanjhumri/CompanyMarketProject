@@ -25,8 +25,8 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Carousel from "react-multi-carousel";
-import { order_number as orderNumber } from "../../Const/CONST";
-
+import { order_number as orderNumber, order_number } from "../../Const/CONST";
+import Cards from "../Cards";
 import "react-multi-carousel/lib/styles.css";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
@@ -65,7 +65,7 @@ const ProductDetail = () => {
   const params = useParams();
   const dispatch = useDispatch();
 
-  const [checkedItems, setCheckedItems] = useState([]);
+  const [checkedItems, setCheckedItems] = useState({});
   const [pages, setPages] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [extraPages, setExtraPages] = useState(0);
@@ -74,12 +74,13 @@ const ProductDetail = () => {
   const [bumpFee, setBumpfee] = useState(0);
   const [bumps, setBumps] = useState([]);
   const [products, setProducts] = useState([]);
+  const [updateCartText, setUpdateCartText] = useState(false);
 
   const product = useSelector((state) => state?.productDetail?.data?.product);
   const isLoading = useSelector((state) => state?.productDetail?.isLoading);
   const isLoadingCart = useSelector((state) => state?.addtocart?.isLoading);
   const { isError, errorMessage } = useSelector((state) => state?.addtocart);
-
+  const inCart = useSelector((state) => state?.productDetail?.inCart);
   const imgPath = useSelector((state) => state?.home?.imgPath);
   const successCart = useSelector((state) => state?.addtocart?.success);
   const moreProduct = useSelector(
@@ -88,35 +89,61 @@ const ProductDetail = () => {
   const encrypted_id = useSelector(
     (state) => state?.productDetail?.data.encrypted_id
   );
+  const oldOrder = useSelector((state) => state?.productDetail?.oldOrder);
 
   useEffect(() => {
     dispatch(productDetail(params));
-  }, [dispatch, params]);
+  }, [params]);
 
-  useMemo(() => {
-    if (product?.bumps?.length > 0) {
-      let newBumps = [];
-      product?.bumps?.forEach((item, index) => {
+  useEffect(() => {
+    let newBumps = [];
+    let newCheckedItems = {};
+
+    if (oldOrder?.bumpresponses?.length > 0) {
+      console.log("if working");
+      oldOrder.bumpresponses.forEach((item, index) => {
+        if (item.bump.name.trim() === "Extra Pages") {
+          setExtraPages(item.pages);
+        }
+        newBumps.push(Number(item.price));
+        newCheckedItems = {
+          ...newCheckedItems,
+          [index]: true,
+        };
+      });
+
+      setCheckedItems(newCheckedItems);
+      setTotalPrice(Number(oldOrder.total_price).toFixed(2));
+    } else if (product?.bumps?.length > 0) {
+      console.log("else if working");
+
+      product.bumps.forEach((item, index) => {
         if (item.name.trim() === "Extra Pages") {
           setExtraPages(item.min_quantity);
         }
         newBumps.push(item.price);
+        newCheckedItems = {
+          ...newCheckedItems,
+          [index]: false,
+        };
       });
+      setCheckedItems(newCheckedItems);
+      setTotalPrice(product.regular_price);
     }
-    setTotalPrice(product?.regular_price);
+
     setProducts(product?.bumps);
-  }, [product]);
+  }, [oldOrder, product]);
 
   useEffect(() => {
     if (successCart) {
       toast.success("Item added to your cart");
       dispatch(resetSuccessCart());
-    }
-    if (isError) {
+      setUpdateCartText(true);
+    } else if (isError) {
       toast.error("Something went wrong!");
       dispatch(resetSuccessCart());
     }
-  }, [successCart, errorMessage, isError]);
+  }, [successCart, isError]);
 
   const responsive = {
     desktop: {
@@ -267,16 +294,9 @@ const ProductDetail = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const order_number = window.localStorage.getItem(orderNumber);
+    const id = window.localStorage.getItem("id");
+
     if (product?.bumps?.length > 0) {
-      // const formData = {
-      //   _token: "BNiq5lIb9RM11nI6MvODcZCcWMyksqkayrN0A3G0",
-      //   product_id: encrypted_id,
-      //   bump_fee: bumpFee,
-      //   license: LinceseIndex,
-      //   bump: bumps,
-      //   pages,
-      //   ...(order_number && { order_number: order_number }),
-      // };
       const data = new FormData();
       data.append("_token", "BNiq5lIb9RM11nI6MvODcZCcWMyksqkayrN0A3G0");
       data.append("product_id", encrypted_id);
@@ -284,18 +304,22 @@ const ProductDetail = () => {
       data.append("license", LinceseIndex);
       data.append("bump", JSON.stringify(bumps));
       data.append("pages", JSON.stringify(pages));
+      data.append("order_number", id ? id : order_number ? order_number : "");
       dispatch(addToCart(data));
     } else {
-      const formData = {
-        _token: "BNiq5lIb9RM11nI6MvODcZCcWMyksqkayrN0A3G0",
-        product_id: encrypted_id,
-        bump_fee: bumpFee,
-        license: LinceseIndex,
-        ...(order_number && { order_number: order_number }),
-      };
-      dispatch(addToCart(formData));
+      const order_number = window.localStorage.getItem(orderNumber);
+      const id = window.localStorage.getItem("id");
+      const data = new FormData();
+      data.append("_token", "BNiq5lIb9RM11nI6MvODcZCcWMyksqkayrN0A3G0");
+      data.append("product_id", encrypted_id);
+      data.append("bump_fee", bumpFee);
+      data.append("license", LinceseIndex);
+      data.append("order_number", id ? id : order_number ? order_number : "");
+      dispatch(addToCart(data));
     }
   };
+
+  console.log(checkedItems, "working2");
 
   const CustomRight = ({ onClick }) => (
     <button className="arrow right" onClick={onClick} style={styles.arrowRight}>
@@ -332,7 +356,7 @@ const ProductDetail = () => {
                     flexWrap: "wrap",
                   }}
                 >
-                  By
+                  By{" "}
                   <Typography variant="span" style={{ color: "#2697FA" }}>
                     {product?.user?.username}
                   </Typography>
@@ -544,7 +568,7 @@ const ProductDetail = () => {
                     {isLoading ? (
                       <Skeleton height={20} width="80%" />
                     ) : (
-                      "1. Quality Checked by JD Funnel Marketplace Future Updates 6 Months"
+                      "1. Quality Checked by JD Funnel"
                     )}
                   </Typography>
                   <Typography sx={styles.detailsText}>
@@ -592,6 +616,9 @@ const ProductDetail = () => {
                                     item.min_quantity
                                   )
                                 }
+                                checked={
+                                  checkedItems[index] === true ? true : false
+                                }
                               />
                               <Typography sx={styles.detailsText}>
                                 {item.name}{" "}
@@ -638,7 +665,11 @@ const ProductDetail = () => {
                         type="submit"
                         disabled={isLoadingCart}
                       >
-                        {isLoadingCart ? "Adding into cart" : "Add to cart"}
+                        {isLoadingCart
+                          ? "Adding into cart"
+                          : updateCartText || inCart
+                          ? "Update cart"
+                          : "Add to cart"}
                       </Button>
                     )}
                     <ToastContainer />

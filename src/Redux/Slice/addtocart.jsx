@@ -8,27 +8,27 @@ const addToCart = createSlice({
     isLoading: false,
     isError: false,
     errorMessage: "",
-    success: "",
+    success: false,
   },
   extraReducers: (builder) => {
     builder.addCase(addToCartApi.pending, (state, action) => {
       state.isLoading = true;
     });
     builder.addCase(addToCartApi.fulfilled, (state, action) => {
+      console.log(action.payload, "Add to cart");
       state.isLoading = false;
       state.isError = false;
       state.errorMessage = "";
-      state.success = action.payload.status;
+      state.success = action.payload.status === "Success" ? true : false;
     });
     builder.addCase(addToCartApi.rejected, (state, action) => {
-      console.log(action, "error");
       state.isLoading = false;
       state.isError = true;
       state.errorMessage = action.payload.message;
       state.success = "";
     });
     builder.addCase(resetSuccessCart, (state) => {
-      state.success = "";
+      state.success = false;
       state.errorMessage = "";
       state.isError = false;
       state.isLoading = false;

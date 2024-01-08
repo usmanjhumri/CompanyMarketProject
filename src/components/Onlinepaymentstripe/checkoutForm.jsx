@@ -85,7 +85,6 @@ function Checkoutstrip() {
       data.append("track", trx);
       data.append("stripe_token", token.id);
       const res = await paymentStripe(data);
-      console.log(res, "wow");
       if (res.success) {
         toast.success("Payment has been processed");
         navigate("/");

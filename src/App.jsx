@@ -7,10 +7,10 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Pagenotfound from "./components/PageNotFound";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchHomeData, getCart } from "./Redux/api/api";
+import { fetchHomeData, getCart, getProfileData } from "./Redux/api/api";
 import { SkeletonTheme } from "react-loading-skeleton";
 import OnlinePayment from "./components/Onlinepaymentstripe";
-import Signup from "./components/Signup/Signup";
+import Signup from "./components/Signup";
 import Signin from "./components/Signin";
 import Products from "./components/AllProducts";
 import Categoires from "./components/Categoires";
@@ -23,6 +23,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/VerifyResetPassword";
 import PreLoading from "./components/PreLoader";
 import ChangePassword from "./components/ChangePassword";
+import AboutUs from "./components/Aboutus";
 import { useNavigate } from "react-router-dom";
 import "react-phone-number-input/style.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,7 +37,11 @@ import {
 import ProfileSetting from "./components/ProfileSettings";
 import Dashboard from "./components/Dashboard/Dashboard";
 import PurchaseHistory from "./components/PurchaseHistory/PurchaseHistory";
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import TermsCondtions from "./components/Terms&Condtions";
+import TopToScroll from "./ScrollToTop";
 import { order_number } from "./Const/CONST";
+import { createTheme } from "@mui/material";
 function App() {
   const navigate = useNavigate();
   const [orderNumber, setOrderNumber] = useState("");
@@ -54,7 +59,10 @@ function App() {
   }, [orderNumber]);
 
   React.useEffect(() => {
-    const getHomeData = () => dispatch(fetchHomeData());
+    const getHomeData = () => {
+      dispatch(fetchHomeData());
+      dispatch(getProfileData());
+    };
     return () => getHomeData();
   }, []);
 
@@ -98,63 +106,69 @@ function App() {
           {" "}
           <Header />
           <SkeletonTheme>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/categories/:name/:id" element={<Categoires />} />
-              <Route path="/products" element={<Products />} />
-              <Route
-                path=":category_id/sub-categories/:name/:id"
-                element={<Subcategory />}
-              />
-              <Route
-                path="/product/:category_id/:name/:id"
-                element={<ProductDetail />}
-              />
-              <Route path="*" element={<Pagenotfound />} />
+            <TopToScroll>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/categories/:name/:id" element={<Categoires />} />
+                <Route path="/products" element={<Products />} />
+                <Route
+                  path=":category_id/sub-categories/:name/:id"
+                  element={<Subcategory />}
+                />
+                <Route
+                  path="/product/:category_id/:name/:id/:order_number?"
+                  element={<ProductDetail />}
+                />
+                <Route path="*" element={<Pagenotfound />} />
 
-              <Route element={<ProtectedRoutes />}>
-                <Route path="/signin" element={<Signin />} />
-              </Route>
-              <Route path="/forget" element={<ForgotPassword />} />
-
-              <Route element={<SignUpProtectedRouts />}>
-                <Route path="/signup" element={<Signup />} />
-              </Route>
-              <Route path="/product/search" element={<SearchProduct />} />
-              <Route path="/cart" element={<Shopping />} />
-              <Route element={<ProtectedRoutesBeforeLoggedIn />}>
+                <Route element={<ProtectedRoutes />}>
+                  <Route path="/signin" element={<Signin />} />
+                </Route>
                 <Route path="/forget" element={<ForgotPassword />} />
-              </Route>
-              <Route element={<ProtectedRoutesBeforeLoggedIn />}>
-                <Route path="/reset-password" element={<ResetPassword />} />
-              </Route>
-              <Route path="/changepassword" element={<ChangePassword />} />
 
-              <Route element={<ProtectedRoutesBeforeLoggedIn />}>
-                <Route path="/profile-setting" element={<ProfileSetting />} />
-              </Route>
+                <Route element={<SignUpProtectedRouts />}>
+                  <Route path="/signup" element={<Signup />} />
+                </Route>
+                <Route path="/product/search" element={<SearchProduct />} />
+                <Route path="/cart" element={<Shopping />} />
+                <Route element={<ProtectedRoutesBeforeLoggedIn />}>
+                  <Route path="/forget" element={<ForgotPassword />} />
+                </Route>
+                <Route element={<SignUpProtectedRouts />}>
+                  <Route path="/reset-password" element={<ResetPassword />} />
+                </Route>
+                <Route path="/changepassword" element={<ChangePassword />} />
 
-              <Route element={<ProtectedRoutesBeforeLoggedIn />}>
+                <Route element={<ProtectedRoutesBeforeLoggedIn />}>
+                  <Route path="/profile-setting" element={<ProfileSetting />} />
+                </Route>
+
+                <Route element={<ProtectedRoutesBeforeLoggedIn />}>
+                  <Route
+                    exact
+                    path="/billing-detail/:trx/:publishable_key"
+                    element={<BillDetail />}
+                  />
+                </Route>
+                <Route element={<ProtectedRoutesBeforeLoggedIn />}>
+                  <Route
+                    path="/online-checkout/:trx/:publishable_key"
+                    element={<OnlinePayment />}
+                  />
+                </Route>
+                <Route element={<ProtectedRoutesBeforeLoggedIn />}>
+                  <Route exact path="/dashboard" element={<Dashboard />} />
+                </Route>
                 <Route
                   exact
-                  path="/billing-detail/:trx/:publishable_key"
-                  element={<BillDetail />}
+                  path="/purchase-history"
+                  element={<PurchaseHistory />}
                 />
-              </Route>
-              <Route element={<ProtectedRoutesBeforeLoggedIn />}>
-                <Route
-                  path="/online-checkout/:trx/:publishable_key"
-                  element={<OnlinePayment />}
-                />
-              </Route>
-
-              <Route exact path="/dashboard" element={<Dashboard />} />
-              <Route
-                exact
-                path="/purchase-history"
-                element={<PurchaseHistory />}
-              />
-            </Routes>
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-conditions" element={<TermsCondtions />} />
+              </Routes>
+            </TopToScroll>
           </SkeletonTheme>
           <Footer />
           <ToastContainer />

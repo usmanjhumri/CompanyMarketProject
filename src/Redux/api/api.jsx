@@ -131,7 +131,6 @@ export const signInNew = createAsyncThunk(
           balance: res?.data?.data?.balance,
         });
         window.localStorage.setItem(storageKey, localStorageData);
-        console.log(res.data);
         return res.data;
       }
     } catch (error) {
@@ -201,7 +200,6 @@ export const getCart = createAsyncThunk(
   async function (orderNumber) {
     try {
       const res = await axios.get(`${api_base_URL}product/cart/${orderNumber}`);
-      console.log(res, " ss");
       return res.data;
     } catch (e) {
       console.log(e);
@@ -212,8 +210,11 @@ export const getCart = createAsyncThunk(
 export const productDetail = createAsyncThunk(
   "productDetail",
   async (params) => {
+    console.log(params);
     const res = await axios.get(
-      `${api_base_URL}product-details/${params.name}/${params.id}/fetch`
+      `${api_base_URL}product-details/${params.name}/${params.id}/fetch/${
+        params.order_number === undefined ? "" : params.order_number
+      }`
     );
     return res.data;
   }
@@ -289,6 +290,17 @@ export const paymentStripe = async (data) => {
     return res.data;
   } catch (e) {
     return e;
+  }
+};
+
+export const emptyCart = async (productID) => {
+  try {
+    const res = await axios.get(
+      `${api_base_URL}product/empty-cart/${productID}`
+    );
+    return res.data;
+  } catch (e) {
+    console.log(e);
   }
 };
 ///// Cart API Ended

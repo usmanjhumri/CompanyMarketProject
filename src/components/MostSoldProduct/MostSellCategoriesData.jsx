@@ -5,7 +5,19 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import "./categories.css";
 import CategoriesStyle from "./style";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { order_number } from "../../Const/CONST";
 export default function MostSellCategoriesData({ filterProduct }) {
+  const imgPath = useSelector((state) => state?.home?.imgPath);
+
+  const [orderNumber, setOrderNumber] = useState("");
+  useEffect(() => {
+    const orderNumber = localStorage.getItem(order_number);
+    const id = localStorage.getItem("id");
+    setOrderNumber(id ? id : orderNumber ? orderNumber : "");
+  }, []);
+
   return (
     <>
       <Grid
@@ -20,13 +32,13 @@ export default function MostSellCategoriesData({ filterProduct }) {
               <Link
                 to={`/product/${item.category_id}/${item.name
                   .toLowerCase()
-                  .replace(/[\s-]/g, "-")}/${item.id}`}
+                  .replace(/[\s-]/g, "-")}/${item.id}/${orderNumber}`}
                 style={{ textDecoration: "none" }}
               >
                 <Box sx={CategoriesStyle.imgBoxDiv}>
                   <Box
                     component="img"
-                    src={`https://marketplace.jdfunnel.com/assets/images/product/${item.image}`}
+                    src={`${imgPath}/${item.image}`}
                     sx={CategoriesStyle.ImgStyle}
                   />
                 </Box>

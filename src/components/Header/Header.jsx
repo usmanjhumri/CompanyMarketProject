@@ -78,7 +78,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 const Header = () => {
-  const firstName = useSelector((state) => state?.getProfileData?.firstName);
   const [mobileOpen, setMobileOpen] = useState(false); // show drawer on mobile screen
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElCart, setAnchorElCart] = useState(null); // Open and Closing menu
@@ -117,11 +116,10 @@ const Header = () => {
       setUserLogged(true);
       const { balance } = JSON.parse(window.localStorage.getItem(storageKey));
       setUserBalance(Number(balance).toFixed(2));
-      dispatch(getProfileData());
     } else {
       setUserLogged(false);
     }
-  }, [userLogged, isLoggedIn, dispatch]);
+  }, [userLogged, isLoggedIn]);
 
   const callfunction = useCallback(
     (event, catergoryId) => {

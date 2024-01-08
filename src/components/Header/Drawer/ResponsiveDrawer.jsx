@@ -27,7 +27,6 @@ const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state?.signInReducer?.isLogedIn);
-  console.log(isLoggedIn, " loggedin");
   const [userLogged, setUserLogged] = useState(false);
 
   useEffect(() => {
@@ -88,7 +87,7 @@ const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
                   onChange={(e) => setSearchProduct(e.target.value)}
                   size="small"
                   sx={{ padding: "8px 5px !important" }}
-                  placeholder="E’g Responsive Landing Pages and Websites"
+                  placeholder="Search..."
                   endAdornment={
                     <InputAdornment position="end">
                       <Button

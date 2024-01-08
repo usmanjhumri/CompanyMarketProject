@@ -69,15 +69,10 @@ const Dashboard = () => {
     const iframe = iframeRef.current;
     if (iframe) {
       iframe.onload = () => {
-        console.log("isIFrameloaded");
         setLoading(true);
       };
     }
   }, [iframeRef]);
-  // const handleIframeLoad = () => {
-  //   console.log("iframe is loaded");
-  //   setLoading(true);
-  // };
 
   const isloadingiframe = () => {
     if (!loading) {
@@ -217,22 +212,9 @@ const Dashboard = () => {
             <Tab label="Transactions" sx={style.list} />
             <Tab label="Purchase log" sx={style.list} />
             <Tab label="Ticket" sx={style.list} />
-            <Tab label="Meeting All" sx={style.list} />
           </Tabs>
         </Box>
         <Box>
-          {/* <CustomTabPanel value={tabValue} index={0}>
-            <iframe
-              title="Embedded Content"
-              src={`${api_base_URL_iFrame}user/dashboard?token=${token}`}
-              width="100%"
-              height="700px"
-              style={{ border: "0px" }}
-              allowFullScreen
-              onLoad={handleIframeLoad}
-            />
-          </CustomTabPanel> */}
-
           <CustomTabPanel value={tabValue} index={0}>
             {isloadingiframe()}
             <iframe
@@ -286,19 +268,6 @@ const Dashboard = () => {
             <iframe
               title="Embedded Content"
               src={`${api_base_URL_iFrame}ticket?token=${token}`}
-              width="100%"
-              height="700px"
-              style={{ border: "0px" }}
-              allowFullScreen
-              ref={iframeRef}
-            />
-          </CustomTabPanel>
-
-          <CustomTabPanel value={tabValue} index={4}>
-            {isloadingiframe()}
-            <iframe
-              title="Embedded Content"
-              src={`${api_base_URL_iFrame}meetings/all?token=${token}`}
               width="100%"
               height="700px"
               style={{ border: "0px" }}

@@ -16,8 +16,6 @@ const userDetails = createSlice({
         state.loading = true;
       })
       .addCase(signUp.fulfilled, (state, action) => {
-        console.log("API Response:", action.payload);
-
         state.loading = false;
         state.user = action.payload?.user;
       })

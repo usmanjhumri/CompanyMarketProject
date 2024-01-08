@@ -8,16 +8,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import styles from "./styles";
+
 import { useEffect, useState } from "react";
 import { FaEyeSlash, FaRegEye } from "react-icons/fa";
 import { useFormik } from "formik";
-import * as Yup from "yup";
+import { signupSchema } from "./Regex";
 import { useDispatch, useSelector } from "react-redux";
 import { changePassword } from "../../Redux/api/api";
 import { changePasswordSuccess } from "../../Redux/Slice/changePassword";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import styles from "./styles";
+const initialValues = {
+  current_password: "",
+  password: "",
+  password_confirmation: "",
+};
 
 const ChangePassword = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -50,67 +56,42 @@ const ChangePassword = () => {
       dispatch(changePasswordSuccess());
     }
   }, [message, isError]);
-  const formik = useFormik({
-    initialValues: {
-      current_password: "",
-      password: "",
-      password_confirmation: "",
-    },
-    validationSchema: Yup.object({
-      currentPassword: Yup.string()
-        .min(8)
-        .max(20)
-        .matches(
-          /^.*[!@#$%^&*()_+\-=\]{};':"\\|,.<>?].*$/,
-          "Need one special character"
-        ),
-      password: Yup.string()
-        .min(8)
-        .max(20)
-        .matches(
-          /^.*[!@#$%^&*()_+\-=\]{};':"\\|,.<>?].*$/,
-          "Need one special character"
-        ),
-      password_confirmation: Yup.string()
-        .min(8)
-        .max(20)
-        .matches(
-          /^.*[!@#$%^&*()_+\-=\]{};':"\\|,.<>?].*$/,
-          "Need one special character"
-        ),
-    }),
-    onSubmit: (values) => {
-      if (values.password.trim() !== values.password_confirmation.trim()) {
-        toast.error("password and confirm password does not matcg", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        return;
-      }
-      dispatch(changePassword(values))
-        .then((res) => {
-          if (
-            res.payload.success &&
-            values.password.trim() === values.password_confirmation.trim()
-          ) {
-            toast.success(message || "password changed", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-            });
-            navigate("/");
-          }
-        })
-        .catch((e) => e);
-    },
-  });
+  const { errors, values, handleBlur, handleChange, handleSubmit, touched } =
+    useFormik({
+      initialValues: initialValues,
+      validationSchema: signupSchema,
+      onSubmit: (values) => {
+        if (values.password.trim() !== values.password_confirmation.trim()) {
+          toast.error("password and confirm password does not matcg", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          return;
+        }
+        dispatch(changePassword(values))
+          .then((res) => {
+            if (
+              res.payload.success &&
+              values.password.trim() === values.password_confirmation.trim()
+            ) {
+              toast.success(message || "password changed", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+              });
+              navigate("/");
+            }
+          })
+          .catch((e) => e);
+      },
+    });
 
   return (
     <>
@@ -133,10 +114,7 @@ const ChangePassword = () => {
                 </Typography>
               </Box>
 
-              <form
-                onSubmit={formik.handleSubmit}
-                style={{ textAlign: "center" }}
-              >
+              <form onSubmit={handleSubmit} style={{ textAlign: "center" }}>
                 <Grid
                   container
                   spacing={2}
@@ -155,9 +133,9 @@ const ChangePassword = () => {
                       type={showPassword ? "text" : "password"}
                       fullWidth
                       required
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.current_password}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.current_password}
                       style={{ marginBottom: "5px" }}
                       InputProps={{
                         endAdornment: (
@@ -172,8 +150,7 @@ const ChangePassword = () => {
                       }}
                       sx={{ width: "90%" }}
                     />
-                    {formik.touched.current_password &&
-                    formik.errors.current_password ? (
+                    {touched.current_password && errors.current_password ? (
                       <p
                         style={{
                           color: "red",
@@ -184,7 +161,7 @@ const ChangePassword = () => {
                           fontSize: "14px",
                         }}
                       >
-                        {formik.errors.current_password}
+                        {errors.current_password}
                       </p>
                     ) : null}
                   </Grid>
@@ -200,9 +177,9 @@ const ChangePassword = () => {
                       type={showPassword2 ? "text" : "password"}
                       fullWidth
                       required
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.password}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password}
                       style={{ marginBottom: "5px" }}
                       InputProps={{
                         endAdornment: (
@@ -217,18 +194,18 @@ const ChangePassword = () => {
                       }}
                       sx={{ width: "90%" }}
                     />
-                    {formik.touched.password && formik.errors.password ? (
+                    {errors.password && touched.password ? (
                       <p
                         style={{
                           color: "red",
                           margin: "0",
-                          paddingLeft: "15px",
+                          paddingLeft: "30px",
                           marginTop: "10px",
                           textAlign: "left",
                           fontSize: "14px",
                         }}
                       >
-                        {formik.errors.password}
+                        {errors.password}
                       </p>
                     ) : null}
                   </Grid>
@@ -244,9 +221,9 @@ const ChangePassword = () => {
                       type={showPassword3 ? "text" : "password"}
                       fullWidth
                       required
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.password_confirmation}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password_confirmation}
                       style={{ marginBottom: "5px" }}
                       InputProps={{
                         endAdornment: (
@@ -261,19 +238,19 @@ const ChangePassword = () => {
                       }}
                       sx={{ width: "90%" }}
                     />
-                    {formik.touched.password_confirmation &&
-                    formik.errors.password_confirmation ? (
+                    {touched.password_confirmation &&
+                    errors.password_confirmation ? (
                       <p
                         style={{
                           color: "red",
                           margin: "0",
-                          paddingLeft: "15px",
+                          paddingLeft: "30px",
                           marginTop: "10px",
                           textAlign: "left",
                           fontSize: "14px",
                         }}
                       >
-                        {formik.errors.password_confirmation}
+                        {errors.password_confirmation}
                       </p>
                     ) : null}
                   </Grid>

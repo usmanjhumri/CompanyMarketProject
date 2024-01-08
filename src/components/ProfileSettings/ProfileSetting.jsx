@@ -30,7 +30,6 @@ const ProfileSetting = () => {
     coverImage,
     logoImage,
   } = useSelector((state) => state?.getProfileData);
-  // console.log(profileData, " profileData");
   const { isError, Message, success, logoImageType } = useSelector(
     (state) => state.sendProfileData
   );
@@ -56,7 +55,6 @@ const ProfileSetting = () => {
   const [coverPhotoName, setCoverPhotoName] = useState();
   const [companyLogo, setCompanyLogo] = useState();
   const [disable, setDisable] = useState(null);
-  // console.log(uploadCoverPhoto, " image uploaded");
   const inputRefs = {
     img: useRef(null),
     cover: useRef(null),
@@ -68,10 +66,6 @@ const ProfileSetting = () => {
     city: useRef(null),
   };
   const inputRefsDescription = useRef(null);
-
-  useEffect(() => {
-    dispatch(getProfileData());
-  }, [dispatch]);
 
   useEffect(() => {
     // Update inputValues with the fetched data
@@ -95,8 +89,6 @@ const ProfileSetting = () => {
     if (profileData[0]?.company_logo) {
       setLogoImageURL(`${imagePath}/${logoImage}`);
     }
-
-    // console.log(`${imagePath}/${logoImage}`);
   }, [profileData, description, imagePath, coverImage, logoImage]);
 
   const handleEditInputDescription = () => {

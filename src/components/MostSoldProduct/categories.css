@@ -35,16 +35,7 @@
     justify-content: "auto";
   }
 }
-@media (max-width: 1310px) {
-  .soldProduct .MuiTabs-flexContainer {
-    justify-content: start !important;
-  }
-}
-.soldProduct .MuiTabs-flexContainer {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}
+
 
 /* @media  (max-width: 768px) {
   .MuiTab-root {

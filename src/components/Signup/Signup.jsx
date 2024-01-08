@@ -92,8 +92,6 @@ export default function Signup({ setIsLoggedIn }) {
         const Order = localStorage.getItem("order_Number");
         values.order_number = Order ? Order : "";
 
-        console.log(values, actions, "working");
-
         const encodedPassword = btoa(values.password);
         values.password = encodedPassword;
         const encodedConfirm = btoa(values.password_confirmation);
@@ -214,16 +212,7 @@ export default function Signup({ setIsLoggedIn }) {
                             fullWidth
                           />
                           {errors.firstname && touched.firstname ? (
-                            <p
-                              style={{
-                                color: "red",
-                                margin: "0",
-                                marginBottom: "15px",
-                                fontSize: "14px",
-                              }}
-                            >
-                              {errors.firstname}
-                            </p>
+                            <p style={styles.errorsP}>{errors.firstname}</p>
                           ) : null}
                         </Box>
                       </Grid>
@@ -249,15 +238,7 @@ export default function Signup({ setIsLoggedIn }) {
                           />
 
                           {errors.lastname && touched.lastname ? (
-                            <Typography
-                              variant="span"
-                              style={{
-                                color: "red",
-                                margin: "0",
-                                marginBottom: "15px",
-                                fontSize: "14px",
-                              }}
-                            >
+                            <Typography variant="span" style={styles.errorsP}>
                               {errors.lastname}
                             </Typography>
                           ) : null}
@@ -279,15 +260,7 @@ export default function Signup({ setIsLoggedIn }) {
                   fullWidth
                 />
                 {errors.username && touched.username ? (
-                  <Typography
-                    variant="span"
-                    style={{
-                      color: "red",
-                      margin: "0",
-                      marginBottom: "15px",
-                      fontSize: "14px",
-                    }}
-                  >
+                  <Typography variant="span" style={styles.errorUername}>
                     {errors.username}
                   </Typography>
                 ) : null}
@@ -326,14 +299,7 @@ export default function Signup({ setIsLoggedIn }) {
                   value={values.email}
                 />
                 {errors.email && touched.email ? (
-                  <Typography
-                    style={{
-                      color: "red",
-                      margin: "0",
-                      marginBottom: "15px",
-                      fontSize: "14px",
-                    }}
-                  >
+                  <Typography style={styles.errorUername}>
                     {errors.email}
                   </Typography>
                 ) : null}
@@ -362,14 +328,7 @@ export default function Signup({ setIsLoggedIn }) {
                 />
 
                 {errors.password && touched.password ? (
-                  <Typography
-                    style={{
-                      color: "red",
-                      margin: "0",
-                      marginBottom: "15px",
-                      fontSize: "14px",
-                    }}
-                  >
+                  <Typography style={styles.errorUername}>
                     {errors.password}
                   </Typography>
                 ) : null}
@@ -398,14 +357,7 @@ export default function Signup({ setIsLoggedIn }) {
                 />
                 {errors.password_confirmation &&
                 touched.password_confirmation ? (
-                  <p
-                    style={{
-                      color: "red",
-                      margin: "0",
-                      marginBottom: "15px",
-                      fontSize: "14px",
-                    }}
-                  >
+                  <p style={styles.errorUername}>
                     {errors.password_confirmation}
                   </p>
                 ) : null}
