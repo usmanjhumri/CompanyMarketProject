@@ -17,7 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles";
 import { IoClose } from "react-icons/io5";
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
-import Logo from "../../../assets/logo.png";
+import Logo from "/companylogo.png";
 import { Fragment, useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +27,7 @@ const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state?.signInReducer?.isLogedIn);
-  const [userLogged, setUserLogged] = useState(false);
+  const [userLogged, setUserLogged] = useState(isLoggedIn);
 
   useEffect(() => {
     setUserLogged(isLoggedIn);

@@ -12,7 +12,7 @@ import Typography from "@mui/material/Typography";
 import Popover from "@mui/material/Popover";
 import style from "./styles";
 import { Container, Hidden, Tooltip, tooltipClasses } from "@mui/material";
-import Logo from "../../assets/logo.png";
+import Logo from "/companylogo.png";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";

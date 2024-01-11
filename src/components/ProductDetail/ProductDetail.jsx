@@ -100,8 +100,39 @@ const ProductDetail = () => {
     let newCheckedItems = {};
 
     if (oldOrder?.bumpresponses?.length > 0) {
-      console.log("if working");
+      setBumpfee(Number(oldOrder.bump_fee));
       oldOrder.bumpresponses.forEach((item, index) => {
+        setPages((prevPages) => {
+          const newBumps = { ...prevPages };
+          if (!newBumps[item.bump_id]) {
+            // Assign the value instead of deleting the entry
+            newBumps[item.bump_id] = Number(item.pages);
+          } else {
+            // Update the value instead of deleting the entry
+            newBumps[item.bump_id] = Number(item.pages);
+          }
+          const filteredBumps = Object.values(newBumps).filter(
+            (value) => value !== undefined
+          );
+
+          return filteredBumps.length > 0 ? newBumps : {};
+        });
+        setBumps((prevBumps) => {
+          const newBumps = { ...prevBumps };
+          if (!newBumps[item.bump_id]) {
+            // Assign the value instead of deleting the entry
+            newBumps[item.bump_id] = Number(item.bump_id);
+          } else {
+            // Update the value instead of deleting the entry
+            newBumps[item.bump_id] = Number(item.bump_id);
+          }
+          const filteredBumps = Object.values(newBumps).filter(
+            (value) => value !== undefined
+          );
+
+          return filteredBumps.length > 0 ? newBumps : {};
+        });
+
         if (item.bump.name.trim() === "Extra Pages") {
           setExtraPages(item.pages);
         }
@@ -113,9 +144,10 @@ const ProductDetail = () => {
       });
 
       setCheckedItems(newCheckedItems);
+
       setTotalPrice(Number(oldOrder.total_price).toFixed(2));
     } else if (product?.bumps?.length > 0) {
-      console.log("else if working");
+      setBumpfee(Number(0));
 
       product.bumps.forEach((item, index) => {
         if (item.name.trim() === "Extra Pages") {
@@ -129,6 +161,8 @@ const ProductDetail = () => {
       });
       setCheckedItems(newCheckedItems);
       setTotalPrice(product.regular_price);
+      setPages({});
+      setBumps({});
     }
 
     setProducts(product?.bumps);
@@ -162,6 +196,7 @@ const ProductDetail = () => {
   };
 
   const handleCheckboxChange = (index, price, name) => {
+    console.log(index, "index", products[index], "productsindex");
     const bump = products[index];
     setBumps((prevBumps) => {
       const newBumps = { ...prevBumps };
@@ -220,7 +255,9 @@ const ProductDetail = () => {
     });
   };
 
-  const handlePageChange = (e, price, isChecked) => {
+  const handlePageChange = (e, price, isChecked, index) => {
+    const id = products[index]?.id;
+
     const newPages = e.target.value;
     setExtraPages(newPages);
     let addPages;
@@ -235,8 +272,8 @@ const ProductDetail = () => {
 
     setProducts(updatedProducts);
     if (isChecked) {
-      if (pages[2]) {
-        pages[2] = Number(addPages);
+      if (pages[id]) {
+        pages[id] = Number(addPages);
       }
       setTotalPrice((prevTotalPrice) => {
         const updatedPrice =
@@ -291,7 +328,7 @@ const ProductDetail = () => {
     setLinceseIndex(index + 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const order_number = window.localStorage.getItem(orderNumber);
     const id = window.localStorage.getItem("id");
@@ -305,7 +342,8 @@ const ProductDetail = () => {
       data.append("bump", JSON.stringify(bumps));
       data.append("pages", JSON.stringify(pages));
       data.append("order_number", id ? id : order_number ? order_number : "");
-      dispatch(addToCart(data));
+      const res = await dispatch(addToCart(data));
+      console.log(res, "aaddtp");
     } else {
       const order_number = window.localStorage.getItem(orderNumber);
       const id = window.localStorage.getItem("id");
@@ -315,11 +353,22 @@ const ProductDetail = () => {
       data.append("bump_fee", bumpFee);
       data.append("license", LinceseIndex);
       data.append("order_number", id ? id : order_number ? order_number : "");
-      dispatch(addToCart(data));
+      const res = await dispatch(addToCart(data));
     }
   };
 
-  console.log(checkedItems, "working2");
+  const handleUpdateCart = () => {
+    console.log(
+      bumpFee,
+      "bumpFee",
+      LinceseIndex,
+      "LinceseIndex",
+      bumps,
+      "bumps",
+      pages,
+      "page"
+    );
+  };
 
   const CustomRight = ({ onClick }) => (
     <button className="arrow right" onClick={onClick} style={styles.arrowRight}>
@@ -586,7 +635,7 @@ const ProductDetail = () => {
                     )}
                   </Typography>
                   {product?.bumps?.length > 0 && (
-                    <Box sx={{ mt: 3 }}>
+                    <Box sx={{ mt: 3 }} key={20}>
                       {product?.bumps?.map((item, index) => (
                         <Box
                           sx={{
@@ -634,8 +683,8 @@ const ProductDetail = () => {
                                     handlePageChange(
                                       e,
                                       item.price,
-
-                                      checkedItems[index]
+                                      checkedItems[index],
+                                      index
                                     )
                                   }
                                 />

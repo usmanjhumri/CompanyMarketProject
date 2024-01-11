@@ -134,6 +134,8 @@ const Shopping = () => {
 
   const handleCheckout = async () => {
     const orderNumber = localStorage.getItem(order_number);
+    const id = localStorage.getItem("id");
+    console.log(id, "user id");
     if (!window.localStorage.getItem("user")) {
       toast.info("Please sign in first ");
       navigate("/signin");
@@ -141,7 +143,7 @@ const Shopping = () => {
     const data = {
       wallet_type: "online",
       subscription: 0,
-      order_number: orderNumber,
+      order_number: id ? id : orderNumber,
     };
     const res = await dispatch(checkOutCart(data));
     if (res.payload.success) {

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { api_base_URL, storageKey, order_number } from "../../Const/CONST";
+import { api_base_URL, storageKey, order_number, id } from "../../Const/CONST";
 
 ///Home API Started
 export const fetchHomeData = createAsyncThunk("fetchHomeData", async () => {
@@ -44,12 +44,6 @@ export const fetchSearchProducts = createAsyncThunk(
     return res.data;
   }
 );
-
-export const signIn = createAsyncThunk("signInReducer", async function (key) {
-  const user = JSON.parse(localStorage.getItem(key) ?? "{}");
-
-  return Object.keys(user).length ? Promise.resolve(user) : Promise.reject();
-});
 
 ///Home API Ended
 
@@ -122,7 +116,6 @@ export const signInNew = createAsyncThunk(
   async function (data, { rejectWithValue }) {
     try {
       const res = await axios.post(`${api_base_URL}auth/sign-in`, data);
-      // console.log(res, " ressss");
       if (res) {
         const localStorageData = JSON.stringify({
           email: res?.data?.data?.email,
@@ -130,6 +123,7 @@ export const signInNew = createAsyncThunk(
           token: res?.data?.access_token,
           balance: res?.data?.data?.balance,
         });
+        localStorage.setItem(id, res.data.data.id);
         window.localStorage.setItem(storageKey, localStorageData);
         return res.data;
       }
@@ -210,10 +204,10 @@ export const getCart = createAsyncThunk(
 export const productDetail = createAsyncThunk(
   "productDetail",
   async (params) => {
-    console.log(params);
+    console.log(params, "after adding");
     const res = await axios.get(
-      `${api_base_URL}product-details/${params.name}/${params.id}/fetch/${
-        params.order_number === undefined ? "" : params.order_number
+      `${api_base_URL}product-details/${params.name}/${params.id}/fetch${
+        params.order_number === undefined ? "" : `/${params.order_number}`
       }`
     );
     return res.data;
@@ -286,7 +280,6 @@ export const paymentStripe = async (data) => {
     const res = await axios.post(`${api_base_URL}payment/process`, data, {
       headers,
     });
-    // console.log(res, "api");
     return res.data;
   } catch (e) {
     return e;

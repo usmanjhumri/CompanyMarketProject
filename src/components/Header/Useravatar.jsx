@@ -9,11 +9,10 @@ import {
 } from "@mui/material";
 import { CiUser } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { storageKey } from "../../Const/CONST";
+import { storageKey, id } from "../../Const/CONST";
 import { resetSuccessSignin } from "../../Redux/Slice/signin";
 import { useNavigate } from "react-router-dom";
 import { RiArrowDropDownLine } from "react-icons/ri";
-import { useEffect } from "react";
 const settings = [
   "Profile Setting",
   "Account",
@@ -39,6 +38,8 @@ const Useravatar = ({
 
       case "Sign out":
         localStorage.removeItem(storageKey);
+        localStorage.removeItem(id);
+
         setUserLogged(false);
         dispatch(resetSuccessSignin());
         navigate("/signin");

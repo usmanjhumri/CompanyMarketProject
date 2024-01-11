@@ -6,3 +6,12 @@
   border-radius: none;
   box-shadow: none;
 }
+
+.overlay-slider-blur {
+  --blur-color: #fff;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--blur-color) 0%, var(--blur-color) 4.17%, rgba(255, 255, 255, 0.05) 17%, rgba(255, 255, 255, 0.05) 85.11%, var(--blur-color) 94.78%, var(--blur-color) 100%);
+  z-index: 99;
+  pointer-events: none;
+}

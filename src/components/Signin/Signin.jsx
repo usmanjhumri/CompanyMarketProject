@@ -78,6 +78,7 @@ export default function Signin() {
 
         dispatch(signInNew(values))
           .then((res) => {
+            console.log(res);
             if (res.payload.success) {
               toast.success("Sign in successfully", {
                 position: "top-right",
@@ -87,12 +88,12 @@ export default function Signin() {
                 pauseOnHover: true,
                 draggable: true,
               });
+              setTimeout(() => {
+                navigate(-1);
+              }, 200);
             }
-            setTimeout(() => {
-              navigate(-1);
-            }, 200);
           })
-          .catch((e) => e);
+          .catch((e) => console.log(e));
       },
     });
 

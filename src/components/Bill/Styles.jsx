@@ -46,7 +46,7 @@ const BillStyle = {
     color: "#000",
   },
   hr: {
-    width: "96%",
+    width: "100%",
     background: "#D9D9D9;",
   },
   boxTotal: {

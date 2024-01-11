@@ -111,6 +111,7 @@ const styles = {
   },
 
   innerCardDisplay: {
+    position: "relative",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -138,10 +139,12 @@ const styles = {
     borderRadius: "10px",
     background: Colors.primary,
     minWidth: "200px",
+    width: "100%",
     minHeight: "20vh",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    margin: "0 10px",
   },
 
   cardText: {
@@ -173,6 +176,13 @@ const styles = {
       fontSize: "25px",
       padding: "0px 2px",
     },
+  },
+  shadowDiv: {
+    display: "flex",
+    width: "100%",
+    height: "100%",
+    background:
+      "linear-gradient(90deg, rgba(254,254,254,1) 0%, rgba(255,255,255,0) 50%, rgba(254,254,254,1) 100%)",
   },
 };
 

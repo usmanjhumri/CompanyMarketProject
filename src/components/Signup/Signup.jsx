@@ -98,7 +98,7 @@ export default function Signup({ setIsLoggedIn }) {
         values.password_confirmation = encodedConfirm;
 
         // Assuming vaildPhoneNumber is a function that checks the validity of the phone number
-        if (vaildPhoneNumber(values.phone)) {
+        if (vaildPhoneNumber) {
           const orderNumber = localStorage.getItem("order_number"); // Corrected the key name
           values.order_number = orderNumber ? orderNumber : "";
 

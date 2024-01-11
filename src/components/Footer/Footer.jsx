@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import { Box, Button, Container, Grid, Link, Typography } from "@mui/material";
-import Logo from "../../assets/logo.png";
+import Logo from "/companylogo.png";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import FooterStyle from "./styles";
 import { LiaCopyrightSolid } from "react-icons/lia";
@@ -40,7 +40,7 @@ const Footer = () => {
             <Grid item xs={6} md={4}>
               <Box>
                 <Typography variant="h3" sx={FooterStyle.Ftype}>
-                  JD Funnel Marketplace MarketPlace
+                  JD Funnel Marketplace
                 </Typography>
                 <Fragment>
                   <Typography sx={FooterStyle.linkTypo}>

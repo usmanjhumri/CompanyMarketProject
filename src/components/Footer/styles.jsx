@@ -29,7 +29,7 @@ const FooterStyle = {
     lineHeight: "17.53px",
     marginLeft: "2px",
     fontFamily: "Be Vietnam Pro , sans-serif",
-    color: "#000000 !important",
+    color: "black",
   },
   linkTypo: {
     display: "flex",

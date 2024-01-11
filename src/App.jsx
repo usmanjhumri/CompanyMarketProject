@@ -1,14 +1,21 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { SkeletonTheme } from "react-loading-skeleton";
+import { ToastContainer } from "react-toastify";
+import "react-phone-number-input/style.css";
+import "react-toastify/dist/ReactToastify.css";
+
+import { fetchHomeData, getCart, getProfileData } from "./Redux/api/api";
+import { order_number, storageKey } from "./Const/CONST";
+
 import Header from "./components/Header";
-import "./App.css";
 import Footer from "./components/Footer";
-import { Routes, Route } from "react-router-dom";
+import PreLoading from "./components/PreLoader";
+import InteranlError from "./components/InteralServerError";
 import Home from "./components/Home";
 import Pagenotfound from "./components/PageNotFound";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchHomeData, getCart, getProfileData } from "./Redux/api/api";
-import { SkeletonTheme } from "react-loading-skeleton";
 import OnlinePayment from "./components/Onlinepaymentstripe";
 import Signup from "./components/Signup";
 import Signin from "./components/Signin";
@@ -18,16 +25,11 @@ import ProductDetail from "./components/ProductDetail";
 import Subcategory from "./components/Subcategories";
 import Shopping from "./components/ShoppingCart/Shopping";
 import SearchProduct from "./components/SearchProduct";
-import InteranlError from "./components/InteralServerError";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/VerifyResetPassword";
-import PreLoading from "./components/PreLoader";
 import ChangePassword from "./components/ChangePassword";
 import AboutUs from "./components/Aboutus";
-import { useNavigate } from "react-router-dom";
-import "react-phone-number-input/style.css";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+import TopToScroll from "./ScrollToTop";
 import BillDetail from "./components/Bill/BillDetail";
 import {
   ProtectedRoutes,
@@ -39,37 +41,41 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import PurchaseHistory from "./components/PurchaseHistory/PurchaseHistory";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import TermsCondtions from "./components/Terms&Condtions";
-import TopToScroll from "./ScrollToTop";
-import { order_number } from "./Const/CONST";
-import { createTheme } from "@mui/material";
 function App() {
   const navigate = useNavigate();
   const [orderNumber, setOrderNumber] = useState("");
+  const [dataFetched, setDataFetched] = useState(false);
   const dispatch = useDispatch();
   const error500 = useSelector((state) => state?.home?.isError);
   const errorMsg = useSelector((state) => state?.home?.errorMessage);
   const isLoading = useSelector((state) => state?.home?.isLoading);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setOrderNumber(window.localStorage.getItem(order_number));
-
     if (orderNumber) {
       dispatch(getCart(orderNumber));
     }
-  }, [orderNumber]);
+  }, [orderNumber, dispatch]);
 
-  React.useEffect(() => {
-    const getHomeData = () => {
-      dispatch(fetchHomeData());
-      dispatch(getProfileData());
-    };
-    return () => getHomeData();
-  }, []);
+  useEffect(() => {
+    const getHomeAndProfileData = async () => {
+      if (!dataFetched) {
+        try {
+          dispatch(fetchHomeData());
 
-  React.useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      navigate("/");
+          setDataFetched(true); // Mark as fetched
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+      if (localStorage.getItem(storageKey)) dispatch(getProfileData());
     };
+
+    getHomeAndProfileData();
+  }, [localStorage.getItem(storageKey)]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => navigate("/");
 
     window.addEventListener("beforeunload", handleBeforeUnload);
 
@@ -78,24 +84,11 @@ function App() {
     };
   }, [navigate]);
 
-  React.useEffect(() => {
-    if (error500) {
-      if (errorMsg?.includes("500")) {
-        navigate("/500");
-      }
+  useEffect(() => {
+    if (error500 && errorMsg?.includes("500")) {
+      navigate("/500");
     }
   }, [errorMsg, error500, navigate]);
-  if (error500) {
-    return (
-      <div>
-        <SkeletonTheme>
-          <Routes>
-            <Route path="/500" element={<InteranlError />} />
-          </Routes>
-        </SkeletonTheme>
-      </div>
-    );
-  }
 
   return (
     <div>
@@ -103,7 +96,6 @@ function App() {
         <PreLoading />
       ) : (
         <>
-          {" "}
           <Header />
           <SkeletonTheme>
             <TopToScroll>
