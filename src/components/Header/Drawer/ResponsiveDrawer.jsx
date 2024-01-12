@@ -27,11 +27,15 @@ const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state?.signInReducer?.isLogedIn);
-  const [userLogged, setUserLogged] = useState(isLoggedIn);
+  const [userLogged, setUserLogged] = useState(false);
 
   useEffect(() => {
-    setUserLogged(isLoggedIn);
-  }, [isLoggedIn]);
+    if (localStorage.getItem(storageKey)) {
+      setUserLogged(true);
+    } else {
+      setUserLogged(false);
+    }
+  }, [userLogged, isLoggedIn]);
 
   const handleLogOut = () => {
     localStorage.removeItem(storageKey);
