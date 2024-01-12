@@ -25,17 +25,13 @@ const changePasswordSlice = createSlice({
         state.Message = "";
       })
       .addCase(changePassword.fulfilled, (state, action) => {
-        // console.log(action.payload.message, " change password action");
-        // console.log(state, " state");
         let userPasswordChanged = action.payload;
         state.isLoading = false;
         state.isError = false;
         state.userPasswordUpdated = userPasswordChanged;
         state.Message = action.payload.message;
-        // console.log(state.Message, " messaged");
       })
       .addCase(changePassword.rejected, (state, action) => {
-        // console.log(action, "rejected payload");
         state.isLoading = false;
         state.isError = true;
         state.Message = action.payload || "An error occurred";

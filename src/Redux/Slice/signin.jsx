@@ -21,7 +21,6 @@ const signInSlice = createSlice({
         state.errorMessage = "";
       })
       .addCase(signInNew.fulfilled, (state, action) => {
-        // console.log(action.payload);
         let { email, username, token } = action.payload;
         state.isLoading = false;
         state.isError = false;
@@ -31,7 +30,6 @@ const signInSlice = createSlice({
         state.success = true;
       })
       .addCase(signInNew.rejected, (state, action) => {
-        // console.log(action, " action");
         state.isError = true;
         state.isLoading = false;
         state.errorMessage = action.payload.message || "something went wrong";

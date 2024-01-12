@@ -78,7 +78,6 @@ export default function Signin() {
 
         dispatch(signInNew(values))
           .then((res) => {
-            console.log(res);
             if (res.payload.success) {
               toast.success("Sign in successfully", {
                 position: "top-right",
@@ -166,10 +165,8 @@ export default function Signin() {
                   <Grid item xs={12}>
                     <Box sx={{ ...styles.typoLabel }}>
                       <Typography sx={{ paddingLeft: "30px" }}>
-                        Username or Email
+                        Email
                       </Typography>
-
-                      <Link>Remind me</Link>
                     </Box>
                     <TextField
                       id="email"

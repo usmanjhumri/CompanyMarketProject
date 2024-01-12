@@ -19,17 +19,61 @@ const Footer = () => {
     <>
       <Box mt={12} sx={FooterStyle.root}>
         <Container maxWidth="100%">
-          <Box sx={FooterStyle.imgBtnstyle}>
-            <Box>
-              <Box component="img" src={Logo} />
-            </Box>
-            <NavLink to={"/signup"}>
-              <Button variant="contained" sx={FooterStyle.button}>
-                Join Now
-              </Button>
-            </NavLink>
-          </Box>
-          <Grid
+          <Grid container>
+            <Grid md={12}>
+              <Box sx={FooterStyle.imgBtnstyle}>
+                <Box>
+                  <Box component="img" src={Logo} />
+                </Box>
+                <Box
+                  display={"inline-flex"}
+                  sx={{
+                    justifyContent: "space-around",
+                    width: "50%",
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <Typography sx={FooterStyle.linkTypo}>
+                    {/* <MdKeyboardArrowRight style={FooterStyle.iconStyle} /> */}
+                    <NavLink to="/about" style={FooterStyle.link}>
+                      About us
+                    </NavLink>
+                  </Typography>
+                  <Typography sx={FooterStyle.linkTypo}>
+                    {/* <MdKeyboardArrowRight style={FooterStyle.iconStyle} /> */}
+                    <NavLink to="/privacy-policy" style={FooterStyle.link}>
+                      Privacy Policy
+                    </NavLink>
+                  </Typography>
+                  <Typography sx={FooterStyle.linkTypo}>
+                    {/* <MdKeyboardArrowRight style={FooterStyle.iconStyle} /> */}
+                    <NavLink to="/terms-conditions" style={FooterStyle.link}>
+                      Terms & Conditions
+                    </NavLink>
+                  </Typography>
+                  <Typography sx={FooterStyle.linkTypo}>
+                    {/* <MdKeyboardArrowRight style={FooterStyle.iconStyle} /> */}
+                    <NavLink to="/about" style={FooterStyle.link}>
+                      Payment Policy
+                    </NavLink>
+                  </Typography>
+                  <Typography sx={FooterStyle.linkTypo}>
+                    {/* <MdKeyboardArrowRight style={FooterStyle.iconStyle} /> */}
+                    <NavLink to="/about" style={FooterStyle.link}>
+                      Help Center
+                    </NavLink>
+                  </Typography>
+                </Box>
+                <NavLink to={"/signup"}>
+                  <Button variant="contained" sx={FooterStyle.button}>
+                    Join Now
+                  </Button>
+                </NavLink>
+              </Box>
+            </Grid>
+          </Grid>
+          {/* <Grid
             maxWidth="100%"
             container
             sx={{
@@ -43,12 +87,6 @@ const Footer = () => {
                   JD Funnel Marketplace
                 </Typography>
                 <Fragment>
-                  <Typography sx={FooterStyle.linkTypo}>
-                    <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
-                    <NavLink to="/terms-conditions" style={FooterStyle.link}>
-                      Terms
-                    </NavLink>
-                  </Typography>
                   <Typography sx={FooterStyle.linkTypo}>
                     <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
                     <Link href="#" sx={FooterStyle.link}>
@@ -105,6 +143,12 @@ const Footer = () => {
                   </Typography>
                   <Typography sx={FooterStyle.linkTypo}>
                     <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
+                    <NavLink to="/terms-conditions" style={FooterStyle.link}>
+                      Terms & Conditions
+                    </NavLink>
+                  </Typography>
+                  <Typography sx={FooterStyle.linkTypo}>
+                    <MdKeyboardArrowRight style={FooterStyle.iconStyle} />
                     <Link href="#" sx={FooterStyle.link}>
                       Sitemap
                     </Link>
@@ -112,13 +156,13 @@ const Footer = () => {
                 </Fragment>
               </Box>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Container>
       </Box>
       <Box sx={FooterStyle.copyRightStyle}>
         <Typography sx={FooterStyle.copyRightTypo}>
           Copyright <LiaCopyrightSolid /> 2023 | All Right Reserved By JD Funnel
-          Marketplace Marketplace
+          Marketplace
         </Typography>
       </Box>
     </>

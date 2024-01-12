@@ -24,7 +24,6 @@ export const fetchAllProducts = createAsyncThunk(
         search: searchValue,
       },
     });
-    // console.log(res, " data");
     return res.data;
   }
 );
@@ -52,7 +51,6 @@ export const changePassword = createAsyncThunk(
   "changePassword",
   async function (data, { rejectWithValue }) {
     const token = JSON.parse(localStorage.getItem(storageKey)).token;
-    // console.log(token, "token user");
     const headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -61,14 +59,12 @@ export const changePassword = createAsyncThunk(
         headers,
       });
       if (res) {
-        // console.log(res.data, " change password");
         return res.data;
       } else {
         // console.error("Unexpected response format:", res);
         throw new Error("Unexpected response format");
       }
     } catch (e) {
-      // console.log(e.response.data.message, "hi this is me");
       return rejectWithValue(e.response.data.message);
     }
   }
@@ -124,6 +120,7 @@ export const signInNew = createAsyncThunk(
           balance: res?.data?.data?.balance,
         });
         localStorage.setItem(id, res.data.data.id);
+
         window.localStorage.setItem(storageKey, localStorageData);
         return res.data;
       }
@@ -155,9 +152,7 @@ export const deleteCart = createAsyncThunk(
   async (id, { dispatch }) => {
     try {
       const res = await axios.get(`${api_base_URL}product/remove-cart/${id}`);
-      const existingOrderNumber = window.localStorage.getItem(order_number);
 
-      dispatch(getCart(existingOrderNumber));
       return res.data;
     } catch (e) {
       return e.response.status;
@@ -167,7 +162,7 @@ export const deleteCart = createAsyncThunk(
 
 export const addToCart = createAsyncThunk(
   "addToCart",
-  async function (productData, { dispatch, rejectWithValue }) {
+  async function (productData, { rejectWithValue }) {
     try {
       const res = await axios.post(
         `${api_base_URL}product/add-to-cart`,
@@ -179,9 +174,7 @@ export const addToCart = createAsyncThunk(
         if (!existingOrderNumber) {
           window.localStorage.setItem(order_number, orderNumber);
         }
-        if (res.data) {
-          dispatch(getCart(existingOrderNumber || orderNumber));
-        }
+
         return res.data;
       }
     } catch (e) {
@@ -204,7 +197,6 @@ export const getCart = createAsyncThunk(
 export const productDetail = createAsyncThunk(
   "productDetail",
   async (params) => {
-    console.log(params, "after adding");
     const res = await axios.get(
       `${api_base_URL}product-details/${params.name}/${params.id}/fetch${
         params.order_number === undefined ? "" : `/${params.order_number}`
@@ -217,7 +209,6 @@ export const productDetail = createAsyncThunk(
 export const checkOutCart = createAsyncThunk(
   "userCheckout",
   async function (data, { dispatch }) {
-    // console.log(data);
     const token = JSON.parse(localStorage.getItem(storageKey)).token;
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -266,7 +257,6 @@ export const paymentProcess = async (data) => {
     });
     return res.data.data;
   } catch (e) {
-    // console.log(e);
     return e;
   }
 };
@@ -303,12 +293,10 @@ export const getProfileData = createAsyncThunk(
   "getProfileData",
   async function () {
     const token = JSON.parse(localStorage.getItem(storageKey)).token;
-    // console.log(token, "token user");
     const headers = {
       Authorization: `Bearer ${token}`,
     };
     const res = await axios.get(`${api_base_URL}profile/setting`, { headers });
-    // console.log(res.data, " response");
     return res.data;
   }
 );
@@ -324,10 +312,8 @@ export const sendProfileData = createAsyncThunk(
       const res = await axios.post(`${api_base_URL}profile-setting`, data, {
         headers,
       });
-      // console.log(res.data, " res");
       return res.data;
     } catch (error) {
-      // console.log(error, rejectWithValue(), " error");
       throw rejectWithValue(error.data);
     }
   }
@@ -338,7 +324,6 @@ export const sendProfileData = createAsyncThunk(
 export const purchaseHistory = createAsyncThunk(
   "userpurchasehistory",
   async function () {
-    // console.log("working with");
     try {
       const token = JSON.parse(localStorage.getItem(storageKey)).token;
       const headers = {
@@ -347,10 +332,7 @@ export const purchaseHistory = createAsyncThunk(
       const res = await axios.get(`${api_base_URL}user/puchased-list`, {
         headers,
       });
-      // console.log(res.data.data, "res");
       return res.data.data;
-    } catch (error) {
-      console.log(error, "error purchase history");
-    }
+    } catch (error) {}
   }
 );

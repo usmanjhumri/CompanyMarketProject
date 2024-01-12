@@ -15,7 +15,6 @@ const addToCart = createSlice({
       state.isLoading = true;
     });
     builder.addCase(addToCartApi.fulfilled, (state, action) => {
-      console.log(action.payload, "Add to cart");
       state.isLoading = false;
       state.isError = false;
       state.errorMessage = "";

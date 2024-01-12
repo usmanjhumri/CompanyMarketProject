@@ -56,14 +56,11 @@ export default function ResetPassword() {
         setLoading(false);
         dispatch(resetForgotState());
       }
-
-      // console.log(res, "after otp");
     },
   });
   const handleChangeOTP = (newValue) => {
     setCode(newValue);
     formik.initialValues.code = newValue;
-    // console.log(formik.values);
   };
   return (
     <Box sx={{ ...styles.mainBox }}>

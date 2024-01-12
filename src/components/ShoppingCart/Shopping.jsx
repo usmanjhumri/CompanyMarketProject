@@ -33,7 +33,7 @@ import {
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import stripeimg from "../../assets/5f6f1d4bc69e71601117515.jpg";
-import { order_number } from "../../Const/CONST";
+import { order_number, id } from "../../Const/CONST";
 import styles from "../Header/styles";
 import { BiSolidCheckboxChecked } from "react-icons/bi";
 import { ImCheckboxChecked } from "react-icons/im";
@@ -51,10 +51,14 @@ const Shopping = () => {
   const [isCardOpen, setIsCardOpen] = useState(false);
   const [walletType, setWalletType] = useState(wallet[0]);
   const [user_balance, set_User_Balance] = useState(0);
+  const [orderNumber, setOrderNumber] = useState("");
+  const [loginId, setLoginId] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useMemo(() => {
+    setOrderNumber(window.localStorage.getItem(order_number));
+    setLoginId(window.localStorage.getItem(id));
     const sum = cartData
       ?.reduce(
         (accumulator, currentValue) =>
@@ -68,61 +72,25 @@ const Shopping = () => {
 
       set_User_Balance(Number(balance).toFixed(2));
     }
+    if (cartData?.length === 0) {
+      localStorage.removeItem(order_number);
+    }
   }, [cartData]);
 
   const handleRemoveProduct = async (id) => {
     const res = await dispatch(deleteCart(id));
     if (res.payload.message) {
       toast.success(res.payload.message);
+      dispatch(getCart(loginId ? loginId : orderNumber));
     }
     if (res === 500) {
       navigate("/500");
     }
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOpenCard = async () => {
-    if (!window.localStorage.getItem("user")) {
-      toast.info("Please sign in first ");
-      navigate("/signin");
-    }
-    if (walletType.toLowerCase().trim() === "own") {
-      if (user_balance < totalPrice) {
-        toast.error("Your wallet balance is low! Please try online payment");
-        handleCloseModal();
-        return;
-      }
-      const orderNumber = localStorage.getItem(order_number);
-      const data = {
-        wallet_type: walletType.toLowerCase(),
-        subscription: 0,
-        order_number: orderNumber,
-      };
-      const res = await dispatch(checkOutCart(data));
-      if (res.payload.success) {
-        toast.success(res.payload.message);
-        localStorage.removeItem(order_number);
-        navigate("/");
-      } else {
-        toast.error("Something went wrong");
-      }
-      handleCloseModal();
-    } else {
-      const orderNumber = localStorage.getItem(order_number);
-      const data = {
-        wallet_type: walletType.substring(0, 6).toLowerCase().trim(),
-        subscription: 0,
-        order_number: orderNumber,
-      };
-      const res = await dispatch(checkOutCart(data));
-      if (res.payload.success) setIsCardOpen(true);
-      else toast.error("Something went wrong!");
-
-      handleCloseModal();
-    }
-  };
+  // const handleOpenModal = () => {
+  //   setIsModalOpen(true);
+  // };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -135,7 +103,6 @@ const Shopping = () => {
   const handleCheckout = async () => {
     const orderNumber = localStorage.getItem(order_number);
     const id = localStorage.getItem("id");
-    console.log(id, "user id");
     if (!window.localStorage.getItem("user")) {
       toast.info("Please sign in first ");
       navigate("/signin");
@@ -158,7 +125,7 @@ const Shopping = () => {
       const res = await emptyCart(cartData[0].encrypted_order_number);
       if (res.status === "Success") {
         toast.success(res.message);
-        dispatch(getCart());
+        dispatch(getCart(loginId ? loginId : orderNumber));
         localStorage.removeItem(order_number);
       }
     }
@@ -537,10 +504,10 @@ const Shopping = () => {
                     </FormControl>
                   </Box>
 
-                  <Box paddingTop={2}>
+                  {/* <Box paddingTop={2}>
                     <Button onClick={handleCloseModal}>No</Button>
                     <Button onClick={handleOpenCard}>Yes</Button>
-                  </Box>
+                  </Box> */}
                 </Box>
               </Modal>
             </Grid>

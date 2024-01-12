@@ -38,6 +38,12 @@ const style = {
       color: `${color.black} !important`,
     },
   },
+
+  flexProfilePic: {
+    display: "flex",
+    justifyContent: "start",
+    alignItems: "center",
+  },
 };
 
 export default style;

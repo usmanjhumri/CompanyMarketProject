@@ -8,7 +8,7 @@ import "react-phone-number-input/style.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import { fetchHomeData, getCart, getProfileData } from "./Redux/api/api";
-import { order_number, storageKey } from "./Const/CONST";
+import { order_number, storageKey, id } from "./Const/CONST";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -44,6 +44,8 @@ import TermsCondtions from "./components/Terms&Condtions";
 function App() {
   const navigate = useNavigate();
   const [orderNumber, setOrderNumber] = useState("");
+  const [loginId, setLoginId] = useState("");
+
   const [dataFetched, setDataFetched] = useState(false);
   const dispatch = useDispatch();
   const error500 = useSelector((state) => state?.home?.isError);
@@ -52,8 +54,9 @@ function App() {
 
   useEffect(() => {
     setOrderNumber(window.localStorage.getItem(order_number));
-    if (orderNumber) {
-      dispatch(getCart(orderNumber));
+    setLoginId(window.localStorage.getItem(id));
+    if (orderNumber || loginId) {
+      dispatch(getCart(loginId ? loginId : orderNumber));
     }
   }, [orderNumber, dispatch]);
 

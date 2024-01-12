@@ -26,6 +26,9 @@ const styles = {
     fontWeight: 500,
     lineHeight: "normal",
     marginBottom: "10px",
+    display: "inline-flex",
+    gap: "4px",
+    flexWrap: "wrap",
   },
   boxDisplay: {
     display: "flex",

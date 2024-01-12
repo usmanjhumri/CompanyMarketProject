@@ -8,6 +8,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+
 import TableStyle from "./style";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -102,7 +104,7 @@ const PurchaseHistory = () => {
 
                 <TableBody>
                   {tableData.map((item, index) => (
-                    <TableRow key={index}>
+                    <TableRow key={index} sx={{ mt: 2, mb: 20 }}>
                       <ResponsiveTableCell style={TableStyle.tableBodyCell}>
                         {item.code}
                       </ResponsiveTableCell>

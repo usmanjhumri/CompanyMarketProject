@@ -35,7 +35,6 @@ const getProfilesDatas = createSlice({
         state.coverImage = action.payload.data.cover_image;
         state.logoImage = action.payload.data.image;
         state.firstName = action.payload.data.firstname;
-        // console.log(state.firstName, "firsname of user");
       })
       .addCase(getProfileData.rejected, (state, action) => {
         state.isLoading = false;

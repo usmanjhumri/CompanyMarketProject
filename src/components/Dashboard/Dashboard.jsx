@@ -3,11 +3,13 @@ import Box from "@mui/material/Box";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 // import style from "./Styles";
-import { useTheme } from "@mui/material/styles";
+import { useSelector } from "react-redux";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import img1 from "../../assets/dashboardLogo.png";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import Grid from "@mui/material/Grid";
+
 import PropTypes from "prop-types";
 import { api_base_URL_iFrame } from "../../Const/CONST";
 import style from "./Styles";
@@ -24,11 +26,7 @@ function CustomTabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Typography>{children}</Typography>}
     </div>
   );
 }
@@ -57,7 +55,15 @@ const Dashboard = () => {
   const isLargeScreen = useMediaQuery("(min-width:961px)");
 
   const [tabValue, setTabValue] = React.useState(0);
-
+  const firstName = useSelector((state) => state?.getProfileData?.firstName);
+  const {
+    profileData,
+    description,
+    isLoading,
+    imagePath,
+    coverImage,
+    logoImage,
+  } = useSelector((state) => state?.getProfileData);
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -81,131 +87,30 @@ const Dashboard = () => {
   };
   return (
     <>
-      <Box
-        sx={{
-          minWidth: 275,
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: isSmallScreen ? "column" : "row",
-            justifyContent: isSmallScreen ? "center" : "space-around",
-            alignItems: isSmallScreen ? "center" : "flex-start",
-            marginTop: "20px",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <img
+      <Grid container>
+        <Grid item md={1}></Grid>
+        <Grid item md={10}>
+          <Box sx={{ ...style.flexProfilePic }}>
+            <Box component={"img"} src={img1}></Box>
+            <Typography
               sx={{
-                width: isSmallScreen ? "80px" : "100px",
-                height: "100px",
-              }}
-              src={img1}
-              alt="funnel"
-            />
-
-            <CardContent
-              sx={{
-                marginLeft: isSmallScreen ? 0 : "16px",
-                textAlign: isSmallScreen ? "center" : "left",
+                fontSize: isSmallScreen ? "24px" : "32px",
+                fontFamily: "Be Vietnam",
+                color: "#363636",
+                fontWeight: 600,
+                ml: 2,
               }}
             >
-              <Typography
-                sx={{
-                  fontSize: isSmallScreen ? "24px" : "32px",
-                  fontFamily: "Be Vietnam",
-                  color: "#363636",
-                  fontWeight: 600,
-                }}
-              >
-                test user
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "Be Vietnam",
-                  color: "black",
-                  fontSize: isSmallScreen ? "12px" : "16px",
-                  fontWeight: "400",
-                }}
-              >
-                Member since December, 2023
-              </Typography>
-            </CardContent>
+              {firstName}
+            </Typography>
           </Box>
-
-          <CardContent
-            sx={{
-              marginLeft: isSmallScreen ? 0 : "16px",
-              textAlign: isSmallScreen ? "center" : "right",
-            }}
-          >
-            <Typography
-              sx={{
-                fontFamily: "Be Vietnam",
-                color: "#50B948",
-                fontSize: isSmallScreen ? "12px" : "16px",
-                textAlign: isSmallScreen ? "center" : "right",
-                fontWeight: "400",
-              }}
-            >
-              Purchased
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: isSmallScreen ? "16px" : "20px",
-                fontFamily: "Be Vietnam",
-                color: "#50B948",
-                textAlign: isSmallScreen ? "center" : "right",
-              }}
-            >
-              17
-            </Typography>
-          </CardContent>
-        </Box>
-
-        <Box
-          maxWidth="lg"
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "53px",
-            marginTop: isSmallScreen
-              ? "70px"
-              : isMediumScreen
-              ? "20px"
-              : isLargeScreen
-              ? "20px"
-              : "",
-          }}
-        >
           <Tabs
             onChange={handleTabChange}
             value={tabValue}
             variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
-            sx={{
-              borderRadius: "4px",
-              width: isSmallScreen ? "100%" : isLargeScreen ? "68%" : "100%",
-
-              display: "flex",
-              flexDirection: isSmallScreen ? "column" : "row",
-              alignItems: isSmallScreen ? "center" : "flex-start",
-              cursor: "pointer",
-              fontFamily: "Be Vietnam",
-
-              fontSize: isSmallScreen ? "12px" : "16px",
-              fontWeight: "400",
-              position: isMediumScreen ? "relative" : "absolute",
-              left: isMediumScreen ? "0" : isLargeScreen ? "16%" : "0",
-            }}
+            sx={{ mt: 4 }}
           >
             <Tab label="Dashboard" sx={style.list} />
             <Tab label="Deposit" sx={style.list} />
@@ -213,16 +118,14 @@ const Dashboard = () => {
             <Tab label="Purchase log" sx={style.list} />
             <Tab label="Ticket" sx={style.list} />
           </Tabs>
-        </Box>
-        <Box>
           <CustomTabPanel value={tabValue} index={0}>
             {isloadingiframe()}
             <iframe
               title="Embedded Content"
               src={`${api_base_URL_iFrame}user/dashboard?token=${token}`}
               width="100%"
-              height="700px"
-              style={{ border: "0px" }}
+              height="800px"
+              style={{ border: "0px", overflow: "hidden" }}
               allowFullScreen
               ref={iframeRef}
             />
@@ -275,8 +178,9 @@ const Dashboard = () => {
               ref={iframeRef}
             />
           </CustomTabPanel>
-        </Box>
-      </Box>
+        </Grid>
+        <Grid item md={1}></Grid>
+      </Grid>
     </>
   );
 };

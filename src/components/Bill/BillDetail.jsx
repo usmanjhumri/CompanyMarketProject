@@ -55,7 +55,7 @@ const BillDetail = () => {
               ))}
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <CardContent>
-                  <Typography sx={BillStyle.hisTypo}>Charges</Typography>
+                  <Typography sx={BillStyle.hisTypo}>Stripe Charges</Typography>
                 </CardContent>
                 <CardContent>
                   <Typography sx={BillStyle.hisTypo}>+5%</Typography>

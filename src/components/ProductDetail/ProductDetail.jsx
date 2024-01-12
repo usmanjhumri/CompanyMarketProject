@@ -1,9 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-no-target-blank */
-/* eslint-disable react/jsx-key */
 import { useEffect, useMemo, useState } from "react";
 import {
   Container,
@@ -32,7 +26,7 @@ import { PiShoppingCartLight } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import { resetSuccessCart } from "../../Redux/Slice/addtocart";
 import styles from "./styles";
-import { productDetail, addToCart } from "../../Redux/api/api";
+import { productDetail, addToCart, getCart } from "../../Redux/api/api";
 import { useParams } from "react-router-dom";
 import { GoChevronLeft, GoChevronRight } from "react-icons/go";
 import { Link } from "react-router-dom";
@@ -50,7 +44,7 @@ const MenuProps = {
   },
 };
 
-const Licenese = ["Regular License", "Extended License"];
+const Licenese = ["Regular License"];
 function getStyles(name, personName, theme) {
   return {
     fontWeight:
@@ -64,6 +58,21 @@ const ProductDetail = () => {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const params = useParams();
   const dispatch = useDispatch();
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 2,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+      slidesToSlide: 2,
+    },
+    mobile: {
+      breakpoint: { max: 538, min: 0 },
+      items: 1,
+    },
+  };
 
   const [checkedItems, setCheckedItems] = useState({});
   const [pages, setPages] = useState([]);
@@ -136,19 +145,20 @@ const ProductDetail = () => {
         if (item.bump.name.trim() === "Extra Pages") {
           setExtraPages(item.pages);
         }
+
         newBumps.push(Number(item.price));
         newCheckedItems = {
           ...newCheckedItems,
-          [index]: true,
+          [item.bump.id]: true,
         };
       });
+      setLicenseType(Licenese[oldOrder?.license - 1]);
 
       setCheckedItems(newCheckedItems);
 
       setTotalPrice(Number(oldOrder.total_price).toFixed(2));
     } else if (product?.bumps?.length > 0) {
       setBumpfee(Number(0));
-
       product.bumps.forEach((item, index) => {
         if (item.name.trim() === "Extra Pages") {
           setExtraPages(item.min_quantity);
@@ -163,15 +173,24 @@ const ProductDetail = () => {
       setTotalPrice(product.regular_price);
       setPages({});
       setBumps({});
+    } else if (oldOrder?.bumpresponses?.length === 0) {
+      setTotalPrice(Number(oldOrder?.total_price).toFixed(2));
+      setLicenseType(Licenese[oldOrder?.license - 1]);
+    } else {
+      setLicenseType(Licenese[0]);
+      setTotalPrice(product?.regular_price);
     }
 
     setProducts(product?.bumps);
   }, [oldOrder, product]);
 
   useEffect(() => {
+    const order_number = window.localStorage.getItem(orderNumber);
+    const id = window.localStorage.getItem("id");
     if (successCart) {
       toast.success("Item added to your cart");
       dispatch(resetSuccessCart());
+      dispatch(getCart(id ? id : order_number));
       setUpdateCartText(true);
     } else if (isError) {
       toast.error("Something went wrong!");
@@ -179,24 +198,7 @@ const ProductDetail = () => {
     }
   }, [successCart, isError]);
 
-  const responsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 2,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2,
-      slidesToSlide: 2,
-    },
-    mobile: {
-      breakpoint: { max: 538, min: 0 },
-      items: 1,
-    },
-  };
-
-  const handleCheckboxChange = (index, price, name) => {
-    console.log(index, "index", products[index], "productsindex");
+  const handleCheckboxChange = (index, price, name, id) => {
     const bump = products[index];
     setBumps((prevBumps) => {
       const newBumps = { ...prevBumps };
@@ -230,10 +232,10 @@ const ProductDetail = () => {
     setCheckedItems((prevCheckedItems) => {
       const checkingItem = {
         ...prevCheckedItems,
-        [index]: !prevCheckedItems[index],
+        [id]: !prevCheckedItems[id],
       };
 
-      if (checkingItem[index]) {
+      if (checkingItem[id]) {
         if (name.trim() === "Extra Pages") {
           setTotalPrice(Number(totalPrice) + Number(price) * extraPages);
           setBumpfee(bumpFee + Number(price) * extraPages);
@@ -308,10 +310,10 @@ const ProductDetail = () => {
     }
 
     let updatedTotalPrice = initialPrice;
-    Object.keys(checkedItems).forEach((index) => {
+    Object.keys(checkedItems).forEach((items, index) => {
       const isChecked = checkedItems[index];
       const bump = product?.bumps[index];
-
+      console.log(bump, index);
       if (isChecked) {
         if (bump.name.trim() === "Extra Pages") {
           updatedTotalPrice += Number(bump.price) * extraPages;
@@ -343,10 +345,7 @@ const ProductDetail = () => {
       data.append("pages", JSON.stringify(pages));
       data.append("order_number", id ? id : order_number ? order_number : "");
       const res = await dispatch(addToCart(data));
-      console.log(res, "aaddtp");
     } else {
-      const order_number = window.localStorage.getItem(orderNumber);
-      const id = window.localStorage.getItem("id");
       const data = new FormData();
       data.append("_token", "BNiq5lIb9RM11nI6MvODcZCcWMyksqkayrN0A3G0");
       data.append("product_id", encrypted_id);
@@ -357,18 +356,18 @@ const ProductDetail = () => {
     }
   };
 
-  const handleUpdateCart = () => {
-    console.log(
-      bumpFee,
-      "bumpFee",
-      LinceseIndex,
-      "LinceseIndex",
-      bumps,
-      "bumps",
-      pages,
-      "page"
-    );
-  };
+  // const handleUpdateCart = () => {
+  //   console.log(
+  //     bumpFee,
+  //     "bumpFee",
+  //     LinceseIndex,
+  //     "LinceseIndex",
+  //     bumps,
+  //     "bumps",
+  //     pages,
+  //     "page"
+  //   );
+  // };
 
   const CustomRight = ({ onClick }) => (
     <button className="arrow right" onClick={onClick} style={styles.arrowRight}>
@@ -400,14 +399,11 @@ const ProductDetail = () => {
                 <Typography
                   sx={{
                     ...styles.createdBy,
-                    display: "inline-flex",
-                    gap: "8px",
-                    flexWrap: "wrap",
                   }}
                 >
                   By{" "}
                   <Typography variant="span" style={{ color: "#2697FA" }}>
-                    {product?.user?.username}
+                    {product?.user?.firstname + " " + product?.user?.lastname}
                   </Typography>
                   in {product?.tag[0]}
                   <Typography variant="span">
@@ -515,7 +511,8 @@ const ProductDetail = () => {
                           </Typography>
 
                           <Typography mt={1} sx={styles.BoxTypo2}>
-                            By {item.user?.username}
+                            By{" "}
+                            {item?.user?.firstname + " " + item?.user?.lastname}
                           </Typography>
 
                           <Box mt={2} sx={{ display: "flex", gap: 2 }}>
@@ -662,15 +659,15 @@ const ProductDetail = () => {
                                     index,
                                     item.price,
                                     item.name,
-                                    item.min_quantity
+                                    item.id
                                   )
                                 }
                                 checked={
-                                  checkedItems[index] === true ? true : false
+                                  checkedItems[item.id] === true ? true : false
                                 }
                               />
                               <Typography sx={styles.detailsText}>
-                                {item.name}{" "}
+                                {item.name}
                               </Typography>
                               {item.name.trim() === "Extra Pages" && (
                                 <input
@@ -683,7 +680,7 @@ const ProductDetail = () => {
                                     handlePageChange(
                                       e,
                                       item.price,
-                                      checkedItems[index],
+                                      checkedItems[item.id],
                                       index
                                     )
                                   }
@@ -762,7 +759,7 @@ const ProductDetail = () => {
                     )}
                   </Typography>
                 </Box>
-                <Box
+                {/* <Box
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -780,7 +777,7 @@ const ProductDetail = () => {
                     {" "}
                     {isLoading ? <Skeleton width={100} /> : "Yes"}
                   </Typography>
-                </Box>
+                </Box> */}
                 <Box
                   sx={{
                     display: "flex",
@@ -935,7 +932,10 @@ const ProductDetail = () => {
                             </Typography>
 
                             <Typography mt={1} sx={styles.BoxTypo2}>
-                              By {item.user?.username}
+                              By{" "}
+                              {item?.user?.firstname +
+                                " " +
+                                item?.user?.lastname}
                             </Typography>
 
                             <Box mt={2} sx={{ display: "flex", gap: 2 }}>

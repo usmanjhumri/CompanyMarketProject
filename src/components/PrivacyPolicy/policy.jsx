@@ -10,7 +10,11 @@ function policy() {
         <Grid container>
           <Grid item md={4} sm={0}></Grid>
           <Grid item md={4} sm={12}>
-            <Typography variant="h4" sx={style.textHeading}>
+            <Typography
+              variant="h4"
+              sx={style.textHeading}
+              style={{ textAlign: "center" }}
+            >
               Privacy Policy
             </Typography>
             <Typography variant="h4" sx={style.textHeading2}>
@@ -27,7 +31,7 @@ function policy() {
       <Grid container>
         <Grid item md={3} xs={0} sm={0}></Grid>
         <Grid item md={6} xs={12} sm={0}>
-          <Box sx={{ pl: 2, pr: 2 }}>
+          <Box sx={{ pl: 2, pr: 2, mt: 5 }}>
             <Typography
               variant="h4"
               sx={{ ...style.textHeading, mb: 3, width: "100%" }}
@@ -123,8 +127,7 @@ function policy() {
               }}
             >
               {" "}
-              By using JD Funnel Marketplace Marketplace, you agree to this
-              Privacy Policy.{" "}
+              By using JD Funnel Marketplace , you agree to this Privacy Policy.{" "}
             </Typography>
           </Box>
         </Grid>

@@ -7,7 +7,7 @@ const Styles = {
   AuthTypo: {
     fontWeight: 600,
     fontSize: { md: "32px", xs: "20px" },
-    color: Colors.black,
+    color: Colors.primary,
     fontFamily: "Be Vietnam Pro , sans-serif",
     lineHeight: "35.06px",
     textAlign: "center",

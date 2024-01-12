@@ -5,7 +5,7 @@ const styles = {
     fontFamily: "Be Vietnam Pro,sans-serif",
     fontStyle: "normal",
     fontWeight: 500,
-    textAlign: "center",
+    textAlign: "left",
     fontSize: 40,
     color: Colors.primary,
     width: { md: "630px", xs: "auto" },
