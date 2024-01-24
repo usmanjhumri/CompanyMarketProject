@@ -47,9 +47,9 @@ const CategoriesStyle = {
   },
   ImgStyle: {
     width: "100%",
-    borderRadius: "2px, 2px, 0px, 0px",
-    height: "200px", // Set the fixed height for all images (adjust as needed)
-    objectFit: "cover",
+    borderRadius: "10px",
+    objectFit: "contain",
+    aspectRatio: "4/2",
   },
   BoxTypo: {
     fontWeight: 500,
@@ -77,6 +77,7 @@ const CategoriesStyle = {
     fontFamily: "Be Vietnam Pro , sans-serif",
     lineHeight: "26.3px",
     textAlign: "left",
+    textDecoration: "line-through",
   },
   PriceTypo2: {
     fontWeight: 500,

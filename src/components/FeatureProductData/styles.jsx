@@ -24,15 +24,15 @@ const Styles = {
     margin: "0.8rem auto",
   },
   BoxStyle: {
-    boxShadow: " 0px 0px 15px 0px #0000001A",
+    boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
     padding: "0.7rem",
     borderRadius: "15px",
   },
   ImgStyle: {
     width: "100%",
-    height: "200px",
-    objectFit: "cover",
-    borderRadius: "2px, 2px, 0px, 0px",
+    borderRadius: "10px",
+    objectFit: "contain",
+    aspectRatio: "4/2",
   },
   BoxTypo: {
     fontWeight: 500,

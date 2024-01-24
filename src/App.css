@@ -107,8 +107,127 @@ input:focus,
   justify-content: space-evenly;
   align-items: center;
 }
-@media (max-width: 1600px) {
+@media (max-width: 1915px) {
   .soldProduct .MuiTabs-flexContainer {
     justify-content: start !important;
+  }
+}
+
+.height-footer {
+  min-height: calc(100dvh - 163px);
+}
+::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 50px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.popever-funnel-navbar > .MuiBackdrop-invisible,
+.popever-funnel-navbar [data-testid="sentinelStart"] {
+  display: none !important;
+}
+
+.popever-funnel-navbar {
+  position: unset !important;
+}
+
+.popever-funnel-navbar .css-3bmhjh-MuiPaper-root-MuiPopover-paper {
+  position: fixed !important;
+  z-index: 999;
+  max-height: 400px !important;
+  margin-top: 12px;
+}
+
+.navlink {
+  text-decoration: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+}
+
+.navlink:hover {
+  background: rgb(38, 151, 250);
+  color: rgb(255, 255, 255) !important;
+}
+.nav-bar {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+}
+.nav-bar-cat {
+  display: flex;
+  gap: 2px;
+}
+
+.navitem {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  padding: 0.5rem 0.8rem;
+  color: rgb(0, 0, 0);
+  line-height: 17.53px;
+  margin-left: 2px;
+  font-family: "Be Vietnam Pro", sans-serif;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.navitem:hover,
+.navitem.active {
+  background: rgb(38, 151, 250);
+  color: #fff;
+}
+
+.navitem .dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  color: #000;
+  transform: translate(-20px, 0);
+  background-color: #fff;
+  width: max-content;
+  min-width: 100px;
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 25px;
+  padding: 20px 10px 20px 10px;
+  box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.05);
+}
+
+.navitem:hover .dropdown {
+  transform: translate(0, 0);
+  opacity: 1;
+  pointer-events: all;
+  box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.05);
+}
+
+.navitem:hover .dropdown a {
+  display: block;
+}
+@media (max-width: 900px) {
+  .arrow {
+    top: 32%;
   }
 }

@@ -165,7 +165,7 @@ export default function Signin() {
                   <Grid item xs={12}>
                     <Box sx={{ ...styles.typoLabel }}>
                       <Typography sx={{ paddingLeft: "30px" }}>
-                        Email
+                        Email or Username
                       </Typography>
                     </Box>
                     <TextField
@@ -225,7 +225,7 @@ export default function Signin() {
                       sx={{ ...styles.signInBtn }}
                       disabled={isLoading}
                     >
-                      {isLoading ? "Loading..." : "Sign in"}
+                      {isLoading ? "Signing In..." : "Sign in"}
                     </Button>
                   </Grid>
                 </Grid>

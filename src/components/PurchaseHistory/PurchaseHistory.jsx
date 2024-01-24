@@ -93,12 +93,6 @@ const PurchaseHistory = () => {
                     >
                       Total
                     </ResponsiveTableCell>
-                    <ResponsiveTableCell
-                      sx={TableStyle.tbHeadCell}
-                      align="right"
-                    >
-                      Action
-                    </ResponsiveTableCell>
                   </TableRow>
                 </TableHead>
 
@@ -115,12 +109,14 @@ const PurchaseHistory = () => {
                         {item.product.name}
                       </ResponsiveTableCell>
                       <ResponsiveTableCell align="right">
-                        <Button
-                          style={TableStyle.tbBodyYesButton}
+                        <Typography
+                          style={{
+                            ...TableStyle.tbBodyYesButton,
+                          }}
                           variant="contained"
                         >
                           {item.support == 1 ? "Yes" : "No"}
-                        </Button>
+                        </Typography>
                       </ResponsiveTableCell>
                       <ResponsiveTableCell
                         style={TableStyle.tableBodyCell}
@@ -135,12 +131,12 @@ const PurchaseHistory = () => {
                         {new Date(item.created_at).toLocaleString("en-GB")}
                       </ResponsiveTableCell>
                       <ResponsiveTableCell align="right">
-                        <Button
+                        <Typography
                           style={TableStyle.tbBodyPurchseButton}
                           variant="contained"
                         >
                           {item.bumpresponses.length > 0 ? "Yes" : "No"}
-                        </Button>
+                        </Typography>
                       </ResponsiveTableCell>
                       <ResponsiveTableCell
                         style={TableStyle.tableBodyCell}
@@ -153,14 +149,6 @@ const PurchaseHistory = () => {
                         align="right"
                       >
                         $ {Number(item.total_price).toFixed(2)}
-                      </ResponsiveTableCell>
-                      <ResponsiveTableCell align="right">
-                        <Button
-                          style={TableStyle.tbBodyYesButton}
-                          variant="contained"
-                        >
-                          View
-                        </Button>
                       </ResponsiveTableCell>
                     </TableRow>
                   ))}

@@ -20,7 +20,10 @@ const getCartItem = createSlice({
       state.isError = false;
       state.errorMessage = "";
       state.success = action.payload.status;
-      state.data = action.payload.data;
+      state.data =
+        action.payload.message === "No Product Added"
+          ? []
+          : action.payload.data;
 
       state.userBalance = action.payload.user_balance;
 

@@ -30,7 +30,6 @@ const forgotPasswordSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(resetForgotState, (state) => {
-      state.email = "";
       state.success = false;
       state.isError = false;
       state.successMessage = "";

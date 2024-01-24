@@ -49,38 +49,35 @@ export default function MostSellCategoriesData({ filterProduct }) {
 
                 <Box mt={2} sx={{ display: "flex", gap: 2 }}>
                   <Typography sx={CategoriesStyle.PriceTypo}>
-                    ${Number(item.extended_price).toFixed(2)}
+                    <strike>${Number(item.extended_price).toFixed(2)}</strike>
                   </Typography>
                   <Typography sx={CategoriesStyle.PriceTypo2}>
                     ${Number(item.regular_price).toFixed(2)}
                   </Typography>
                 </Box>
-
+              </Link>
+              <Box
+                mt={4}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography sx={CategoriesStyle.SalesTypo}>
+                  {item.total_sell} Sales
+                </Typography>
                 <Box
-                  mt={4}
                   sx={{
                     display: "flex",
-                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 2,
                   }}
                 >
-                  <Typography sx={CategoriesStyle.SalesTypo}>
-                    {item.total_sell} Sales
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2,
-                    }}
-                  >
-                    <a href={item.demo_link} target="_blank">
-                      <Button sx={CategoriesStyle.BtnStyle}>
-                        Live Preview
-                      </Button>
-                    </a>
-                  </Box>
+                  <a href={item.demo_link} target="_blank">
+                    <Button sx={CategoriesStyle.BtnStyle}>Live Preview</Button>
+                  </a>
                 </Box>
-              </Link>
+              </Box>
             </Box>
           </Grid>
         ))}

@@ -5,11 +5,11 @@ import {
   Button,
   Collapse,
   Divider,
+  Drawer,
   FormControl,
   InputAdornment,
   List,
   OutlinedInput,
-  SwipeableDrawer,
   Typography,
 } from "@mui/material";
 import { LuSearch } from "react-icons/lu";
@@ -21,7 +21,7 @@ import Logo from "/companylogo.png";
 import { Fragment, useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { storageKey } from "../../../Const/CONST";
+import { storageKey, id } from "../../../Const/CONST";
 import { resetSuccessSignin } from "../../../Redux/Slice/signin";
 const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
   const dispatch = useDispatch();
@@ -39,6 +39,7 @@ const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
 
   const handleLogOut = () => {
     localStorage.removeItem(storageKey);
+    localStorage.removeItem(id);
     dispatch(resetSuccessSignin());
     navigate("/signin");
   };
@@ -64,7 +65,7 @@ const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
   };
   return (
     <>
-      <SwipeableDrawer
+      <Drawer
         open={mobileOpen}
         onClose={() => {
           setMobileOpen(!mobileOpen);
@@ -215,7 +216,7 @@ const ResponsiveDrawer = ({ mobileOpen, setMobileOpen, catergories }) => {
             )}
           </List>
         </Box>
-      </SwipeableDrawer>
+      </Drawer>
     </>
   );
 };

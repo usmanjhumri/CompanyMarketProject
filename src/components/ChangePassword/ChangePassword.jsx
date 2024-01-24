@@ -62,7 +62,7 @@ const ChangePassword = () => {
       validationSchema: signupSchema,
       onSubmit: (values) => {
         if (values.password.trim() !== values.password_confirmation.trim()) {
-          toast.error("password and confirm password does not matcg", {
+          toast.error("Password and confirm password does not match", {
             position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,
@@ -103,11 +103,6 @@ const ChangePassword = () => {
                 ...styles.innerPaperFlex,
               }}
             >
-              <Box
-                sx={{
-                  ...styles.logoDiv,
-                }}
-              ></Box>
               <Box>
                 <Typography sx={{ ...styles.equalMargin, ...styles.signFont }}>
                   Change Password

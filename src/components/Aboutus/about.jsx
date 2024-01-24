@@ -10,16 +10,22 @@ function about() {
         <Grid container>
           <Grid item md={4} sm={0}></Grid>
           <Grid item md={4} sm={12}>
-            <Typography variant="h4" sx={style.textHeading}>
-              About Us
-            </Typography>
-            <Typography variant="h4" sx={style.textHeading2}>
-              The Premier Global Community for Creative Tools and Assets.
-            </Typography>
-            <p variant="p" style={style.textParagraph}>
-              Our goal is to create the ultimate community for creatives
-              worldwide, promoting sharing and growth
-            </p>
+            <Box
+              sx={{
+                ...style.heroHeadingAboutUs,
+              }}
+            >
+              <Typography variant="h4" sx={style.textHeading}>
+                About Us
+              </Typography>
+              <Typography variant="h4" sx={style.textHeading2}>
+                The Premier Global Community for Creative Tools and Assets.
+              </Typography>
+              <p variant="p" style={style.textParagraph}>
+                Our goal is to create the ultimate community for creatives
+                worldwide, promoting sharing and growth
+              </p>
+            </Box>
           </Grid>
 
           <Grid item md={4} sm={0}></Grid>

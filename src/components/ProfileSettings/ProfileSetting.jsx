@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import "./Profile.css";
 import BG from "../../assets/settingBg.png";
-import ProfilPic from "../../assets/profilePic.png";
+import ProfilPic from "../../assets/ProfilPics.png";
 import CAMERA from "../../assets/cameraselect.png";
 import profileStyles from "./styles";
 import { getProfileData, sendProfileData } from "../../Redux/api/api";
@@ -33,28 +33,21 @@ const ProfileSetting = () => {
   const { isError, Message, success, logoImageType } = useSelector(
     (state) => state.sendProfileData
   );
+  const isLoadingProfileSend = useSelector(
+    (state) => state?.sendProfileData?.isLoadingProfileSend
+  );
 
   const dispatch = useDispatch();
   const [inputFocus, setInputFocus] = useState({});
-  const [inputValues, setInputValues] = useState({
-    firstName: "",
-    lastName: "",
-    address: "",
-    state: "",
-    zipCode: "",
-    city: "",
-    country: "",
-  });
-  // base_url + image  + cover_image
   const [inputFocusDescription, setInputFocusDescription] = useState(false);
   const [selectedImg, setSelectedImg] = useState(null);
   const [uploadCoverPhoto, setUploadCoverPhoto] = useState(null);
-
   const [coverImageURL, setCoverImageURL] = useState(null);
   const [logoImageURL, setLogoImageURL] = useState(null);
   const [coverPhotoName, setCoverPhotoName] = useState();
   const [companyLogo, setCompanyLogo] = useState();
   const [disable, setDisable] = useState(null);
+  const [loading, setLoading] = useState(false);
   const inputRefs = {
     img: useRef(null),
     cover: useRef(null),
@@ -65,20 +58,30 @@ const ProfileSetting = () => {
     zipCode: useRef(null),
     city: useRef(null),
   };
+  const [inputValues, setInputValues] = useState({
+    "first name": "",
+    "last name": "",
+    address: "",
+    state: "",
+    zipCode: "",
+    city: "",
+    country: "",
+    description: "",
+  });
   const inputRefsDescription = useRef(null);
 
   useEffect(() => {
     // Update inputValues with the fetched data
     setInputValues((prevValues) => ({
       ...prevValues,
-      firstName: profileData[0]?.firstname || "",
-      lastName: profileData[0]?.lastname || "",
+      "first name": profileData[0]?.firstname || "",
+      "last name": profileData[0]?.lastname || "",
       address: profileData[0]?.address?.address || "",
       state: profileData[0]?.address?.state || "",
       zipCode: profileData[0]?.address?.zip || "",
       city: profileData[0]?.address?.city || "",
-      description: description || "",
-      companyLogo: profileData[0]?.company_logo || "",
+      description: profileData[0]?.description || "",
+      companyLogo: profileData[0]?.image || "",
       coverPhoto: profileData[0]?.cover_image || "",
     }));
 
@@ -86,13 +89,14 @@ const ProfileSetting = () => {
       setCoverImageURL(`${imagePath}/${coverImage}`);
     }
 
-    if (profileData[0]?.company_logo) {
+    if (profileData[0]?.image) {
       setLogoImageURL(`${imagePath}/${logoImage}`);
     }
   }, [profileData, description, imagePath, coverImage, logoImage]);
 
   const handleEditInputDescription = () => {
     setInputFocusDescription(true);
+    setDisable("description");
     if (inputRefsDescription.current) {
       inputRefsDescription.current.focus();
     }
@@ -112,7 +116,7 @@ const ProfileSetting = () => {
 
     if (selectedFile) {
       if (selectedFile.type !== "image/png") {
-        toast.error("The LogoImage must be png type", {
+        toast.error("Logo image must be png type", {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -144,20 +148,68 @@ const ProfileSetting = () => {
     }
   };
 
+  //   e.preventDefault();
+  //   setLoading(true);
+
+  //   const formData = new FormData();
+  //   formData.append("firstname", inputValues["first name"]);
+  //   formData.append("lastname", inputValues["last name"]);
+  //   formData.append("address", inputValues.address);
+  //   formData.append("state", inputValues.state);
+  //   formData.append("zip", inputValues.zipCode);
+  //   formData.append("description", inputValues.description);
+  //   formData.append("city", inputValues.city);
+
+  //   if (companyLogo) {
+  //     formData.append("image", companyLogo);
+  //   }
+
+  //   if (coverPhotoName) {
+  //     formData.append("cover_image", coverPhotoName);
+  //   }
+  //   try {
+  //     await dispatch(sendProfileData(formData));
+  //     await dispatch(getProfileData());
+  //     toast.success("Profile updated successfully", {
+  //       position: "top-right",
+  //       autoClose: 1000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //     });
+  //   } catch (error) {
+  //     toast.error("Error updating profile", {
+  //       position: "top-right",
+  //       autoClose: 3000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData();
-    formData.append("firstname", inputValues.firstName);
-    formData.append("lastname", inputValues.lastName);
+    formData.append("firstname", inputValues["first name"]);
+    formData.append("lastname", inputValues["last name"]);
     formData.append("address", inputValues.address);
     formData.append("state", inputValues.state);
     formData.append("zip", inputValues.zipCode);
-    formData.append("image", companyLogo); // Assuming image is a file input, you might handle it differently
-    formData.append("logoimage", companyLogo);
-    formData.append("cover_image", coverPhotoName);
+    formData.append("description", inputValues.description);
     formData.append("city", inputValues.city);
-    // formData.append("description", inputValues.)
+    if (companyLogo) {
+      formData.append("image", companyLogo);
+    }
 
+    if (coverPhotoName) {
+      formData.append("cover_image", coverPhotoName);
+    }
     dispatch(sendProfileData(formData));
   };
 
@@ -175,13 +227,14 @@ const ProfileSetting = () => {
     } else if (success) {
       toast.success(Message, {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
       });
       dispatch(profileSuccessData());
+      dispatch(getProfileData());
     }
   }, [isError, success, Message]);
   return (
@@ -208,6 +261,7 @@ const ProfileSetting = () => {
                       width: "100%",
                       height: "280px",
                       borderRadius: "15px",
+                      objectFit: "cover",
                     }}
                   />
                 )}
@@ -228,7 +282,7 @@ const ProfileSetting = () => {
 
                 {/* Profile Image */}
                 <Box sx={profileStyles.profileImagePosition}>
-                  {isLoading ? (
+                  {isLoading || isLoadingProfileSend ? (
                     <Skeleton
                       variant="circular"
                       animation="wave"
@@ -269,18 +323,18 @@ const ProfileSetting = () => {
                   </span>
 
                   {/* Profile Name and Title */}
-                  <span style={profileStyles.profileNamePostion}>
+                  <Box component="span" sx={profileStyles.profileNamePostion}>
                     <Typography sx={profileStyles.profileTitleName}>
                       {profileData[0]?.firstname || <Skeleton width={100} />}
                     </Typography>
                     <Typography sx={profileStyles.profileSubTitleName}>
                       {profileData[0]?.lastname || <Skeleton width={80} />}
                     </Typography>
-                  </span>
+                  </Box>
 
                   {/* Profile Picture Text */}
                   <span>
-                    {isLoading ? (
+                    {isLoading || isLoadingProfileSend ? (
                       <Skeleton
                         variant="circular"
                         animation="wave"
@@ -298,8 +352,8 @@ const ProfileSetting = () => {
 
               <Grid container mt={18} spacing={3} width="100%">
                 {[
-                  "firstName",
-                  "lastName",
+                  "first name",
+                  "last name",
                   "address",
                   "state",
                   "zipCode",
@@ -316,13 +370,13 @@ const ProfileSetting = () => {
                             fieldName.slice(1) || <Skeleton width={100} />}
                         </label>
                         <Typography
-                          style={profileStyles.labelLinkStyle}
+                          sx={profileStyles.labelLinkStyle}
                           onClick={handleEditInput(fieldName)}
                         >
                           Edit
                         </Typography>
                       </Box>
-                      {isLoading ? (
+                      {isLoading || isLoadingProfileSend ? (
                         <Skeleton variant="text" animation="wave" width={150} />
                       ) : (
                         <OutlinedInput
@@ -344,7 +398,7 @@ const ProfileSetting = () => {
                 ))}
 
                 <Grid item xs={12} md={12}>
-                  <FormControl sx={{ m: 1 }} fullWidth className="inputBase">
+                  <FormControl sx={{ m: 1 }} className="inputBase" fullWidth>
                     <Box sx={profileStyles.labelStyle}>
                       <label
                         htmlFor="description"
@@ -353,19 +407,28 @@ const ProfileSetting = () => {
                         Description
                       </label>
                       <Typography
-                        style={profileStyles.labelLinkStyle}
+                        sx={profileStyles.labelLinkStyle}
                         onClick={handleEditInputDescription}
                       >
                         Edit
                       </Typography>
                     </Box>
-                    <OutlinedInput
-                      inputRef={inputRefsDescription}
-                      autoFocus={inputFocusDescription}
-                      placeholder={description || <Skeleton />}
-                      size="small"
-                      sx={profileStyles.inputStyle}
-                    />
+                    {isLoading || isLoadingProfileSend ? (
+                      <Skeleton variant="text" animation="wave" width={150} />
+                    ) : (
+                      <OutlinedInput
+                        inputRef={inputRefsDescription}
+                        autoFocus={inputFocusDescription}
+                        placeholder={description || <Skeleton width={150} />}
+                        onChange={(e) =>
+                          handleInputChangeValue("description", e)
+                        }
+                        size="small"
+                        disabled={disable !== "description"}
+                        sx={profileStyles.inputStyle}
+                        value={inputValues.description}
+                      />
+                    )}
                   </FormControl>
                 </Grid>
               </Grid>
@@ -375,19 +438,24 @@ const ProfileSetting = () => {
                   <Button
                     fullWidth
                     sx={{
-                      background: "#50b948",
-                      textTransform: "capitalize",
-                      color: "#FFFFFF",
-                      fontSize: "20px",
-                      boxShadow: "0px 0px 6px 2px #00000040",
-                      borderRadius: "15px",
+                      ...profileStyles.saveBtn,
+                      background:
+                        isLoading || isLoadingProfileSend
+                          ? "#CCCCCC"
+                          : "#50b948", // Change colors as needed
                       "&:hover": {
-                        background: "#50b948",
+                        background:
+                          isLoading || isLoadingProfileSend
+                            ? "#CCCCCC"
+                            : "#50b948", // Change colors as needed
                       },
                     }}
                     type="submit"
+                    disabled={isLoading || isLoadingProfileSend}
                   >
-                    Save Changes
+                    {isLoading || isLoadingProfileSend
+                      ? "Loading..."
+                      : " Save Changes"}
                   </Button>
                 </Box>
               </Grid>

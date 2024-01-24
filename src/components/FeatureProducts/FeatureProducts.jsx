@@ -83,7 +83,7 @@ const FeatureProducts = () => {
               marginBottom: { md: "3rem", xs: "3rem" },
               marginTop: "2rem",
             }}
-            className="soldProduct "
+            className="soldProduct"
           >
             <Tabs
               scrollButtons
@@ -104,13 +104,6 @@ const FeatureProducts = () => {
                   }}
                 />
               ))}
-
-              {/* <Tab label="Websites" {...a11yProps(1)} />
-              <Tab label="Dashboards" {...a11yProps(2)} />
-              <Tab label="GHL Add-on’s" {...a11yProps(3)} />
-              <Tab label="Surveys" {...a11yProps(4)} />
-              <Tab label="Business Cards" {...a11yProps(5)} />
-              <Tab label="Logos" {...a11yProps(6)} /> */}
             </Tabs>
           </Box>
 

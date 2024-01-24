@@ -34,6 +34,7 @@ const TableStyle = {
     padding: "7px 15px",
     fontWeight: "400",
     textTransform: "capitalize",
+    cursor: "text !important",
 
     "&:hover": {
       background: "#50B948",

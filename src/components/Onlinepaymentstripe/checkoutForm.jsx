@@ -108,6 +108,8 @@ function Checkoutstrip() {
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
+        pl: 3,
+        pr: 3,
       }}
     >
       <Card sx={{ minWidth: "400px" }}>

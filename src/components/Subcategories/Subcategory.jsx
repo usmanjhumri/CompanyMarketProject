@@ -20,24 +20,26 @@ const Subcategory = () => {
   }, [subCatgeoryProduct, params]);
   return (
     <Fragment>
-      <Typography sx={Styles.CatHeading}>{params.name}</Typography>
-      <Typography sx={Styles.CatSubHeading}>
-        Designed to meet the diverse needs of entrepreneurs, creatives, and
-        professionals alike, our Featured Products are more than just tools
-        they're catalysts for success.
-      </Typography>
-      <Grid
-        container
-        sx={{
-          maxWidth: { md: "100%", xs: "auto" },
-          margin: "auto",
-          marginTop: "4rem",
-        }}
-      >
-        <Grid item md={12}>
-          <Cards data={products} isLoading={isLoading} />
+      <div className="height-footer">
+        <Typography sx={Styles.CatHeading}>{params.name}</Typography>
+        <Typography sx={Styles.CatSubHeading}>
+          Designed to meet the diverse needs of entrepreneurs, creatives, and
+          professionals alike, our Featured Products are more than just tools
+          they're catalysts for success.
+        </Typography>
+        <Grid
+          container
+          sx={{
+            maxWidth: { md: "100%", xs: "auto" },
+            margin: "auto",
+            marginTop: "4rem",
+          }}
+        >
+          <Grid item md={12}>
+            <Cards data={products} isLoading={isLoading} />
+          </Grid>
         </Grid>
-      </Grid>
+      </div>
     </Fragment>
   );
 };

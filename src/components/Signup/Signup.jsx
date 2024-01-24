@@ -48,9 +48,7 @@ const initialValues = {
   country: "",
   order_number: "",
 };
-const handleOtpChange = (otp) => {
-  setOtp(otp);
-};
+
 export default function Signup({ setIsLoggedIn }) {
   const [id, setID] = useState("");
   const dispatch = useDispatch();
@@ -108,9 +106,11 @@ export default function Signup({ setIsLoggedIn }) {
               toast.success(registerResult.payload.message);
               // Assuming you want to navigate after successful registration
               // You can uncomment the following line and replace "/signin" with the desired route
-              // navigate("/signin");
+              navigate("/signin");
+              actions.resetForm();
             } else {
               toast.error(registerResult.payload.message);
+              actions.resetForm();
             }
           } catch (error) {
             // Handle registration error, e.g., display an error message and reset the form
@@ -247,6 +247,7 @@ export default function Signup({ setIsLoggedIn }) {
                     </Grid>
                   </Box>
                 </Box>
+                
                 <Box sx={{ ...styles.typoLabel }}>
                   <Typography>Username </Typography>
                 </Box>
@@ -264,7 +265,7 @@ export default function Signup({ setIsLoggedIn }) {
                     {errors.username}
                   </Typography>
                 ) : null}
-
+                
                 <FormControl>
                   <Box>
                     <Typography style={{ marginTop: "20px" }}>
@@ -286,7 +287,6 @@ export default function Signup({ setIsLoggedIn }) {
                     <div style={{ color: "red" }}>{errors.phoneNumber}</div>
                   )}
                 </FormControl>
-
                 <Box sx={{ ...styles.typoLabel }}>
                   <Typography>Email </Typography>
                 </Box>
@@ -303,7 +303,6 @@ export default function Signup({ setIsLoggedIn }) {
                     {errors.email}
                   </Typography>
                 ) : null}
-
                 <Box sx={{ ...styles.typoLabel }}>
                   <Typography>Password </Typography>
                 </Box>
@@ -326,13 +325,11 @@ export default function Signup({ setIsLoggedIn }) {
                     ),
                   }}
                 />
-
                 {errors.password && touched.password ? (
                   <Typography style={styles.errorUername}>
                     {errors.password}
                   </Typography>
                 ) : null}
-
                 <Box sx={{ ...styles.typoLabel }}>
                   <Typography>Confirm Password </Typography>
                 </Box>
@@ -361,7 +358,6 @@ export default function Signup({ setIsLoggedIn }) {
                     {errors.password_confirmation}
                   </p>
                 ) : null}
-
                 <Button
                   onClick={handleSignIn}
                   type="submit"

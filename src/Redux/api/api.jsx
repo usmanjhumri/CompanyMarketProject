@@ -47,6 +47,24 @@ export const fetchSearchProducts = createAsyncThunk(
 ///Home API Ended
 
 //Auth API Started
+
+export const userLogout = async () => {
+  const token = JSON.parse(localStorage.getItem(storageKey)).token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  try {
+    const res = await axios.post(`${api_base_URL}auth/logout`, "", {
+      headers,
+    });
+    if (res) {
+      console.log("Logout successful", res.data);
+      return res.data;
+    }
+  } catch (e) {
+    return e.data;
+  }
+};
 export const changePassword = createAsyncThunk(
   "changePassword",
   async function (data, { rejectWithValue }) {
@@ -109,7 +127,7 @@ export const resetPasswordVerify = async (data) => {
 
 export const signInNew = createAsyncThunk(
   "signInReducer",
-  async function (data, { rejectWithValue }) {
+  async function (data, { rejectWithValue, dispatch }) {
     try {
       const res = await axios.post(`${api_base_URL}auth/sign-in`, data);
       if (res) {
@@ -120,7 +138,9 @@ export const signInNew = createAsyncThunk(
           balance: res?.data?.data?.balance,
         });
         localStorage.setItem(id, res.data.data.id);
-
+        if (res.data.data.id) {
+          dispatch(getCart(res.data.data.id));
+        }
         window.localStorage.setItem(storageKey, localStorageData);
         return res.data;
       }
@@ -297,6 +317,7 @@ export const getProfileData = createAsyncThunk(
       Authorization: `Bearer ${token}`,
     };
     const res = await axios.get(`${api_base_URL}profile/setting`, { headers });
+    // console.log(res, " getProfileData");
     return res.data;
   }
 );
@@ -312,6 +333,7 @@ export const sendProfileData = createAsyncThunk(
       const res = await axios.post(`${api_base_URL}profile-setting`, data, {
         headers,
       });
+      console.log(res, " sendProfileData");
       return res.data;
     } catch (error) {
       throw rejectWithValue(error.data);

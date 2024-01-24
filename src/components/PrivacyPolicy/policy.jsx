@@ -10,19 +10,21 @@ function policy() {
         <Grid container>
           <Grid item md={4} sm={0}></Grid>
           <Grid item md={4} sm={12}>
-            <Typography
-              variant="h4"
-              sx={style.textHeading}
-              style={{ textAlign: "center" }}
-            >
-              Privacy Policy
-            </Typography>
-            <Typography variant="h4" sx={style.textHeading2}>
-              Our Commitment to Protecting your Privacy
-            </Typography>
-            <p variant="p" style={style.textParagraph}>
-              Welcome to JD Funnel Marketplace’s Privacy Policy
-            </p>
+            <Box sx={{ ...style.textCenter }}>
+              <Typography
+                variant="h4"
+                sx={style.textHeading}
+                style={{ textAlign: "center" }}
+              >
+                Privacy Policy
+              </Typography>
+              <Typography variant="h4" sx={style.textHeading2}>
+                Our Commitment to Protecting your Privacy
+              </Typography>
+              <p variant="p" style={style.textParagraph}>
+                Welcome to JD Funnel Marketplace’s Privacy Policy
+              </p>
+            </Box>
           </Grid>
 
           <Grid item md={4} sm={0}></Grid>

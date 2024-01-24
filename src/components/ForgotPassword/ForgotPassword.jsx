@@ -17,6 +17,7 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 // import { MuiOtpInput } from "mui-one-time-password-input";
 import { forgotPassword } from "../../Redux/api/api";
+import { resetForgotState } from "../../Redux/Slice/forgotpassword";
 function ForgotPassword() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,9 +43,11 @@ function ForgotPassword() {
     if (success) {
       toast.success(successMessage);
       navigate("/reset-password");
+      dispatch(resetForgotState());
     }
     if (isError) {
       toast.error(errorMessage);
+      dispatch(resetForgotState());
     }
   }, [success, isError]);
 

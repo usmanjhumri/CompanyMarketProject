@@ -1,4 +1,3 @@
-import { BorderBottom } from "@mui/icons-material";
 import Colors from "../colors";
 const styles = {
   boxMargin: {
@@ -207,9 +206,9 @@ const styles = {
   },
   ImgStyle: {
     width: "100%",
-    height: "200px",
-    borderRadius: "2px, 2px, 0px, 0px",
-    objectFit: "cover",
+    borderRadius: "10px",
+    objectFit: "contain",
+    aspectRatio: "4/2",
   },
   BoxTypo: {
     fontWeight: 500,
@@ -237,6 +236,7 @@ const styles = {
     fontFamily: "Be Vietnam Pro , sans-serif",
     lineHeight: "26.3px",
     textAlign: "left",
+    textDecoration: "line-through",
   },
   PriceTypo2: {
     fontWeight: 500,
@@ -298,6 +298,7 @@ const styles = {
     cursor: "pointer",
     boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
   },
+
   productBumps: {
     p: 0,
     mt: 0,
@@ -314,6 +315,7 @@ const styles = {
     lineHeight: "normal",
     color: Colors.primary,
     BorderBottom: "none",
+    minWidth: { lg: "400px", md: "200px", sm: "100px" },
   },
 };
 export default styles;

@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import Box from "@mui/material/Box";
-import CardContent from "@mui/material/CardContent";
+// import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import ProfilPic from "../../assets/ProfilPics.png";
+
 // import style from "./Styles";
 import { useSelector } from "react-redux";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -56,14 +58,12 @@ const Dashboard = () => {
 
   const [tabValue, setTabValue] = React.useState(0);
   const firstName = useSelector((state) => state?.getProfileData?.firstName);
-  const {
-    profileData,
-    description,
-    isLoading,
-    imagePath,
-    coverImage,
-    logoImage,
-  } = useSelector((state) => state?.getProfileData);
+  const baseUrl = useSelector(
+    (state) => state?.getProfileData?.profileData[0]?.base_url
+  );
+  const userImage = useSelector(
+    (state) => state?.getProfileData?.profileData[0]?.image
+  );
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -91,7 +91,14 @@ const Dashboard = () => {
         <Grid item md={1}></Grid>
         <Grid item md={10}>
           <Box sx={{ ...style.flexProfilePic }}>
-            <Box component={"img"} src={img1}></Box>
+            <Box
+              component={"img"}
+              // src={ProfilPic}
+              src={userImage ? `${baseUrl}/${userImage}` : ProfilPic}
+              width="158px"
+              height="158px"
+              sx={{}}
+            />
             <Typography
               sx={{
                 fontSize: isSmallScreen ? "24px" : "32px",

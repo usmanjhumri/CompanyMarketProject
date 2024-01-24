@@ -6,6 +6,7 @@
     align-items: center;
     opacity: 1;
     transition: opacity 0.5s ease-in-out; /* Adjust the duration as needed */
+    overflow: hidden;
   }
   
   .preloader-container.hidden {

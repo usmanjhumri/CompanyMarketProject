@@ -1,4 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+/* eslint-disable react/jsx-no-target-blank */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -11,7 +15,6 @@ import {
   Button,
   Skeleton,
   Hidden,
-  Checkbox,
   FormControl,
   OutlinedInput,
   MenuItem,
@@ -19,8 +22,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Carousel from "react-multi-carousel";
-import { order_number as orderNumber, order_number } from "../../Const/CONST";
-import Cards from "../Cards";
+import { order_number as orderNumber } from "../../Const/CONST";
 import "react-multi-carousel/lib/styles.css";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +33,9 @@ import { useParams } from "react-router-dom";
 import { GoChevronLeft, GoChevronRight } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import BumpsInput from "./BumpsInput";
 import "./ProductDetail.css";
+import MoreProducts from "./MoreProducts";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -55,24 +59,9 @@ function getStyles(name, personName, theme) {
 }
 
 const ProductDetail = () => {
-  const label = { inputProps: { "aria-label": "Checkbox demo" } };
+  // const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const params = useParams();
   const dispatch = useDispatch();
-  const responsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 2,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2,
-      slidesToSlide: 2,
-    },
-    mobile: {
-      breakpoint: { max: 538, min: 0 },
-      items: 1,
-    },
-  };
 
   const [checkedItems, setCheckedItems] = useState({});
   const [pages, setPages] = useState([]);
@@ -88,13 +77,14 @@ const ProductDetail = () => {
   const product = useSelector((state) => state?.productDetail?.data?.product);
   const isLoading = useSelector((state) => state?.productDetail?.isLoading);
   const isLoadingCart = useSelector((state) => state?.addtocart?.isLoading);
-  const { isError, errorMessage } = useSelector((state) => state?.addtocart);
+  const { isError } = useSelector((state) => state?.addtocart);
   const inCart = useSelector((state) => state?.productDetail?.inCart);
   const imgPath = useSelector((state) => state?.home?.imgPath);
   const successCart = useSelector((state) => state?.addtocart?.success);
   const moreProduct = useSelector(
     (state) => state?.productDetail?.data?.moreProducts
   );
+  console.log(moreProduct, " more productsss");
   const encrypted_id = useSelector(
     (state) => state?.productDetail?.data.encrypted_id
   );
@@ -142,7 +132,7 @@ const ProductDetail = () => {
           return filteredBumps.length > 0 ? newBumps : {};
         });
 
-        if (item.bump.name.trim() === "Extra Pages") {
+        if (item.bump.is_quantity === 1) {
           setExtraPages(item.pages);
         }
 
@@ -160,7 +150,7 @@ const ProductDetail = () => {
     } else if (product?.bumps?.length > 0) {
       setBumpfee(Number(0));
       product.bumps.forEach((item, index) => {
-        if (item.name.trim() === "Extra Pages") {
+        if (item.is_quantity === 1) {
           setExtraPages(item.min_quantity);
         }
         newBumps.push(item.price);
@@ -198,7 +188,7 @@ const ProductDetail = () => {
     }
   }, [successCart, isError]);
 
-  const handleCheckboxChange = (index, price, name, id) => {
+  const handleCheckboxChange = (index, price, is_quantity, id) => {
     const bump = products[index];
     setBumps((prevBumps) => {
       const newBumps = { ...prevBumps };
@@ -236,7 +226,7 @@ const ProductDetail = () => {
       };
 
       if (checkingItem[id]) {
-        if (name.trim() === "Extra Pages") {
+        if (is_quantity === 1) {
           setTotalPrice(Number(totalPrice) + Number(price) * extraPages);
           setBumpfee(bumpFee + Number(price) * extraPages);
         } else {
@@ -244,7 +234,7 @@ const ProductDetail = () => {
           setBumpfee(Number(price));
         }
       } else {
-        if (name.trim() === "Extra Pages") {
+        if (is_quantity === 1) {
           setTotalPrice(Number(totalPrice) - Number(price) * extraPages);
           setBumpfee(bumpFee - Number(price) * extraPages);
         } else {
@@ -265,7 +255,7 @@ const ProductDetail = () => {
     let addPages;
 
     const updatedProducts = products.map((item) => {
-      if (item.name.trim() === "Extra Pages") {
+      if (item.is_quantity === 1) {
         addPages = newPages;
         return { ...item, min_quantity: newPages };
       }
@@ -315,7 +305,7 @@ const ProductDetail = () => {
       const bump = product?.bumps[index];
       console.log(bump, index);
       if (isChecked) {
-        if (bump.name.trim() === "Extra Pages") {
+        if (bump.is_quantity === 1) {
           updatedTotalPrice += Number(bump.price) * extraPages;
         } else {
           updatedTotalPrice += Number(bump.price);
@@ -355,19 +345,6 @@ const ProductDetail = () => {
       const res = await dispatch(addToCart(data));
     }
   };
-
-  // const handleUpdateCart = () => {
-  //   console.log(
-  //     bumpFee,
-  //     "bumpFee",
-  //     LinceseIndex,
-  //     "LinceseIndex",
-  //     bumps,
-  //     "bumps",
-  //     pages,
-  //     "page"
-  //   );
-  // };
 
   const CustomRight = ({ onClick }) => (
     <button className="arrow right" onClick={onClick} style={styles.arrowRight}>
@@ -436,7 +413,7 @@ const ProductDetail = () => {
           width="100%"
           sx={{ paddingLeft: { xs: "1.2rem", md: "0" } }}
         >
-          <Grid item md={6} sm={12}>
+          <Grid item md={6} sm={12} xs={12}>
             <Card sx={{ background: "#ECECEC" }}>
               <CardContent>
                 {isLoading ? (
@@ -470,96 +447,25 @@ const ProductDetail = () => {
               </CardContent>
             </Card>
 
-            <Hidden smDown>
-              <Box mt={5}>
-                <Typography variant="h5" sx={styles.moreProduct}>
-                  More Products by JD Funnel Marketplace
-                </Typography>
-              </Box>
-              <Carousel
-                responsive={responsive}
-                infinite
-                containerClass="container-with-dots"
-                itemClass="image-item"
-                arrows
-                autoPlaySpeed={3000}
-                renderButtonGroupOutside={false}
-                renderDotsOutside={false}
-                customRightArrow={<CustomRight />}
-                customLeftArrow={<CustomLeft />}
-              >
-                {moreProduct?.length > 0 &&
-                  moreProduct?.map((item, index) => (
-                    <div style={{ marginLeft: 5, marginRight: 5 }} key={index}>
-                      <Box sx={styles.BoxStyle}>
-                        <Link
-                          to={`/product/${item.category_id}/${item.name
-                            .toLowerCase()
-                            .replace(/[\s-]/g, "-")}/${item.id}`}
-                          style={{ textDecoration: "none" }}
-                        >
-                          <Box sx={styles.imgBoxDiv}>
-                            <Box
-                              component="img"
-                              src={`${imgPath}/${item.image}`}
-                              sx={styles.ImgStyle}
-                              alt="Loading"
-                            />
-                          </Box>
-                          <Typography mt={2} sx={styles.BoxTypo}>
-                            {item.name}
-                          </Typography>
+            <Hidden mdDown>
+              {/* <Box mt={5}> */}
+              <Typography mt={5} variant="h5" sx={styles.moreProduct}>
+                More Products by JD Funnel Marketplace
+              </Typography>
 
-                          <Typography mt={1} sx={styles.BoxTypo2}>
-                            By{" "}
-                            {item?.user?.firstname + " " + item?.user?.lastname}
-                          </Typography>
-
-                          <Box mt={2} sx={{ display: "flex", gap: 2 }}>
-                            <Typography sx={styles.PriceTypo}>
-                              $ {Number(item.extended_price).toFixed(2)}
-                            </Typography>
-                            <Typography sx={styles.PriceTypo2}>
-                              {" "}
-                              $ {Number(item.regular_price).toFixed(2)}
-                            </Typography>
-                          </Box>
-                        </Link>
-
-                        <Box
-                          mt={4}
-                          sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <Typography sx={styles.SalesTypo}>
-                            {item.total_sell} Sales
-                          </Typography>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 2,
-                            }}
-                          >
-                            <a href={item.demo_link} target="_blank">
-                              <Button sx={styles.BtnStyle}>Live Preview</Button>
-                            </a>
-                          </Box>
-                        </Box>
-                      </Box>
-                    </div>
-                  ))}
-              </Carousel>
+              <MoreProducts />
             </Hidden>
           </Grid>
-          <Grid item md={6} sm={12}>
+          <Grid item md={6} sm={12} xs={12}>
             <Card sx={{ background: "#ECECEC" }}>
               <CardContent>
                 <form onSubmit={handleSubmit}>
                   <Box
-                    sx={{ display: "flex", justifyContent: "space-between" }}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
                   >
                     <FormControl sx={{ display: "flex" }}>
                       {isLoading ? (
@@ -576,7 +482,9 @@ const ProductDetail = () => {
                           onChange={(e) => handleLicenseChange(e)}
                           input={
                             <OutlinedInput
-                              sx={{ ...styles.licenseName, minWidth: "300px" }}
+                              sx={{
+                                ...styles.licenseName,
+                              }}
                             />
                           }
                           MenuProps={MenuProps}
@@ -634,64 +542,14 @@ const ProductDetail = () => {
                   {product?.bumps?.length > 0 && (
                     <Box sx={{ mt: 3 }} key={20}>
                       {product?.bumps?.map((item, index) => (
-                        <Box
-                          sx={{
-                            ...styles.productBumps,
-                          }}
-                        >
-                          <Box
-                            display="flex"
-                            sx={{
-                              alignItems: "center",
-
-                              flexDirection: "column",
-                            }}
-                          >
-                            <Box
-                              display="flex"
-                              sx={{ alignItems: "center", gap: 1 }}
-                            >
-                              <Checkbox
-                                {...label}
-                                sx={{ p: 0 }}
-                                onChange={(e) =>
-                                  handleCheckboxChange(
-                                    index,
-                                    item.price,
-                                    item.name,
-                                    item.id
-                                  )
-                                }
-                                checked={
-                                  checkedItems[item.id] === true ? true : false
-                                }
-                              />
-                              <Typography sx={styles.detailsText}>
-                                {item.name}
-                              </Typography>
-                              {item.name.trim() === "Extra Pages" && (
-                                <input
-                                  style={{ width: "18%" }}
-                                  value={extraPages}
-                                  type="number"
-                                  min={item.min_quantity}
-                                  pattern="\d*"
-                                  onChange={(e) =>
-                                    handlePageChange(
-                                      e,
-                                      item.price,
-                                      checkedItems[item.id],
-                                      index
-                                    )
-                                  }
-                                />
-                              )}
-                            </Box>
-                          </Box>
-                          <Typography sx={styles.detailsText}>
-                            $ {item.price}
-                          </Typography>
-                        </Box>
+                        <BumpsInput
+                          key={item.id}
+                          item={item}
+                          index={index}
+                          checkedItems={checkedItems}
+                          handleCheckboxChange={handleCheckboxChange}
+                          handlePageChange={handlePageChange}
+                        />
                       ))}
                     </Box>
                   )}
@@ -759,25 +617,7 @@ const ProductDetail = () => {
                     )}
                   </Typography>
                 </Box>
-                {/* <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    mt: 3,
-                  }}
-                >
-                  <Typography sx={styles.productsInfoHeading}>
-                    {isLoading ? (
-                      <Skeleton width={100} />
-                    ) : (
-                      "Gutenberg Optimized"
-                    )}
-                  </Typography>
-                  <Typography sx={styles.detailsText}>
-                    {" "}
-                    {isLoading ? <Skeleton width={100} /> : "Yes"}
-                  </Typography>
-                </Box> */}
+
                 <Box
                   sx={{
                     display: "flex",
@@ -885,8 +725,7 @@ const ProductDetail = () => {
               </CardContent>
             </Card>
           </Grid>
-
-          <Hidden smUp>
+          <Hidden mdUp>
             <Grid container sx={{ paddingLeft: { xs: "1.2rem", md: "auto" } }}>
               <Grid item xs={12} md={6}>
                 <Box mt={5}>
@@ -894,98 +733,7 @@ const ProductDetail = () => {
                     More Products by JD Funnel Marketplace
                   </Typography>
                 </Box>
-                <Carousel
-                  responsive={responsive}
-                  infinite
-                  containerClass="container-with-dots"
-                  itemClass="image-item"
-                  arrows
-                  autoPlaySpeed={3000}
-                  renderButtonGroupOutside={false}
-                  renderDotsOutside={false}
-                  customRightArrow={<CustomRight />}
-                  customLeftArrow={<CustomLeft />}
-                >
-                  {moreProduct?.length > 0 &&
-                    moreProduct?.map((item, index) => (
-                      <div
-                        style={{ marginLeft: 5, marginRight: 5 }}
-                        key={index}
-                      >
-                        <Box sx={styles.BoxStyle}>
-                          <Link
-                            to={`/product/${item.category_id}/${item.name
-                              .toLowerCase()
-                              .replace(/[\s-]/g, "-")}/${item.id}`}
-                            style={{ textDecoration: "none" }}
-                          >
-                            <Box sx={styles.imgBoxDiv}>
-                              <Box
-                                component="img"
-                                src={`${imgPath}/${item.image}`}
-                                sx={styles.ImgStyle}
-                                alt="Loading"
-                              />
-                            </Box>
-                            <Typography mt={2} sx={styles.BoxTypo}>
-                              {item.name}
-                            </Typography>
-
-                            <Typography mt={1} sx={styles.BoxTypo2}>
-                              By{" "}
-                              {item?.user?.firstname +
-                                " " +
-                                item?.user?.lastname}
-                            </Typography>
-
-                            <Box mt={2} sx={{ display: "flex", gap: 2 }}>
-                              <Typography sx={styles.PriceTypo}>
-                                $ {Number(item.extended_price).toFixed(2)}
-                              </Typography>
-                              <Typography sx={styles.PriceTypo2}>
-                                {" "}
-                                $ {Number(item.regular_price).toFixed(2)}
-                              </Typography>
-                            </Box>
-                          </Link>
-
-                          <Box
-                            mt={4}
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <Typography sx={styles.SalesTypo}>
-                              {item.total_sell} Sales
-                            </Typography>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 2,
-                              }}
-                            >
-                              <PiShoppingCartLight
-                                style={{
-                                  padding: "0.6rem",
-                                  border: "1px solid #787878",
-                                  borderRadius: "2px",
-                                  color: "#787878",
-                                }}
-                              />
-
-                              <a href={item.demo_link} target="_blank">
-                                <Button sx={styles.BtnStyle}>
-                                  Live Preview
-                                </Button>
-                              </a>
-                            </Box>
-                          </Box>
-                        </Box>
-                      </div>
-                    ))}
-                </Carousel>
+                <MoreProducts />
               </Grid>
             </Grid>
           </Hidden>

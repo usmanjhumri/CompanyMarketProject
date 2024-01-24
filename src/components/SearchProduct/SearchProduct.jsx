@@ -164,7 +164,10 @@ const SearchProduct = () => {
                     width: "40ch",
                   },
                   [theme.breakpoints.down("sm")]: {
-                    width: "20ch",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-between", // Align items to the start
+                    alignItems: "center",
                   },
                   padding: "3px",
                   transition: "background-color 0.3s",
@@ -172,10 +175,10 @@ const SearchProduct = () => {
                     padding: "8px 12px",
                     width: "100%",
                     [theme.breakpoints.down("md")]: {
-                      width: "60%",
+                      width: "100%",
                     },
                     [theme.breakpoints.down("sm")]: {
-                      width: "40%",
+                      width: "100%",
                     },
                   },
                 }}

@@ -1,3 +1,6 @@
+/**
+ * This is a React component that displays the most sold products of different categories.
+ */
 /* eslint-disable react/jsx-key */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-undef */
@@ -95,7 +98,7 @@ const MostSoldProduct = () => {
                     {...a11yProps(index, item.name)}
                     key={index}
                     sx={{
-                      margin: "0 1rem",
+                      margin: "0px 10px",
                     }}
                   />
                 ))}
@@ -108,11 +111,7 @@ const MostSoldProduct = () => {
                   {state.filterProduct.length === 0 ? (
                     <Skeletoncard cards={3} />
                   ) : (
-                    <Grid
-                      container
-                      // spacing={2}
-                      // sx={{ marginTop: { md: "0rem", xs: "0.5rem" } }}
-                    >
+                    <Grid container>
                       <MostSellCategoriesData
                         filterProduct={state.filterProduct}
                       />

@@ -33,12 +33,15 @@ const styles = {
     padding: "10px",
     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
     background: "#F8F9FA",
-    height: "6vh",
+    height: { md: "6vh", xs: "60px", sm: "60px" },
     width: "100%",
     animationName: keyframes.headerSlideDown,
     animationDuration: "0.5s",
     animationTimingFunction: "ease",
     animationFillMode: "forwards",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   signupLoginStyle: {
@@ -96,6 +99,7 @@ const styles = {
     textDecoration: "none",
     lineHeight: "17.53px",
     marginLeft: "2px",
+    padding: "0.5rem 0.8rem",
     fontFamily: "Be Vietnam Pro , sans-serif",
     color: "#000000",
     "&:hover": {

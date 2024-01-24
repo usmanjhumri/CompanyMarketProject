@@ -11,21 +11,23 @@ function conditions() {
         <Grid container>
           <Grid item md={4} sm={0}></Grid>
           <Grid item md={4} sm={12}>
-            <Typography
-              variant="h4"
-              sx={style.textHeading}
-              style={{ textAlign: "center" }}
-            >
-              Terms & Conditions
-            </Typography>
-            <Typography variant="h4" sx={style.textHeading2}>
-              Our Terms of Service Welcome to JD Funnel Marketplace’s Terms &
-              Conditions
-            </Typography>
-            <p variant="p" style={style.textParagraph}>
-              By accessing or using our services, you agree to be bound by these
-              Terms and Conditions. Please read them carefully.
-            </p>
+            <Box sx={{ ...style.textCenter }}>
+              <Typography
+                variant="h4"
+                sx={style.textHeading}
+                style={{ textAlign: "center" }}
+              >
+                Terms & Conditions
+              </Typography>
+              <Typography variant="h4" sx={style.textHeading2}>
+                Our Terms of Service Welcome to JD Funnel Marketplace’s Terms &
+                Conditions
+              </Typography>
+              <p variant="p" style={style.textParagraph}>
+                By accessing or using our services, you agree to be bound by
+                these Terms and Conditions. Please read them carefully.
+              </p>
+            </Box>
           </Grid>
 
           <Grid item md={4} sm={0}></Grid>

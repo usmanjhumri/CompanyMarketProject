@@ -1,6 +1,13 @@
 import BackgroundImage from "../../assets/aboutus.png";
 import Colors from "../colors";
 const styles = {
+  heroHeadingAboutUs: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+  },
   textHeading: {
     fontFamily: "Be Vietnam Pro,sans-serif",
     fontStyle: "normal",

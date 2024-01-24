@@ -49,7 +49,10 @@ const Cards = ({ data, isLoading }) => {
 
                   <Box mt={2} sx={{ display: "flex", gap: 2 }}>
                     <Typography sx={Styles.PriceTypo}>
-                      $ {Number(item.extended_price).toFixed(2)}
+                      <strike>
+                        {" "}
+                        $ {Number(item.extended_price).toFixed(2)}
+                      </strike>
                     </Typography>
                     <Typography sx={Styles.PriceTypo2}>
                       {" "}

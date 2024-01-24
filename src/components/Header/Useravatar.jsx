@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 /* eslint-disable react/prop-types */
 import {
   Avatar,
@@ -9,13 +10,15 @@ import {
 } from "@mui/material";
 import { CiUser } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { storageKey, id } from "../../Const/CONST";
+import { userLogout, getCart } from "../../Redux/api/api";
+import { storageKey, id, order_number } from "../../Const/CONST";
 import { resetSuccessSignin } from "../../Redux/Slice/signin";
 import { useNavigate } from "react-router-dom";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import ProfilPic from "../../assets/ProfilPics.png";
+
 const settings = [
   "Profile Setting",
-  "Account",
   "Dashboard",
   "Change Password",
   "Purchase History",
@@ -30,19 +33,29 @@ const Useravatar = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const firstName = useSelector((state) => state?.getProfileData?.firstName);
+  const baseUrl = useSelector(
+    (state) => state?.getProfileData?.profileData[0]?.base_url
+  );
+  const userImage = useSelector(
+    (state) => state?.getProfileData?.profileData[0]?.image
+  );
+  // console.log(baseUrl, userImage, " logoImage");
 
-  const handleUserAvatar = (avatarmenu) => {
+  const handleUserAvatar = async (avatarmenu) => {
     switch (avatarmenu) {
       case "Profile":
         break;
 
       case "Sign out":
-        localStorage.removeItem(storageKey);
-        localStorage.removeItem(id);
+        // const orderNumber = localStorage.getItem(order_number);
+        // const userId = localStorage.getItem(id);
+        dispatch(getCart(""));
 
         setUserLogged(false);
         dispatch(resetSuccessSignin());
         navigate("/signin");
+        localStorage.removeItem(storageKey);
+        localStorage.removeItem(id);
 
         break;
       case "Change Password":
@@ -70,9 +83,13 @@ const Useravatar = ({
       >
         <Box>
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            {/* <Box component="img" src={logoImage} width="20%" /> */}
             <Avatar
+              src={`${baseUrl}/${userImage}`}
               sx={{
                 background: "#2697fa",
+                // background: logoImage ? `url${logoImage}` : "#2697fa",
+
                 width: "35px",
                 height: "35px",
               }}

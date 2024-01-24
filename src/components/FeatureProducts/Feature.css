@@ -1,6 +1,6 @@
-:root{
-  --muitabbgCololr:#f4f4f4 !important;
-  --muitabColor:#000000 !important;
+:root {
+  --muitabbgCololr: #f4f4f4 !important;
+  --muitabColor: #000000 !important;
 }
 .MuiTabs-root {
   background: var(--muitabbgCololr) !important;
@@ -22,37 +22,16 @@
   color: #ffffff !important;
   transition: all 0.3s ease-in-out;
 }
-  .Mui-selected {
+.Mui-selected {
   color: #ffffff !important;
   border-radius: 4px !important;
   background: #1976d2 !important;
   padding: 0px 2.5rem !important;
   text-transform: capitalize !important;
   font-family: "Be Vietnam", sans-serif;
-
 }
-
-/* @media  (max-width: 768px) {
-  .MuiTab-root {
-    color: var(--muitabColor) !important;
-    border-radius: 4px !important;
-    background: #ffffff !important;
-    padding: 0px 0.5rem !important;
-    text-transform: capitalize !important;
-    transition: all 0.3s ease-in-out;
+@media (max-width: 1444px) {
+  .MuiTabs-root {
+    justify-content: "auto";
   }
-  .MuiTab-root:hover {
-    background: #1976d2 !important;
-    color: #ffffff !important;
-    transition: all 0.3s ease-in-out;
-  }
-    .Mui-selected {
-    color: #ffffff !important;
-    border-radius: 4px !important;
-    background: #1976d2 !important;
-    padding: 0px 0.5rem !important;
-    text-transform: capitalize !important;
-    font-family: "Be Vietnam", sans-serif;
-  
-  }
-} */
+}

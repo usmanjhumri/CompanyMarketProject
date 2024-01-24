@@ -50,7 +50,7 @@ const Slider = () => {
     <Box sx={styles.sliderBoxDiv}>
       <StyledCard variant="outlined">
         <Typography variant="h4" sx={styles.silderHeading}>
-          Unleash Our Prime Creations
+          Explore Different Categories
         </Typography>
 
         <Box sx={styles.innerCardDisplay}>

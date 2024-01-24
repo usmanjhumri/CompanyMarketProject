@@ -37,7 +37,12 @@ const profileStyles = {
     position: "absolute",
     top: "44%",
     left: "100%",
+    "@media (max-width: 450px)": {
+      top: "90%",
+      left: "80%",
+    },
   },
+
   profileTitleName: {
     fontSize: "32px",
     fontWeight: 500,
@@ -69,6 +74,17 @@ const profileStyles = {
   inputStyle: {
     borderRadius: "15px",
     boxShadow: "0px 0px 10px 2px #00000040",
+  },
+  saveBtn: {
+    background: "#50b948",
+    textTransform: "capitalize",
+    color: "#FFFFFF",
+    fontSize: "20px",
+    boxShadow: "0px 0px 6px 2px #00000040",
+    borderRadius: "15px",
+    "&:hover": {
+      background: "#50b948",
+    },
   },
 };
 export default profileStyles;

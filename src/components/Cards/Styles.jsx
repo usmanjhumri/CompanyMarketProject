@@ -30,9 +30,9 @@ const CardStyle = {
   },
   ImgStyle: {
     width: "100%",
-    height: "200px",
-    borderRadius: "2px, 2px, 0px, 0px",
-    objectFit: "cover",
+    borderRadius: "10px",
+    objectFit: "contain",
+    aspectRatio: "4/2",
   },
   BoxTypo: {
     fontWeight: 500,

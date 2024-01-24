@@ -78,7 +78,7 @@ const Categoires = () => {
   }, [selectedSubcategories, priceRange]);
 
   return (
-    <Fragment>
+    <div className="height-footer">
       <Box sx={{ mt: 2 }}>
         <Typography sx={Styles.CatHeading}>{params.name}</Typography>
         <Typography sx={Styles.CatSubHeading}>
@@ -125,7 +125,7 @@ const Categoires = () => {
           <Cards data={product ? product : []} isLoading={isLoading} />
         </Grid>
       </Grid>
-    </Fragment>
+    </div>
   );
 };
 

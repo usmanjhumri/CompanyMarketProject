@@ -17,8 +17,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import { resetPasswordVerify } from "../../Redux/api/api";
 import { resetForgotState } from "../../Redux/Slice/forgotpassword";
-
+import { useNavigate } from "react-router-dom";
 export default function ResetPassword() {
+  const navigate = useNavigate();
   const { email } = useSelector((state) => state?.forgotpassword);
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
@@ -46,16 +47,18 @@ export default function ResetPassword() {
     onSubmit: async (values) => {
       setLoading(true);
       const res = await resetPasswordVerify(values);
-      if (res.success) {
-        toast.success(res.data);
-        setLoading(false);
-        dispatch(resetForgotState());
-      }
-      if (!res.success) {
+      if (res.message?.includes("Invalid OTP")) {
         toast.error(res.message);
-        setLoading(false);
-        dispatch(resetForgotState());
+        navigate("/forget");
+      } else if (res.success) {
+        toast.success(res.message);
+        navigate("/signin");
+      } else {
+        toast.error(res.message);
       }
+
+      setLoading(false);
+      dispatch(resetForgotState());
     },
   });
   const handleChangeOTP = (newValue) => {

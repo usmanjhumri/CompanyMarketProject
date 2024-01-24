@@ -133,7 +133,7 @@ const Shopping = () => {
 
   return (
     <>
-      <Box mt={3}>
+      <Box mt={3} className="height-footer">
         <Container>
           <Typography sx={Styles.ShoppingHead}>Shopping Cart</Typography>
 
@@ -192,6 +192,18 @@ const Shopping = () => {
                         background: "#fff",
                         boxShadow: "0px 0px 6px 2px rgba(0, 0, 0, 0.10)",
                         borderRadius: "2px",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        navigate(
+                          `/product/${
+                            item?.product?.category_id
+                          }/${item?.product?.name
+                            .toLowerCase()
+                            .replace(/[\s-]/g, "-")}/${item?.product?.id}/${
+                            item?.order_number
+                          }`
+                        );
                       }}
                     >
                       <CardContent>
@@ -357,7 +369,6 @@ const Shopping = () => {
                         </Box>
                       </CardContent>
                     </Card>
-                    <Box sx={{ mt: 2 }}></Box>
                   </Fragment>
                 ))}
               </Grid>

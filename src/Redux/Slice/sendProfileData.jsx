@@ -28,6 +28,7 @@ const sendProfileDatas = createSlice({
         state.isError = false;
       })
       .addCase(sendProfileData.fulfilled, (state, action) => {
+        // console.log(action.payload, "sendProfileData");
         state.isLoading = false;
         state.isError = false;
         state.success = true;

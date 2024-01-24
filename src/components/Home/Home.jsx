@@ -9,6 +9,7 @@ import Slider from "./Slider";
 import MostSoldProduct from "../MostSoldProduct/MostSoldProducts";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
+import { toast } from "react-toastify";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -68,7 +69,11 @@ const Home = () => {
   };
   const handlekeyPress = (e) => {
     if (e.key === "Enter") {
-      handleSearch();
+      if (searchProducts === "") {
+        return toast.error("Please enter product name!");
+      } else {
+        handleSearch();
+      }
     }
   };
 
@@ -102,6 +107,7 @@ const Home = () => {
                   variant="contained"
                   sx={styles.buttonText}
                   onClick={handleSearch}
+                  disabled={searchProducts === "" ? true : false}
                 >
                   Search
                 </Button>

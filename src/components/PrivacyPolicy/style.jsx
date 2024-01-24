@@ -66,6 +66,13 @@ const styles = {
       margin: "0px 3px",
     },
   },
+  textCenter: {
+    justifyContent: "center",
+    alignItems: "center",
+    display: "flex",
+    width: "100%",
+    flexDirection: "column",
+  },
 };
 
 export default styles;

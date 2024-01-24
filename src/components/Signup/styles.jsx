@@ -10,7 +10,6 @@ const styles = {
   },
 
   paperDiv: {
-    boxShadow: "0px 0px 12.8px 2px rgba(0, 0, 0, 0.25)",
     borderRadius: "2px",
     maxWidth: 630,
   },
